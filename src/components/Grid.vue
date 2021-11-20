@@ -5,11 +5,11 @@
         <div
           :class="[
             'grid-cell',
-            { 'last-group-row': row.id % 3 == 0 },
-            { 'last-group-column': cell.id.col % 3 == 0 },
+            { 'last-group-row': cell.row % 3 == 0 },
+            { 'last-group-column': cell.col % 3 == 0 },
           ]"
           v-for="cell in row.value"
-          :key="cell.id.row + '-' + cell.id.col"
+          :key="cell.row + '-' + cell.col"
         >
           {{ cell.state == states.empty ? "" : cell.value }}
         </div>
@@ -23,20 +23,18 @@
 export default {
   data: function () {
     return {
+      cells: [],
       grid: [],
       rowsNo: 9,
       colsNo: 9,
-      states: {
-        empty: 1,
-        const: 2,
-        try: 3,
-        fail: 4,
-        good: 5,
-      },
+      states: { empty: 1, const: 2, try: 3, fail: 4, good: 5 },
     };
   },
 
   methods: {
+    getRandValue: function (items) {
+      return items[Math.floor(Math.random() * items.length)];
+    },
     InSameSubgrid: function (cell1, cell2) {
       return (
         Math.ceil(cell1.row / 3) == Math.ceil(cell2.row / 3) &&
@@ -44,77 +42,101 @@ export default {
       );
     },
 
-    CreateCellValue: function (grid, rowId, colId) {
+    GetValidCellValues: function (cells, rowId, colId) {
       var validValues = Array.from({ length: 9 }, (_, i) => i + 1);
-      for (const row of grid) {
-        for (const cell of row.value) {
-          if (!cell.state == this.states.empty) break;
-          if (
-            cell.id.row == rowId ||
-            cell.id.col == colId ||
-            this.InSameSubgrid(
-              { row: rowId, col: colId },
-              { row: cell.id.row, col: cell.id.col }
-            )
+      for (const cell of cells) {
+        if (
+          cell.row == rowId ||
+          cell.col == colId ||
+          this.InSameSubgrid(
+            { row: rowId, col: colId },
+            { row: cell.row, col: cell.col }
           )
-            validValues = validValues.filter((value) => value != cell.value);
-        }
+        )
+          validValues = validValues.filter((value) => value != cell.value);
       }
-      var validValuesLen = validValues.length;
-      if (!validValuesLen) return 0;
-      return validValues[Math.floor(Math.random() * validValuesLen)];
+      return validValues;
     },
 
-    CreateSubgrid: function (stRow, stCol) {
-      var subgrid = this.grid
-        .filter((row) => row.id >= stRow && row.id <= stRow + 2)
-        .map((row) =>
-          row.value.filter(
-            (cell) => cell.id.col >= stCol && cell.id.col <= stCol + 2
-          )
+    CreateSubgrid: function (subgRow, subgCol) {
+      var subgrid = this.cells.filter(
+        (cell) => cell.subgridRow == subgRow && cell.subgridCol == subgCol
+      );
+
+      for (const cell of subgrid) {
+        cell.value = this.getRandValue(
+          this.GetValidCellValues(this.cells, cell.row, cell.col)
         );
-      for (const row of subgrid)
-        for (const cell of row) {
-          cell.value = this.CreateCellValue(
-            this.grid,
-            cell.id.row,
-            cell.id.col
-          );
-          cell.state = cell.value ? this.states.const : this.state.empty;
-        }
+        cell.state = this.states.const;
+      }
     },
 
-    CreateGrid: function () {
-      for (var rc = 1; rc <= 9; rc += 3) this.CreateSubgrid(rc, rc);
-      for (var row = 1; row <= 9; row += 3)
-        for (var col = 1; col <= 9; col += 3)
-          if (row != col) this.CreateSubgrid(row, col);
+    CreateGridWithBacktracking: function (cells, id) {
+      if (id == cells.length) return true;
+      var cell = cells[id];
+      if (cell.state == this.states.const)
+        return this.CreateGridWithBacktracking(cells, id + 1);
+      var validValues = this.GetValidCellValues(this.cells, cell.row, cell.col);
+
+      while (validValues.length) {
+        cell.state = this.try;
+        cell.value = this.getRandValue(validValues);
+        if (this.CreateGridWithBacktracking(cells, id + 1)) return true;
+        validValues = validValues.filter((val) => val != cell.value);
+        cell.state = this.fail;
+        cell.value = 0;
+      }
+      return false;
     },
 
-    CreateEmptyGrid: function () {
+    ClearCells: function (cells) {
+      for (const cell of cells) {
+        cell.value = 0;
+        cell.state = this.states.empty;
+      }
+    },
+
+    FillGrid: function () {
+      this.ClearCells(this.cells);
+      for (var subg = 1; subg <= 3; subg++) this.CreateSubgrid(subg, subg);
+      var cells = this.cells.filter(
+        (cell) => cell.subgridRow != cell.subgridCol
+      );
+      this.CreateGridWithBacktracking(cells, 0);
+    },
+
+    InitGrid: function (cells) {
       var grid = [];
       for (var rowId = 1; rowId <= this.rowsNo; rowId++) {
         var row = { id: rowId, value: [] };
         grid.push(row);
-        for (var colId = 1; colId <= this.colsNo; colId++) {
-          var cell = {
-            id: { row: rowId, col: colId },
-            state: this.states.empty,
-            value: 0,
-          };
-          row.value.push(cell);
-        }
+        for (var colId = 1; colId <= this.colsNo; colId++)
+          row.value.push(
+            cells.find((cell) => cell.row == rowId && cell.col == colId)
+          );
       }
       return grid;
     },
 
-    FillGrid: function () {
-      this.CreateGrid({});
+    InitCells: function () {
+      var cells = [];
+      for (var rowId = 1; rowId <= this.rowsNo; rowId++)
+        for (var colId = 1; colId <= this.colsNo; colId++)
+          cells.push({
+            row: rowId,
+            col: colId,
+            subgridRow: Math.ceil(rowId / 3),
+            subgridCol: Math.ceil(colId / 3),
+            state: this.states.empty,
+            value: 0,
+          });
+      return cells;
     },
   },
 
   created: function () {
-    this.grid = this.CreateEmptyGrid();
+    this.cells = this.InitCells();
+    this.grid = this.InitGrid(this.cells);
   },
 };
 </script>
