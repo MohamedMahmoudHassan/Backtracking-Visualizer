@@ -5,6 +5,7 @@
         <div
           :class="[
             'grid-cell',
+            cell.state,
             { 'last-group-row': cell.row % 3 == 0 },
             { 'last-group-column': cell.col % 3 == 0 },
           ]"
@@ -27,7 +28,13 @@ export default {
       grid: [],
       rowsNo: 9,
       colsNo: 9,
-      states: { empty: 1, const: 2, try: 3, fail: 4, good: 5 },
+      states: {
+        empty: "empty-cell",
+        const: "const-cell",
+        try: "try-cell",
+        failed: "faild-cell",
+        succeed: "good-cell",
+      },
     };
   },
 
@@ -35,53 +42,35 @@ export default {
     getRandValue: function (items) {
       return items[Math.floor(Math.random() * items.length)];
     },
-    InSameSubgrid: function (cell1, cell2) {
+
+    CellsConfilct: function (cell1, cell2) {
       return (
-        Math.ceil(cell1.row / 3) == Math.ceil(cell2.row / 3) &&
-        Math.ceil(cell1.col / 3) == Math.ceil(cell2.col / 3)
+        cell1.row == cell2.row ||
+        cell1.col == cell2.col ||
+        (cell1.subgridRow == cell2.subgridRow &&
+          cell1.subgridCol == cell2.subgridCol)
       );
     },
 
-    GetValidCellValues: function (cells, rowId, colId) {
+    GetValidCellValues: function (cells, cell) {
       var validValues = Array.from({ length: 9 }, (_, i) => i + 1);
-      for (const cell of cells) {
-        if (
-          cell.row == rowId ||
-          cell.col == colId ||
-          this.InSameSubgrid(
-            { row: rowId, col: colId },
-            { row: cell.row, col: cell.col }
-          )
-        )
-          validValues = validValues.filter((value) => value != cell.value);
-      }
+      for (const c of cells)
+        if (this.CellsConfilct(c, cell))
+          validValues = validValues.filter((value) => value != c.value);
       return validValues;
     },
 
-    CreateSubgrid: function (subgRow, subgCol) {
-      var subgrid = this.cells.filter(
-        (cell) => cell.subgridRow == subgRow && cell.subgridCol == subgCol
-      );
-
-      for (const cell of subgrid) {
-        cell.value = this.getRandValue(
-          this.GetValidCellValues(this.cells, cell.row, cell.col)
-        );
-        cell.state = this.states.const;
-      }
-    },
-
-    CreateGridWithBacktracking: function (cells, id) {
+    CreateGridWithBacktracking: function (cells, gridCells, id) {
       if (id == cells.length) return true;
       var cell = cells[id];
       if (cell.state == this.states.const)
-        return this.CreateGridWithBacktracking(cells, id + 1);
-      var validValues = this.GetValidCellValues(this.cells, cell.row, cell.col);
+        return this.CreateGridWithBacktracking(cells, gridCells, id + 1);
 
+      var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
-        cell.state = this.try;
+        cell.state = this.states.try;
         cell.value = this.getRandValue(validValues);
-        if (this.CreateGridWithBacktracking(cells, id + 1)) return true;
+        if (this.CreateGridWithBacktracking(cells, gridCells, id + 1)) return true;
         validValues = validValues.filter((val) => val != cell.value);
         cell.state = this.fail;
         cell.value = 0;
@@ -89,20 +78,34 @@ export default {
       return false;
     },
 
+    FillDiagonalSubgrids: function (cells) {
+      for (const cell of cells) {
+        cell.value = this.getRandValue(this.GetValidCellValues(cells, cell));
+        cell.state = this.states.const;
+      }
+    },
+
+    FillGrid: function () {
+      var cells = this.InitCells();
+      var diagSubgridsCells = cells.filter(
+        (cell) => cell.subgridRow == cell.subgridCol
+      );
+      this.FillDiagonalSubgrids(diagSubgridsCells);
+
+      var nonDiagSubgridsCells = cells.filter(
+        (cell) => cell.subgridRow != cell.subgridCol
+      );
+      this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
+
+      this.cells = cells;
+      this.grid = this.InitGrid(cells);
+    },
+
     ClearCells: function (cells) {
       for (const cell of cells) {
         cell.value = 0;
         cell.state = this.states.empty;
       }
-    },
-
-    FillGrid: function () {
-      this.ClearCells(this.cells);
-      for (var subg = 1; subg <= 3; subg++) this.CreateSubgrid(subg, subg);
-      var cells = this.cells.filter(
-        (cell) => cell.subgridRow != cell.subgridCol
-      );
-      this.CreateGridWithBacktracking(cells, 0);
     },
 
     InitGrid: function (cells) {
@@ -156,6 +159,10 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+}
+
+.try-cell {
+  color: red;
 }
 
 .grid {
