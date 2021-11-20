@@ -18,7 +18,8 @@
     </div>
     <button @click="FillGrid()">Fill</button>
     <button @click="Autoplay()">Autoplay</button>
-    <button @click="stepForward()">>></button>
+    <button @click="StepBack()">StepBack</button>
+    <button @click="StepForward()">StepForward</button>
   </div>
 </template>
 
@@ -118,6 +119,17 @@ export default {
 
       // this.cells = cells;
       // this.grid = this.InitGrid(cells);
+    },
+
+    StepBack: function () {
+      if (!this.currentStepId) return false;
+      const { cell, before } = this.steps[--this.currentStepId];
+      var gridCell = this.cells.find(
+        (c) => c.row == cell.row && c.col == cell.col
+      );
+      gridCell.value = before.value;
+      gridCell.state = before.state;
+      return true;
     },
 
     StepForward: function () {
