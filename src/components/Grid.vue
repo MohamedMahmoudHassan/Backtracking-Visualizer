@@ -63,31 +63,32 @@ export default {
       return validValues;
     },
 
-    stepForward: function () {
-      if (this.currentStepId >= this.steps.length) return;
-      const { cell, after } = this.steps[this.currentStepId++];
-      var gridCell = this.cells.find(
-        (c) => c.row == cell.row && c.col == cell.col
-      );
-      gridCell.value = after.value;
-      gridCell.state = after.state;
-    },
-
     CreateGridWithBacktracking: function (cells, gridCells, id) {
       if (id == cells.length) return true;
       var cell = cells[id];
-      if (cell.state == this.states.const)
-        return this.CreateGridWithBacktracking(cells, gridCells, id + 1);
-
       var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
-        cell.state = this.states.try;
+        var step = { cell, before: { ...cell } };
         cell.value = this.getRandValue(validValues);
+        cell.state = this.states.try;
+        this.AddStep(step, cell);
+
+        step = { cell, before: { ...cell } };
+        cell.state = this.states.const;
+        this.AddStep(step, cell);
+
         if (this.CreateGridWithBacktracking(cells, gridCells, id + 1))
           return true;
+
         validValues = validValues.filter((val) => val != cell.value);
-        cell.state = this.fail;
+        step = { cell, before: { ...cell } };
+        cell.state = this.states.failed;
+        this.AddStep(step, cell);
+
+        step = { cell, before: { ...cell } };
         cell.value = 0;
+        cell.state = this.states.empty;
+        this.AddStep(step, cell);
       }
       return false;
     },
@@ -97,8 +98,7 @@ export default {
         var step = { cell, before: { ...cell } };
         cell.value = this.getRandValue(this.GetValidCellValues(cells, cell));
         cell.state = this.states.const;
-        step.after = { ...cell };
-        this.steps.push(step);
+        this.AddStep(step, cell);
       }
     },
 
@@ -117,6 +117,21 @@ export default {
 
       // this.cells = cells;
       // this.grid = this.InitGrid(cells);
+    },
+
+    stepForward: function () {
+      if (this.currentStepId >= this.steps.length) return;
+      const { cell, after } = this.steps[this.currentStepId++];
+      var gridCell = this.cells.find(
+        (c) => c.row == cell.row && c.col == cell.col
+      );
+      gridCell.value = after.value;
+      gridCell.state = after.state;
+    },
+
+    AddStep: function (step, cell) {
+      step.after = { ...cell };
+      this.steps.push(step);
     },
 
     ClearCells: function (cells) {
@@ -180,6 +195,10 @@ export default {
 }
 
 .try-cell {
+  color: blueviolet;
+}
+
+.faild-cell {
   color: red;
 }
 
