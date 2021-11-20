@@ -17,6 +17,7 @@
       </div>
     </div>
     <button @click="FillGrid()">Fill</button>
+    <button @click="stepForward()">>></button>
   </div>
 </template>
 
@@ -26,6 +27,8 @@ export default {
     return {
       cells: [],
       grid: [],
+      steps: [],
+      currentStepId: 0,
       rowsNo: 9,
       colsNo: 9,
       states: {
@@ -60,6 +63,16 @@ export default {
       return validValues;
     },
 
+    stepForward: function () {
+      if (this.currentStepId >= this.steps.length) return;
+      const { cell, after } = this.steps[this.currentStepId++];
+      var gridCell = this.cells.find(
+        (c) => c.row == cell.row && c.col == cell.col
+      );
+      gridCell.value = after.value;
+      gridCell.state = after.state;
+    },
+
     CreateGridWithBacktracking: function (cells, gridCells, id) {
       if (id == cells.length) return true;
       var cell = cells[id];
@@ -70,7 +83,8 @@ export default {
       while (validValues.length) {
         cell.state = this.states.try;
         cell.value = this.getRandValue(validValues);
-        if (this.CreateGridWithBacktracking(cells, gridCells, id + 1)) return true;
+        if (this.CreateGridWithBacktracking(cells, gridCells, id + 1))
+          return true;
         validValues = validValues.filter((val) => val != cell.value);
         cell.state = this.fail;
         cell.value = 0;
@@ -80,12 +94,16 @@ export default {
 
     FillDiagonalSubgrids: function (cells) {
       for (const cell of cells) {
+        var step = { cell, before: { ...cell } };
         cell.value = this.getRandValue(this.GetValidCellValues(cells, cell));
         cell.state = this.states.const;
+        step.after = { ...cell };
+        this.steps.push(step);
       }
     },
 
     FillGrid: function () {
+      this.steps = [];
       var cells = this.InitCells();
       var diagSubgridsCells = cells.filter(
         (cell) => cell.subgridRow == cell.subgridCol
@@ -97,8 +115,8 @@ export default {
       );
       this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
 
-      this.cells = cells;
-      this.grid = this.InitGrid(cells);
+      // this.cells = cells;
+      // this.grid = this.InitGrid(cells);
     },
 
     ClearCells: function (cells) {
