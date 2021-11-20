@@ -17,6 +17,7 @@
       </div>
     </div>
     <button @click="FillGrid()">Fill</button>
+    <button @click="Autoplay()">Autoplay</button>
     <button @click="stepForward()">>></button>
   </div>
 </template>
@@ -42,7 +43,7 @@ export default {
   },
 
   methods: {
-    getRandValue: function (items) {
+    GetRandValue: function (items) {
       return items[Math.floor(Math.random() * items.length)];
     },
 
@@ -69,7 +70,7 @@ export default {
       var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
         var step = { cell, before: { ...cell } };
-        cell.value = this.getRandValue(validValues);
+        cell.value = this.GetRandValue(validValues);
         cell.state = this.states.try;
         this.AddStep(step, cell);
 
@@ -96,7 +97,7 @@ export default {
     FillDiagonalSubgrids: function (cells) {
       for (const cell of cells) {
         var step = { cell, before: { ...cell } };
-        cell.value = this.getRandValue(this.GetValidCellValues(cells, cell));
+        cell.value = this.GetRandValue(this.GetValidCellValues(cells, cell));
         cell.state = this.states.const;
         this.AddStep(step, cell);
       }
@@ -119,14 +120,19 @@ export default {
       // this.grid = this.InitGrid(cells);
     },
 
-    stepForward: function () {
-      if (this.currentStepId >= this.steps.length) return;
+    StepForward: function () {
+      if (this.currentStepId >= this.steps.length) return false;
       const { cell, after } = this.steps[this.currentStepId++];
       var gridCell = this.cells.find(
         (c) => c.row == cell.row && c.col == cell.col
       );
       gridCell.value = after.value;
       gridCell.state = after.state;
+      return true;
+    },
+
+    Autoplay: function () {
+      if (this.StepForward()) setTimeout(() => this.Autoplay(), 100);
     },
 
     AddStep: function (step, cell) {
