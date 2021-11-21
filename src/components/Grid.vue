@@ -43,7 +43,7 @@ export default {
         const: "const-cell",
         try: "try-cell",
         failed: "faild-cell",
-        succeed: "good-cell",
+        succeed: "succeed-cell",
       },
       generationModes: {
         naive: 1,
@@ -57,12 +57,19 @@ export default {
   },
 
   methods: {
-    UpdateCell: function (cell, cellAfter, addStep = true) {
-      var step = { cell, before: { ...cell } };
-      cell.state = cellAfter.state;
-      if (cellAfter.value) cell.value = cellAfter.value;
-      if (cellAfter.state == this.states.empty) cell.value = 0;
-      if (addStep && this.visualizeGeneration) this.AddStep(step, cell);
+    UpdateCells: function (cells, after, addStep = true) {
+      var actions = [];
+      for (const cell of cells) {
+        var action = { cell, before: { ...cell } };
+        cell.state = after.state;
+        if (after.value) cell.value = after.value;
+        if (after.state == this.states.empty) cell.value = 0;
+        if (addStep && this.visualizeGeneration) {
+          action.after = { ...cell };
+          actions.push(action);
+        }
+      }
+      if (addStep && this.visualizeGeneration) this.steps.push(actions);
     },
 
     GetRandValue: function (items) {
@@ -91,25 +98,24 @@ export default {
       var cell = cells[id];
       var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
-        this.UpdateCell(cell, {
+        this.UpdateCells([cell], {
           value: this.GetRandValue(validValues),
           state: this.states.try,
         });
-        this.UpdateCell(cell, { state: this.states.const });
 
         if (this.CreateGridWithBacktracking(cells, gridCells, id + 1))
           return true;
 
         validValues = validValues.filter((val) => val != cell.value);
-        this.UpdateCell(cell, { state: this.states.failed });
-        this.UpdateCell(cell, { state: this.states.empty });
+        this.UpdateCells([cell], { state: this.states.failed });
+        this.UpdateCells([cell], { state: this.states.empty });
       }
       return false;
     },
 
     FillDiagonalSubgrids: function (cells) {
       for (const cell of cells)
-        this.UpdateCell(cell, {
+        this.UpdateCells([cell], {
           value: this.GetRandValue(this.GetValidCellValues(cells, cell)),
           state: this.states.const,
         });
@@ -131,8 +137,13 @@ export default {
           (cell) => cell.subgridRow != cell.subgridCol
         );
         this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
-      } else this.CreateGridWithBacktracking(cells, cells, 0);
-
+        this.UpdateCells(cells, { state: this.states.succeed });
+        this.UpdateCells(cells, { state: this.states.const });
+      } else {
+        this.CreateGridWithBacktracking(cells, cells, 0);
+        this.UpdateCells(cells, { state: this.states.succeed });
+        this.UpdateCells(cells, { state: this.states.const });
+      }
       this.RemoveRandCells(cells);
       if (!this.visualizeGeneration) {
         this.cells = cells;
@@ -145,7 +156,7 @@ export default {
       if (this.removeMode == this.randomRemoveModes.percentageBased) {
         for (var i = 0; i < cells.length && needToRemove; i++) {
           if (Math.random() <= needToRemove / (cells.length - i)) {
-            this.UpdateCell(cells[i], { state: this.states.empty });
+            this.UpdateCells([cells[i]], { state: this.states.empty });
             needToRemove--;
           }
         }
@@ -153,7 +164,7 @@ export default {
         while (needToRemove) {
           var cell = this.GetRandValue(cells);
           if (cell.state != this.states.empty) {
-            this.UpdateCell(cell, { state: this.states.empty });
+            this.UpdateCells([cell], { state: this.states.empty });
             needToRemove--;
           }
         }
@@ -162,23 +173,29 @@ export default {
 
     StepBack: function () {
       if (!this.currentStepId) return false;
-      const { cell, before } = this.steps[--this.currentStepId];
-      var gridCell = this.cells.find(
-        (c) => c.row == cell.row && c.col == cell.col
-      );
-      gridCell.value = before.value;
-      gridCell.state = before.state;
+      const actions = this.steps[--this.currentStepId];
+      for (const action of actions) {
+        const { cell, before } = action;
+        var gridCell = this.cells.find(
+          (c) => c.row == cell.row && c.col == cell.col
+        );
+        gridCell.value = before.value;
+        gridCell.state = before.state;
+      }
       return true;
     },
 
     StepForward: function () {
       if (this.currentStepId >= this.steps.length) return false;
-      const { cell, after } = this.steps[this.currentStepId++];
-      var gridCell = this.cells.find(
-        (c) => c.row == cell.row && c.col == cell.col
-      );
-      gridCell.value = after.value;
-      gridCell.state = after.state;
+      const actions = this.steps[this.currentStepId++];
+      for (const action of actions) {
+        const { cell, after } = action;
+        var gridCell = this.cells.find(
+          (c) => c.row == cell.row && c.col == cell.col
+        );
+        gridCell.value = after.value;
+        gridCell.state = after.state;
+      }
       return true;
     },
 
@@ -187,14 +204,9 @@ export default {
         setTimeout(() => this.Autoplay(), 1000 / this.visualSpeed);
     },
 
-    AddStep: function (step, cell) {
-      step.after = { ...cell };
-      this.steps.push(step);
-    },
-
     ClearCells: function (cells) {
       for (const cell of cells)
-        this.UpdateCell(cell, { state: this.states.empty }, false);
+        this.UpdateCells([cell], { state: this.states.empty }, false);
     },
 
     InitGrid: function (cells) {
@@ -230,7 +242,8 @@ export default {
     this.cells = this.InitCells();
     this.grid = this.InitGrid(this.cells);
     this.gridGenerationMode = this.generationModes.naive;
-    this.removeMode = this.randomRemoveModes.percentageBased;
+    this.removeMode = this.randomRemoveModes.cellsBasedased;
+    this.visualizeGeneration = true;
   },
 };
 </script>
@@ -258,6 +271,10 @@ export default {
 
 .faild-cell {
   color: red;
+}
+
+.succeed-cell {
+  color: rgb(13, 185, 13);
 }
 
 .grid {
