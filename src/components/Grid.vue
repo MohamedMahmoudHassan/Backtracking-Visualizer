@@ -30,11 +30,10 @@ export default {
       cells: [],
       grid: [],
       steps: [],
-      generationModes: {
-        naive: 1,
-        diagonal: 2,
-      },
       gridGenerationMode: null,
+      visualizeGeneration: false,
+      removeMode: null,
+      EmptyCellsNumber: 18,
       visualSpeed: 20,
       currentStepId: 0,
       rowsNo: 9,
@@ -46,10 +45,26 @@ export default {
         failed: "faild-cell",
         succeed: "good-cell",
       },
+      generationModes: {
+        naive: 1,
+        diagonal: 2,
+      },
+      randomRemoveModes: {
+        percentageBased: 1,
+        cellsBased: 2,
+      },
     };
   },
 
   methods: {
+    UpdateCell: function (cell, cellAfter, addStep = true) {
+      var step = { cell, before: { ...cell } };
+      cell.state = cellAfter.state;
+      if (cellAfter.value) cell.value = cellAfter.value;
+      if (cellAfter.state == this.states.empty) cell.value = 0;
+      if (addStep && this.visualizeGeneration) this.AddStep(step, cell);
+    },
+
     GetRandValue: function (items) {
       return items[Math.floor(Math.random() * items.length)];
     },
@@ -76,38 +91,28 @@ export default {
       var cell = cells[id];
       var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
-        var step = { cell, before: { ...cell } };
-        cell.value = this.GetRandValue(validValues);
-        cell.state = this.states.try;
-        this.AddStep(step, cell);
-
-        step = { cell, before: { ...cell } };
-        cell.state = this.states.const;
-        this.AddStep(step, cell);
+        this.UpdateCell(cell, {
+          value: this.GetRandValue(validValues),
+          state: this.states.try,
+        });
+        this.UpdateCell(cell, { state: this.states.const });
 
         if (this.CreateGridWithBacktracking(cells, gridCells, id + 1))
           return true;
 
         validValues = validValues.filter((val) => val != cell.value);
-        step = { cell, before: { ...cell } };
-        cell.state = this.states.failed;
-        this.AddStep(step, cell);
-
-        step = { cell, before: { ...cell } };
-        cell.value = 0;
-        cell.state = this.states.empty;
-        this.AddStep(step, cell);
+        this.UpdateCell(cell, { state: this.states.failed });
+        this.UpdateCell(cell, { state: this.states.empty });
       }
       return false;
     },
 
     FillDiagonalSubgrids: function (cells) {
-      for (const cell of cells) {
-        var step = { cell, before: { ...cell } };
-        cell.value = this.GetRandValue(this.GetValidCellValues(cells, cell));
-        cell.state = this.states.const;
-        this.AddStep(step, cell);
-      }
+      for (const cell of cells)
+        this.UpdateCell(cell, {
+          value: this.GetRandValue(this.GetValidCellValues(cells, cell)),
+          state: this.states.const,
+        });
     },
 
     FillGrid: function () {
@@ -128,8 +133,31 @@ export default {
         this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
       } else this.CreateGridWithBacktracking(cells, cells, 0);
 
-      // this.cells = cells;
-      // this.grid = this.InitGrid(cells);
+      this.RemoveRandCells(cells);
+      if (!this.visualizeGeneration) {
+        this.cells = cells;
+        this.grid = this.InitGrid(cells);
+      }
+    },
+
+    RemoveRandCells: function (cells) {
+      var needToRemove = this.EmptyCellsNumber;
+      if (this.removeMode == this.randomRemoveModes.percentageBased) {
+        for (var i = 0; i < cells.length && needToRemove; i++) {
+          if (Math.random() <= needToRemove / (cells.length - i)) {
+            this.UpdateCell(cells[i], { state: this.states.empty });
+            needToRemove--;
+          }
+        }
+      } else {
+        while (needToRemove) {
+          var cell = this.GetRandValue(cells);
+          if (cell.state != this.states.empty) {
+            this.UpdateCell(cell, { state: this.states.empty });
+            needToRemove--;
+          }
+        }
+      }
     },
 
     StepBack: function () {
@@ -165,10 +193,8 @@ export default {
     },
 
     ClearCells: function (cells) {
-      for (const cell of cells) {
-        cell.value = 0;
-        cell.state = this.states.empty;
-      }
+      for (const cell of cells)
+        this.UpdateCell(cell, { state: this.states.empty }, false);
     },
 
     InitGrid: function (cells) {
@@ -204,6 +230,7 @@ export default {
     this.cells = this.InitCells();
     this.grid = this.InitGrid(this.cells);
     this.gridGenerationMode = this.generationModes.naive;
+    this.removeMode = this.randomRemoveModes.percentageBased;
   },
 };
 </script>
