@@ -30,6 +30,12 @@ export default {
       cells: [],
       grid: [],
       steps: [],
+      generationModes: {
+        naive: 1,
+        diagonal: 2,
+      },
+      gridGenerationMode: null,
+      visualSpeed: 20,
       currentStepId: 0,
       rowsNo: 9,
       colsNo: 9,
@@ -106,16 +112,21 @@ export default {
 
     FillGrid: function () {
       this.steps = [];
+      this.currentStepId = 0;
+      this.ClearCells(this.cells);
       var cells = this.InitCells();
-      var diagSubgridsCells = cells.filter(
-        (cell) => cell.subgridRow == cell.subgridCol
-      );
-      this.FillDiagonalSubgrids(diagSubgridsCells);
 
-      var nonDiagSubgridsCells = cells.filter(
-        (cell) => cell.subgridRow != cell.subgridCol
-      );
-      this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
+      if (this.gridGenerationMode == this.generationModes.diagonal) {
+        var diagSubgridsCells = cells.filter(
+          (cell) => cell.subgridRow == cell.subgridCol
+        );
+        this.FillDiagonalSubgrids(diagSubgridsCells);
+
+        var nonDiagSubgridsCells = cells.filter(
+          (cell) => cell.subgridRow != cell.subgridCol
+        );
+        this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
+      } else this.CreateGridWithBacktracking(cells, cells, 0);
 
       // this.cells = cells;
       // this.grid = this.InitGrid(cells);
@@ -144,7 +155,8 @@ export default {
     },
 
     Autoplay: function () {
-      if (this.StepForward()) setTimeout(() => this.Autoplay(), 100);
+      if (this.StepForward())
+        setTimeout(() => this.Autoplay(), 1000 / this.visualSpeed);
     },
 
     AddStep: function (step, cell) {
@@ -191,6 +203,7 @@ export default {
   created: function () {
     this.cells = this.InitCells();
     this.grid = this.InitGrid(this.cells);
+    this.gridGenerationMode = this.generationModes.naive;
   },
 };
 </script>
