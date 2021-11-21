@@ -20,6 +20,7 @@
     <button @click="Autoplay()">Autoplay</button>
     <button @click="StepBack()">StepBack</button>
     <button @click="StepForward()">StepForward</button>
+    <button @click="Solve()">Solve</button>
   </div>
 </template>
 
@@ -33,7 +34,7 @@ export default {
       gridGenerationMode: null,
       visualizeGeneration: false,
       removeMode: null,
-      EmptyCellsNumber: 18,
+      EmptyCellsNumber: 40,
       visualSpeed: 20,
       currentStepId: 0,
       rowsNo: 9,
@@ -93,7 +94,7 @@ export default {
       return validValues;
     },
 
-    CreateGridWithBacktracking: function (cells, gridCells, id) {
+    FillCellsWithBacktracking: function (cells, gridCells, id) {
       if (id == cells.length) return true;
       var cell = cells[id];
       var validValues = this.GetValidCellValues(gridCells, cell);
@@ -103,7 +104,7 @@ export default {
           state: this.states.try,
         });
 
-        if (this.CreateGridWithBacktracking(cells, gridCells, id + 1))
+        if (this.FillCellsWithBacktracking(cells, gridCells, id + 1))
           return true;
 
         validValues = validValues.filter((val) => val != cell.value);
@@ -136,11 +137,11 @@ export default {
         var nonDiagSubgridsCells = cells.filter(
           (cell) => cell.subgridRow != cell.subgridCol
         );
-        this.CreateGridWithBacktracking(nonDiagSubgridsCells, cells, 0);
-        this.UpdateCells(cells, { state: this.states.succeed });
-        this.UpdateCells(cells, { state: this.states.const });
+        this.FillCellsWithBacktracking(nonDiagSubgridsCells, cells, 0);
+        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.succeed });
+        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.const });
       } else {
-        this.CreateGridWithBacktracking(cells, cells, 0);
+        this.FillCellsWithBacktracking(cells, cells, 0);
         this.UpdateCells(cells, { state: this.states.succeed });
         this.UpdateCells(cells, { state: this.states.const });
       }
@@ -169,6 +170,17 @@ export default {
           }
         }
       }
+    },
+
+    Solve: function () {
+      var gridCells = this.cells.map((cell) => {
+        return { ...cell };
+      });
+      var cells = gridCells.filter((cell) => cell.state == this.states.empty);
+      this.visualizeGeneration = true;
+      this.FillCellsWithBacktracking(cells, gridCells, 0);
+      this.UpdateCells(cells, { state: this.states.succeed });
+      this.UpdateCells(cells, { state: this.states.const });
     },
 
     StepBack: function () {
@@ -243,7 +255,7 @@ export default {
     this.grid = this.InitGrid(this.cells);
     this.gridGenerationMode = this.generationModes.naive;
     this.removeMode = this.randomRemoveModes.cellsBasedased;
-    this.visualizeGeneration = true;
+    this.visualizeGeneration = false;
   },
 };
 </script>
