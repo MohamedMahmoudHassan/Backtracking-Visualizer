@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Grid></Grid>
+    <Sudoku></Sudoku>
   </div>
 </template>
 
 <script>
-import Grid from "./components/Grid.vue";
+import Sudoku from "./components/Sudoku.vue";
 
 export default {
   name: "App",
   components: {
-    Grid,
+    Sudoku
   },
 };
 </script>
