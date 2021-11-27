@@ -1,25 +1,31 @@
 <template>
-  <div class="grid">
-    <div class="grid-row" v-for="row in grid" :key="row.id">
-      <div
-        :class="[
-          'grid-cell',
-          cell.state,
-          { 'last-group-row': cell.row % gridBase == 0 },
-          { 'last-group-column': cell.col % gridBase == 0 },
-        ]"
-        :style="{
-          width: getCellLength() + 'px',
-          height: getCellLength() + 'px',
-          fontSize: getFontSize() + 'px',
-        }"
-        v-for="cell in row.value"
-        :key="cell.row + '-' + cell.col"
-      >
-        {{ cell.state == states.empty || cell.state == states.invalid ? "" : cell.value }}
+  <v-card elevation="3" color="grey lighten-5" loading width="600" style="margin: 80px 300px">
+    <div class="grid">
+      <div class="grid-row" v-for="row in grid" :key="row.id">
+        <div
+          :class="[
+            'grid-cell',
+            cell.state,
+            { 'last-group-row': cell.row % gridBase == 0 },
+            { 'last-group-column': cell.col % gridBase == 0 },
+          ]"
+          :style="{
+            width: getCellLength() + 'px',
+            height: getCellLength() + 'px',
+            fontSize: getFontSize() + 'px',
+          }"
+          v-for="cell in row.value"
+          :key="cell.row + '-' + cell.col"
+        >
+          {{
+            cell.state == states.empty || cell.state == states.invalid
+              ? ""
+              : cell.value
+          }}
+        </div>
       </div>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -65,7 +71,7 @@ export default {
   background-color: rgb(13, 185, 13, 0.5);
 }
 
-.invalid-cell{
+.invalid-cell {
   color: rgb(228, 231, 17, 0.5);
   background-color: rgba(238, 255, 0, 0.5);
 }
@@ -76,6 +82,7 @@ export default {
 }
 
 .grid {
+  margin: 28px;
   box-sizing: border-box;
   border-top-style: solid;
   width: fit-content;

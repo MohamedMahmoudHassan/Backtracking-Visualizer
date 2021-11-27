@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <v-navigation-drawer
+    absolute
+    class="secondary"
+    dark
+    permanent
+    right
+    width="400"
+  >
     <input
       type="checkbox"
       v-model="options.visualizeSteps"
@@ -11,7 +18,7 @@
 
     <button @click="FillGrid">Fill</button>
     <button @click="Solve">Solve</button>
-  </div>
+  </v-navigation-drawer>
 </template>
 
 <script>

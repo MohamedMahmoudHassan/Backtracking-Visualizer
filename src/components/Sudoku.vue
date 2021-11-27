@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <v-card color="grey lighten-4">
+    <AppBar title="Backtracking Visulaizer"></AppBar>
     <Grid :grid="grid" :gridBase="options.gridBase" :states="states"></Grid>
     <OptionsControllers
       :options="options"
@@ -13,15 +14,16 @@
       :StepBack="StepBack"
       :StepForward="StepForward"
     ></VisualizationControllers>
-  </div>
+  </v-card>
 </template>
 
 <script>
+import AppBar from "./AppBar.vue";
 import Grid from "./Grid.vue";
 import OptionsControllers from "./OptionsControllers.vue";
 import VisualizationControllers from "./VisualizationControllers.vue";
 export default {
-  components: { Grid, OptionsControllers, VisualizationControllers },
+  components: { AppBar, Grid, OptionsControllers, VisualizationControllers },
   data: function () {
     return {
       cells: [],
