@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <section>
+    <mu-appbar
+      class="app-bar"
+      color="indigo400"
+      title="Sudoku Generator/Solver"
+      :z-depth="18"
+    ></mu-appbar>
     <Grid :grid="grid" :gridBase="options.gridBase" :states="states"></Grid>
     <OptionsControllers
       :options="options"
@@ -13,7 +19,7 @@
       :StepBack="StepBack"
       :StepForward="StepForward"
     ></VisualizationControllers>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -279,4 +285,8 @@ export default {
 </script>
 
 <style>
+.app-bar {
+  width: 100%;
+  z-index: 500;
+}
 </style>
