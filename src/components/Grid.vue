@@ -1,30 +1,39 @@
 <template>
-  <v-card elevation="3" color="grey lighten-5" loading width="600" style="margin: 80px 300px">
-    <div class="grid">
-      <div class="grid-row" v-for="row in grid" :key="row.id">
-        <div
-          :class="[
-            'grid-cell',
-            cell.state,
-            { 'last-group-row': cell.row % gridBase == 0 },
-            { 'last-group-column': cell.col % gridBase == 0 },
-          ]"
-          :style="{
-            width: getCellLength() + 'px',
-            height: getCellLength() + 'px',
-            fontSize: getFontSize() + 'px',
-          }"
-          v-for="cell in row.value"
-          :key="cell.row + '-' + cell.col"
-        >
-          {{
-            cell.state == states.empty || cell.state == states.invalid
-              ? ""
-              : cell.value
-          }}
-        </div>
-      </div>
-    </div>
+  <v-card
+    elevation="3"
+    color="grey lighten-5"
+    width="600"
+    style="margin: 80px 300px"
+  >
+    <v-container color="grey lighten-5">
+      <v-row no-gutters v-for="row in grid" :key="row.id">
+        <template v-for="cell in row.value">
+          <v-col
+            :key="cell.row * gridBase + cell.col"
+            style="text-align: center"
+          >
+            <div
+              :style="{
+                height: getCellLength() + 'px',
+              }"
+              :class="[
+                'grid-cell pa-24',
+                cell.state,
+                { 'first-row': cell.row == 1 },
+                { 'first-col': cell.col == 1 },
+                { 'last-group-row': cell.row % gridBase == 0 },
+                { 'last-group-column': cell.col % gridBase == 0 },
+              ]"
+              :height="getCellLength()"
+              outlined
+              tile
+            >
+              {{ cell.row * gridBase + cell.col }}
+            </div>
+          </v-col>
+        </template>
+      </v-row>
+    </v-container>
   </v-card>
 </template>
 
@@ -44,16 +53,9 @@ export default {
 
 <style>
 .grid-cell {
-  box-sizing: border-box;
-  border-color: rgba(0, 0, 0, 1);
-  border-bottom-style: solid;
-  border-right-style: solid;
-  border-bottom-width: 1px;
-  border-right-width: 1px;
-  float: left;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .try-cell {
@@ -81,26 +83,19 @@ export default {
   background-color: rgba(50, 50, 50, 0.05);
 }
 
-.grid {
-  margin: 28px;
-  box-sizing: border-box;
-  border-top-style: solid;
-  width: fit-content;
+.first-row {
+  border-top-color: rgba(0, 0, 0, 0.4);
 }
 
-.grid-row {
-  box-sizing: border-box;
-  border-left-style: solid;
-  overflow: hidden;
+.first-col {
+  border-left-color: rgba(0, 0, 0, 0.4);
 }
 
 .last-group-row {
-  box-sizing: border-box;
-  border-bottom-width: initial;
+  border-bottom-color: rgba(0, 0, 0, 0.4);
 }
 
 .last-group-column {
-  box-sizing: border-box;
-  border-right-width: initial;
+  border-right-color: rgba(0, 0, 0, 0.4);
 }
 </style>
