@@ -8,10 +8,7 @@
     <v-container color="grey lighten-5">
       <v-row no-gutters v-for="row in grid" :key="row.id">
         <template v-for="cell in row.value">
-          <v-col
-            :key="cell.row * gridBase + cell.col"
-            style="text-align: center"
-          >
+          <v-col :key="cell.row + '-' + cell.col" style="text-align: center">
             <div
               :style="{
                 height: getCellLength() + 'px',
@@ -28,7 +25,7 @@
               outlined
               tile
             >
-              {{ cell.row * gridBase + cell.col }}
+              {{ cell.state == states.empty ? "" : cell.value }}
             </div>
           </v-col>
         </template>
