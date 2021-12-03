@@ -21,8 +21,33 @@ var colorsList = [
 ];
 
 var problemsList = [
-  { id: 1, label: "Sudoku Generator/Solver", value: "Sudoku" },
-  { id: 2, label: "N-Queen", value: "NQueen" },
+  {
+    id: 1,
+    label: "Sudoku Generator",
+    value: "SudokuGenerator",
+    color: colorsList.find((c) => c.value == "red"),
+  },
+  {
+    id: 2,
+    label: "Sudoku Solver",
+    value: "SudokuSolver",
+    color: colorsList.find((c) => c.value == "blue"),
+  },
+  {
+    id: 3,
+    label: "N-Queens",
+    value: "NQueens",
+    color: colorsList.find((c) => c.value == "purple"),
+  },
 ];
 
-export { colorsList, problemsList };
+var sudoku = {
+  gridSizesList: [
+    // { id: 1, label: "1 x 1", value: 1 },
+    { id: 2, label: "2 x 2", value: 2 },
+    { id: 3, label: "3 x 3", value: 3 },
+    { id: 4, label: "4 x 4", value: 4 },
+  ],
+};
+
+export { colorsList, problemsList, sudoku };

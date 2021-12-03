@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar app color="secondary" dark>
-    <v-toolbar-title>Backtracking Visulaizer</v-toolbar-title>
-    <v-sheet class="mx-auto" max-width="500" color="secondary" dark>
+  <v-app-bar app :color="colors.base" dark>
+    <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
+    <v-sheet class="mx-auto" max-width="600" :color="colors.base" dark>
       <v-slide-group show-arrows mandatory>
         <v-slide-item v-for="p in problemsList" :key="p.id">
           <v-btn
@@ -21,6 +21,7 @@
 
 <script>
 import { colorsList, problemsList } from "../config";
+
 export default {
   name: "app-header",
   props: ["colors", "chooseColor", "problem", "chooseProblem"],
@@ -32,7 +33,7 @@ export default {
   methods: {
     changeColor: function () {
       var color = colorsList[Math.floor(Math.random() * colorsList.length)];
-      this.chooseColor(color.value);
+      this.chooseColor(color.value, "primary");
     },
   },
 };

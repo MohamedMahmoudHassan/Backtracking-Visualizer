@@ -7,7 +7,7 @@
           <v-btn
             class="mx-2"
             :input-value="active"
-            :active-class="colors.primary + ' white--text'"
+            :active-class="colors.primary"
             depressed
             rounded
             @click="toggle"
