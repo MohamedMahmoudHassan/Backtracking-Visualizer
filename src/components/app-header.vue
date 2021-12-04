@@ -21,6 +21,7 @@
 
 <script>
 import { colorsList, problemsList } from "../config";
+import { GetRandFromList } from "../utils/helpers";
 
 export default {
   name: "app-header",
@@ -32,7 +33,7 @@ export default {
   },
   methods: {
     changeColor: function () {
-      var color = colorsList[Math.floor(Math.random() * colorsList.length)];
+      var color = GetRandFromList(colorsList);
       this.chooseColor(color.value, "primary");
     },
   },

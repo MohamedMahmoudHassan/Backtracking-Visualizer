@@ -61,7 +61,7 @@ export default {
         empty: "empty-cell",
         const: "const-cell",
         try: "try-cell",
-        failed: "faild-cell",
+        failed: "failed-cell",
         succeed: "succeed-cell",
         invalid: "invalid-cell",
       },
@@ -131,9 +131,6 @@ export default {
       if (addStep) this.steps.push({ actions, description });
     },
 
-    GetRandValue: function (items) {
-      return items[Math.floor(Math.random() * items.length)];
-    },
 
     CellsConfilct: function (cell1, cell2) {
       return (

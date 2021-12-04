@@ -48,6 +48,22 @@ var sudoku = {
     { id: 3, label: "3 x 3", value: 3 },
     { id: 4, label: "4 x 4", value: 4 },
   ],
+  cellStatesList: [
+    { id: 1, label: "Empty", value: "empty-cell" },
+    { id: 2, label: "Const", value: "const-cell" },
+    { id: 3, label: "Try", value: "try-cell" },
+    { id: 4, label: "Failed", value: "failed-cell" },
+    { id: 5, label: "Succeed", value: "succeed-cell" },
+    { id: 6, label: "Invalid", value: "invalid-cell" },
+  ],
+  cellStatesEnum: {
+    empty: "empty-cell",
+    const: "const-cell",
+    try: "try-cell",
+    failed: "failed-cell",
+    succeed: "succeed-cell",
+    invalid: "invalid-cell",
+  },
 };
 
 export { colorsList, problemsList, sudoku };

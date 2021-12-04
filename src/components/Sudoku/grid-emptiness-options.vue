@@ -8,6 +8,7 @@
       max="70"
       min="30"
       thumb-label
+      :disabled="isDisabled"
     >
       <template v-slot:thumb-label="{ value }">
         {{ value + "%" }}
@@ -19,7 +20,7 @@
 <script>
 export default {
   name: "grid-emptiness-options",
-  props: ["gridEmptiness", "chooseGridEmptiness", "colors"],
+  props: ["gridEmptiness", "chooseGridEmptiness", "isDisabled", "colors"],
   data: function () {
     return {
       emptiness: this.gridEmptiness,
