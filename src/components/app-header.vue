@@ -15,7 +15,22 @@
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
-    <v-btn @click="changeColor()">Change Color</v-btn>
+
+    <v-btn class="ma-2" @click="changeColor()" fab small>
+      <v-icon> mdi-palette </v-icon>
+    </v-btn>
+    <v-btn class="ma-2" fab small>
+      <v-icon> mdi-help </v-icon>
+    </v-btn>
+    <v-btn
+      class="ma-2"
+      fab
+      small
+      href="https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer"
+      target="_blank"
+    >
+      <v-icon> mdi-github </v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 

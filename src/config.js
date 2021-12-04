@@ -49,23 +49,24 @@ var optionsDefault = {
   },
 };
 
-var visualization = {
+var visualConfig = {
   modesEnum: {
     active: "active",
     paused: "paused",
     disabled: "disabled",
   },
   speedsList: [
-    { id: 1, label: "Slower", value: 5000 },
-    { id: 2, label: "Slow", value: 1000 },
-    { id: 3, label: "Normal", value: 500 },
-    { id: 4, label: "Fast", value: 100 },
-    { id: 5, label: "Faster", value: 50 },
+    { id: 1, label: "Slower", value: 1, interval: 5000 },
+    { id: 2, label: "Slow", value: 2, interval: 1000 },
+    { id: 3, label: "Normal", value: 3, interval: 500 },
+    { id: 4, label: "Fast", value: 4, interval: 100 },
+    { id: 5, label: "Faster", value: 5, interval: 1 },
   ],
   optionsDefault: {
     mode: "disabled",
-    speed: 500,
+    speed: 3,
     currentStepId: 0,
+    steps: [],
   },
 };
 
@@ -105,4 +106,4 @@ var sudoku = {
   optionsNeedRecreate: ["gridSize"],
 };
 
-export { colorsList, problemsList, optionsDefault, visualization, sudoku };
+export { colorsList, problemsList, optionsDefault, visualConfig, sudoku };

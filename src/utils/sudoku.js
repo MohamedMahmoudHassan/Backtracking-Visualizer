@@ -142,7 +142,7 @@ var RemoveRandCells = function (cells, options) {
   }
 };
 
-var StepForward = function (actions, cells) {
+var ApplyAction = function (actions, cells) {
   for (const action of actions) {
     const { cell, after } = action;
     var gridCell = cells.find((c) => c.row == cell.row && c.col == cell.col);
@@ -151,4 +151,4 @@ var StepForward = function (actions, cells) {
   }
 };
 
-export { InitCells, InitGrid, FillGrid, StepForward };
+export { InitCells, InitGrid, FillGrid, ApplyAction };
