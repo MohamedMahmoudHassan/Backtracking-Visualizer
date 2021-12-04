@@ -1,6 +1,13 @@
 <template>
   <v-card>
-    <AppBar title="Backtracking Visulaizer"></AppBar>
+    <AppBar
+      title="Backtracking Visulaizer"
+      :problems="[
+        { id: 1, name: 'Sudoku Generator/Solver' },
+        { id: 2, name: 'N-Queen' },
+      ]"
+      :colors="colors"
+    ></AppBar>
     <OptionsControllers
       :options="options"
       :colors="colors"
@@ -54,7 +61,7 @@ export default {
         empty: "empty-cell",
         const: "const-cell",
         try: "try-cell",
-        failed: "faild-cell",
+        failed: "failed-cell",
         succeed: "succeed-cell",
         invalid: "invalid-cell",
       },
@@ -94,12 +101,14 @@ export default {
   },
 
   methods: {
-    DescripeStep: function (cells, step) {
+    DescribeStep: function (cells, step) {
       if (step.state == this.states.succeed) return "Success!";
       if (step.state == this.states.failed) return "Can't continue with value " + cells[0].value;
       if (step.state == this.states.empty) return "Removing value " + cells[0].value;
       if (step.state == this.states.const)
-        return cells.length == 1 ? "Putting value " + cells[0].value : "Grid is complete!";
+        return cells.length == this.gridSize * this.gridSize
+          ? "Putting value " + cells[0].value
+          : "Grid is complete!";
       if (step.state == this.states.try)
         return step.validValues.length
           ? "Valid values: " + step.validValues + " | trying: " + step.value
@@ -108,7 +117,7 @@ export default {
 
     UpdateCells: function (cells, after, addStep = true) {
       var actions = [];
-      var description = this.DescripeStep(cells, after);
+      var description = this.DescribeStep(cells, after);
       for (const cell of cells) {
         var action = { cell, before: { ...cell } };
         cell.state = after.state;
@@ -122,11 +131,8 @@ export default {
       if (addStep) this.steps.push({ actions, description });
     },
 
-    GetRandValue: function (items) {
-      return items[Math.floor(Math.random() * items.length)];
-    },
 
-    CellsConfilct: function (cell1, cell2) {
+    CellsConflict: function (cell1, cell2) {
       return (
         cell1.row == cell2.row ||
         cell1.col == cell2.col ||
@@ -139,7 +145,8 @@ export default {
       var gridSize = this.options.gridBase * this.options.gridBase;
       var validValues = Array.from({ length: gridSize }, (_, i) => i + 1);
       for (const c of cells)
-        if (this.CellsConfilct(c, cell)) validValues = validValues.filter((value) => value != c.value);
+        if (this.CellsConflict(c, cell))
+          validValues = validValues.filter((value) => value != c.value);
       return validValues;
     },
 
@@ -148,7 +155,11 @@ export default {
       var cell = cells[id];
       var validValues = this.GetValidCellValues(gridCells, cell);
       while (validValues.length) {
-        this.UpdateCells([cell], { value: this.GetRandValue(validValues), state: this.states.try, validValues });
+        this.UpdateCells([cell], {
+          value: this.GetRandValue(validValues),
+          state: this.states.try,
+          validValues,
+        });
         if (this.FillCellsWithBacktracking(cells, gridCells, id + 1)) return true;
 
         validValues = validValues.filter((val) => val != cell.value);
@@ -162,7 +173,7 @@ export default {
       return false;
     },
 
-    FillDiagonalSubgrids: function (cells) {
+    FillDiagonalSubGrids: function (cells) {
       for (const cell of cells)
         this.UpdateCells([cell], {
           value: this.GetRandValue(this.GetValidCellValues(cells, cell)),
@@ -177,13 +188,13 @@ export default {
       var cells = this.InitCells();
 
       if (this.options.gridGenerationMode == this.generationModes.diagonal) {
-        var diagSubgridsCells = cells.filter((cell) => cell.subgridRow == cell.subgridCol);
-        this.FillDiagonalSubgrids(diagSubgridsCells);
+        var diagSubGridsCells = cells.filter((cell) => cell.subgridRow == cell.subgridCol);
+        this.FillDiagonalSubGrids(diagSubGridsCells);
 
-        var nonDiagSubgridsCells = cells.filter((cell) => cell.subgridRow != cell.subgridCol);
-        this.FillCellsWithBacktracking(nonDiagSubgridsCells, cells, 0);
-        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.succeed });
-        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.const });
+        var nonDiagSubGridsCells = cells.filter((cell) => cell.subgridRow != cell.subgridCol);
+        this.FillCellsWithBacktracking(nonDiagSubGridsCells, cells, 0);
+        this.UpdateCells(nonDiagSubGridsCells, { state: this.states.succeed });
+        this.UpdateCells(nonDiagSubGridsCells, { state: this.states.const });
       } else {
         this.FillCellsWithBacktracking(cells, cells, 0);
         this.UpdateCells(cells, { state: this.states.succeed });
@@ -258,13 +269,17 @@ export default {
         gridCell.state = after.state;
       }
 
-      this.visualization.steps = [{ description, id: this.visualization.currentStepId }, ...this.visualization.steps];
+      this.visualization.steps = [
+        { description, id: this.visualization.currentStepId },
+        ...this.visualization.steps,
+      ];
       if (this.visualization.steps.length > 5) this.visualization.steps.pop();
       return true;
     },
 
     Autoplay: function () {
-      if (this.StepForward()) setTimeout(() => this.Autoplay(), 10000 / (5 * this.visualization.visualSpeed));
+      if (this.StepForward())
+        setTimeout(() => this.Autoplay(), 10000 / (5 * this.visualization.visualSpeed));
     },
 
     ClearCells: function (cells) {

@@ -1,14 +1,12 @@
 <template>
-  <v-card elevation="3" color="grey lighten-5" width="600" style="margin: 100px 0px 80px 400px">
-    <v-container color="grey lighten-5">
+  <v-card elevation="3" color="grey lighten-5" width="600" style="margin: 100px 0px 0px 400px">
+    <v-container>
       <v-row no-gutters v-for="row in grid" :key="row.id">
-        <template v-for="cell in row.value">
-          <v-col :key="cell.row + '-' + cell.col">
-            <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
-              {{ cell.state == states.empty ? "" : cell.value }}
-            </div>
-          </v-col>
-        </template>
+        <v-col v-for="cell in row.value" :key="cell.row + '-' + cell.col">
+          <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
+            {{ cell.state == states.empty ? "" : cell.value }}
+          </div>
+        </v-col>
       </v-row>
     </v-container>
   </v-card>
@@ -39,7 +37,6 @@ export default {
       return {
         height: this.getCellLength() + "px",
         fontSize: this.getFontSize() + "px",
-        textAlign: "center",
       };
     },
   },
@@ -54,18 +51,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: "center";
 }
 
 .try-cell {
-  background-color:#80D8FF;
+  background-color: #80d8ff;
 }
 
 .faild-cell {
-  background-color: #FF8A80;
+  background-color: #ff8a80;
 }
 
 .succeed-cell {
-  background-color: #B9F6CA;
+  background-color: #b9f6ca;
 }
 
 .invalid-cell {
