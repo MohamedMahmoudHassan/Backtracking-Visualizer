@@ -67,6 +67,7 @@ var visualConfig = {
     speed: 3,
     currentStepId: 0,
     steps: [],
+    descriptionList: [],
   },
 };
 

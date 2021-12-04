@@ -142,7 +142,7 @@ var RemoveRandCells = function (cells, options) {
   }
 };
 
-var ApplyAction = function (actions, cells) {
+var ApplyForwardAction = function (actions, cells) {
   for (const action of actions) {
     const { cell, after } = action;
     var gridCell = cells.find((c) => c.row == cell.row && c.col == cell.col);
@@ -151,4 +151,13 @@ var ApplyAction = function (actions, cells) {
   }
 };
 
-export { InitCells, InitGrid, FillGrid, ApplyAction };
+var ApplyBackAction = function (actions, cells) {
+  for (const action of actions) {
+    const { cell, before } = action;
+    var gridCell = cells.find((c) => c.row == cell.row && c.col == cell.col);
+    gridCell.value = before.value;
+    gridCell.state = before.state;
+  }
+};
+
+export { InitCells, InitGrid, FillGrid, ApplyForwardAction, ApplyBackAction };

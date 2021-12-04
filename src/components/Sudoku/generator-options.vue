@@ -23,7 +23,7 @@
     </v-card>
 
     <v-row align="center" justify="space-around" style="margin-top: 20px">
-      <v-btn :color="colors.primary" elevation="4" :disabled="isDisabled" @click="startVisualization"
+      <v-btn :color="colors.primary" elevation="4" block :disabled="isDisabled" @click="StartVisualization"
         >Start Visualization</v-btn
       >
     </v-row>
@@ -36,7 +36,7 @@ import gridEmptinessOptions from "./grid-emptiness-options.vue";
 export default {
   name: "generator-options",
   components: { gridSizeOptions, gridEmptinessOptions },
-  props: ["options", "chooseOption", "isDisabled", "startVisualization", "colors"],
+  props: ["options", "chooseOption", "isDisabled", "StartVisualization", "colors"],
   data: function () {
     return {
       gridSize: 3,
