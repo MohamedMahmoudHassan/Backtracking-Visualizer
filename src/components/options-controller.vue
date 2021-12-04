@@ -5,6 +5,7 @@
       :colors="colors"
       :options="options"
       :chooseOption="chooseOption"
+      :startVisualization="startVisualization"
     ></sudoku-generator-options>
   </v-navigation-drawer>
 </template>
@@ -14,7 +15,7 @@ import sudokuGeneratorOptions from "./Sudoku/generator-options.vue";
 export default {
   name: "options-controller",
   components: { sudokuGeneratorOptions },
-  props: ["options", "chooseOption", "isDisabled", "colors"],
+  props: ["options", "chooseOption", "isDisabled", "startVisualization", "colors"],
   data: function () {
     return {};
   },

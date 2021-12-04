@@ -41,6 +41,34 @@ var problemsList = [
   },
 ];
 
+var optionsDefault = {
+  problem: "SudokuGenerator",
+  colors: {
+    primary: "orange",
+    base: "secondary",
+  },
+};
+
+var visualization = {
+  modesEnum: {
+    active: "active",
+    paused: "paused",
+    disabled: "disabled",
+  },
+  speedsList: [
+    { id: 1, label: "Slower", value: 5000 },
+    { id: 2, label: "Slow", value: 1000 },
+    { id: 3, label: "Normal", value: 500 },
+    { id: 4, label: "Fast", value: 100 },
+    { id: 5, label: "Faster", value: 50 },
+  ],
+  optionsDefault: {
+    mode: "disabled",
+    speed: 500,
+    currentStepId: 0,
+  },
+};
+
 var sudoku = {
   gridSizesList: [
     // { id: 1, label: "1 x 1", value: 1 },
@@ -64,6 +92,17 @@ var sudoku = {
     succeed: "succeed-cell",
     invalid: "invalid-cell",
   },
+  optionsEnum: {
+    gridSize: "gridSize",
+    gridEmptiness: "gridEmptiness",
+    diagonalsFirst: "diagonalsFirst",
+  },
+  optionsDefault: {
+    gridSize: 3,
+    gridEmptiness: 50,
+    diagonalsFirst: false,
+  },
+  optionsNeedRecreate: ["gridSize"],
 };
 
-export { colorsList, problemsList, sudoku };
+export { colorsList, problemsList, optionsDefault, visualization, sudoku };

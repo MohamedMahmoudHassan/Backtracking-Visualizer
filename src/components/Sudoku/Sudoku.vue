@@ -132,7 +132,7 @@ export default {
     },
 
 
-    CellsConfilct: function (cell1, cell2) {
+    CellsConflict: function (cell1, cell2) {
       return (
         cell1.row == cell2.row ||
         cell1.col == cell2.col ||
@@ -145,7 +145,7 @@ export default {
       var gridSize = this.options.gridBase * this.options.gridBase;
       var validValues = Array.from({ length: gridSize }, (_, i) => i + 1);
       for (const c of cells)
-        if (this.CellsConfilct(c, cell))
+        if (this.CellsConflict(c, cell))
           validValues = validValues.filter((value) => value != c.value);
       return validValues;
     },
@@ -173,7 +173,7 @@ export default {
       return false;
     },
 
-    FillDiagonalSubgrids: function (cells) {
+    FillDiagonalSubGrids: function (cells) {
       for (const cell of cells)
         this.UpdateCells([cell], {
           value: this.GetRandValue(this.GetValidCellValues(cells, cell)),
@@ -188,13 +188,13 @@ export default {
       var cells = this.InitCells();
 
       if (this.options.gridGenerationMode == this.generationModes.diagonal) {
-        var diagSubgridsCells = cells.filter((cell) => cell.subgridRow == cell.subgridCol);
-        this.FillDiagonalSubgrids(diagSubgridsCells);
+        var diagSubGridsCells = cells.filter((cell) => cell.subgridRow == cell.subgridCol);
+        this.FillDiagonalSubGrids(diagSubGridsCells);
 
-        var nonDiagSubgridsCells = cells.filter((cell) => cell.subgridRow != cell.subgridCol);
-        this.FillCellsWithBacktracking(nonDiagSubgridsCells, cells, 0);
-        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.succeed });
-        this.UpdateCells(nonDiagSubgridsCells, { state: this.states.const });
+        var nonDiagSubGridsCells = cells.filter((cell) => cell.subgridRow != cell.subgridCol);
+        this.FillCellsWithBacktracking(nonDiagSubGridsCells, cells, 0);
+        this.UpdateCells(nonDiagSubGridsCells, { state: this.states.succeed });
+        this.UpdateCells(nonDiagSubGridsCells, { state: this.states.const });
       } else {
         this.FillCellsWithBacktracking(cells, cells, 0);
         this.UpdateCells(cells, { state: this.states.succeed });
