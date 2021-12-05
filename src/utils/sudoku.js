@@ -1,10 +1,12 @@
-import { sudoku } from "../config";
+import { sudokuGenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
-var { cellStatesEnum, optionsEnum } = sudoku;
+var { cellStatesEnum, optionsEnum } = sudokuGenConfig;
 var steps = [];
 
 var InitCells = function (options) {
+  // eslint-disable-next-line no-debugger
+  debugger;
   var cells = [];
   var size = options.gridSize * options.gridSize;
   for (var rowId = 1; rowId <= size; rowId++)

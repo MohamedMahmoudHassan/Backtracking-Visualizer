@@ -1,10 +1,11 @@
 <template>
   <v-app>
     <options-controller
-      :isDisabled="onVisualization()"
+      :isDisabled="visualization.mode != modesEnum.disabled"
+      :problem="problem"
       :colors="colors"
       :options="options"
-      :chooseOption="(opt, prop) => changeOption(opt, prop)"
+      :chooseOption="(opt, prop) => ChangeOption(opt, prop)"
       :StartVisualization="(steps) => startVisualization(steps)"
     ></options-controller>
     <app-header
@@ -18,6 +19,7 @@
         <v-col>
           <problem-grid
             :grid="grid"
+            :problem="problem"
             :changeGrid="(newGrid) => (grid = newGrid)"
             :options="options"
             :colors="colors"
@@ -32,7 +34,7 @@
             :StepBack="StepBack"
             :StopVisualization="StopVisualization"
             :colors="colors"
-            :isDisabled="!onVisualization()"
+            :isDisabled="visualization.mode == modesEnum.disabled"
           ></visualization-controller>
         </v-col>
       </v-row>
@@ -46,8 +48,8 @@ import optionsController from "./components/options-controller.vue";
 import problemGrid from "./components/problem-grid.vue";
 import visualizationController from "./components/visualization-controller.vue";
 
-import { InitCells, FillGrid, ApplyForwardAction, ApplyBackAction } from "./utils/sudoku";
-import { optionsDefault, visualConfig, sudoku } from "./config";
+import { InitGrid, Solve, ApplyForwardAction, ApplyBackAction } from "./utils/helpers";
+import { optionsDefault, visualConfig } from "./config";
 
 export default {
   name: "App",
@@ -56,31 +58,29 @@ export default {
     return {
       problem: optionsDefault.problem,
       colors: optionsDefault.colors,
-      options: {},
-      optionsNeedRecreate: [],
       grid: {},
+      options: optionsDefault.options,
+      optionsNeedRecreate: optionsDefault.optionsNeedRecreate,
       visualization: visualConfig.optionsDefault,
+      modesEnum: visualConfig.modesEnum,
     };
   },
   methods: {
-    changeOption: function (opt, prop) {
+    ChangeOption: function (opt, prop) {
       this.options[prop] = opt;
-      if (this.optionsNeedRecreate.includes(prop)) this.grid = InitCells(this.options);
+      if (this.optionsNeedRecreate.includes(prop)) InitGrid(this.problem, this.options);
     },
 
-    onVisualization: function () {
-      return this.visualization.mode != visualConfig.modesEnum.disabled;
-    },
     startVisualization: function () {
       this.StopVisualization();
-      this.visualization.steps = FillGrid(this.options);
-      this.StartAutoPlay(); // setTimeout(() => this.StartAutoPlay(), 500);
+      this.visualization.steps = Solve(this.problem, this.options, this.grid);
+      this.StartAutoPlay();
     },
 
     StepForward: function () {
       if (this.visualization.currentStepId >= this.visualization.steps.length) return false;
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
-      ApplyForwardAction(actions, this.grid);
+      ApplyForwardAction(this.problem, actions, this.grid);
 
       this.visualization.descriptionList = [
         { value: description, id: this.visualization.currentStepId },
@@ -93,7 +93,7 @@ export default {
     StepBack: function () {
       if (!this.visualization.currentStepId) return false;
       const { actions } = this.visualization.steps[--this.visualization.currentStepId];
-      ApplyBackAction(actions, this.grid);
+      ApplyBackAction(this.problem, actions, this.grid);
 
       this.visualization.descriptionList.splice(0, 1);
       if (this.visualization.currentStepId > 4)
@@ -116,17 +116,19 @@ export default {
           visualConfig.speedsList.find((sp) => sp.value == this.visualization.speed).interval
         );
     },
+
     Pause: function () {
       this.visualization.mode = visualConfig.modesEnum.paused;
     },
+
     StopVisualization: function () {
       this.visualization.mode = visualConfig.modesEnum.disabled;
       this.visualization.currentStepId = 0;
-      this.grid = InitCells(this.options);
+      this.grid = InitGrid(this.problem, this.options);
     },
   },
   created: function () {
-    this.optionsNeedRecreate = sudoku.optionsNeedRecreate;
+    this.grid = InitGrid(this.problem, this.options);
   },
 };
 </script>

@@ -23,7 +23,12 @@
     </v-card>
 
     <v-row align="center" justify="space-around" style="margin-top: 20px">
-      <v-btn :color="colors.primary" elevation="4" block :disabled="isDisabled" @click="StartVisualization"
+      <v-btn
+        :color="colors.primary"
+        elevation="4"
+        block
+        :disabled="isDisabled"
+        @click="StartVisualization"
         >Start Visualization</v-btn
       >
     </v-row>
@@ -39,15 +44,10 @@ export default {
   props: ["options", "chooseOption", "isDisabled", "StartVisualization", "colors"],
   data: function () {
     return {
-      gridSize: 3,
-      gridEmptiness: 50,
-      diagonalsFirst: false,
+      gridSize: this.options.gridSize,
+      gridEmptiness: this.options.gridEmptiness,
+      diagonalsFirst: this.options.diagonalsFirst,
     };
-  },
-  created: function () {
-    this.chooseOption(this.gridSize, "gridSize");
-    this.chooseOption(this.gridEmptiness, "gridEmptiness");
-    this.chooseOption(this.diagonalsFirst, "diagonalsFirst");
   },
 };
 </script>

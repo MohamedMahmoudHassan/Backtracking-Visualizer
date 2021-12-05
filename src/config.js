@@ -41,12 +41,10 @@ var problemsList = [
   },
 ];
 
-var optionsDefault = {
-  problem: "SudokuGenerator",
-  colors: {
-    primary: "orange",
-    base: "secondary",
-  },
+var problemsEnum = {
+  sudokuGenerator: "SudokuGenerator",
+  sudokuSolver: "SudokuSolver",
+  nQueens: "NQueens",
 };
 
 var visualConfig = {
@@ -71,7 +69,7 @@ var visualConfig = {
   },
 };
 
-var sudoku = {
+var sudokuConfig = {
   gridSizesList: [
     // { id: 1, label: "1 x 1", value: 1 },
     { id: 2, label: "2 x 2", value: 2 },
@@ -94,6 +92,12 @@ var sudoku = {
     succeed: "succeed-cell",
     invalid: "invalid-cell",
   },
+};
+
+var sudokuGenConfig = {
+  gridSizesList: sudokuConfig.gridSizesList,
+  cellStatesList: sudokuConfig.cellStatesList,
+  cellStatesEnum: sudokuConfig.cellStatesEnum,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -107,4 +111,22 @@ var sudoku = {
   optionsNeedRecreate: ["gridSize"],
 };
 
-export { colorsList, problemsList, optionsDefault, visualConfig, sudoku };
+var optionsDefault = {
+  problem: "SudokuGenerator",
+  colors: {
+    primary: "orange",
+    base: "secondary",
+  },
+  options: sudokuGenConfig.optionsDefault,
+  optionsNeedRecreate: sudokuGenConfig.optionsNeedRecreate,
+};
+
+export {
+  colorsList,
+  problemsList,
+  problemsEnum,
+  optionsDefault,
+  visualConfig,
+  sudokuConfig,
+  sudokuGenConfig,
+};

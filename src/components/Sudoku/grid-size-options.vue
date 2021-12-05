@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import { sudoku } from "../../config";
+import { sudokuGenConfig } from "../../config";
 
 export default {
   name: "grid-size-options",
   props: ["gridSize", "chooseGridSize", "isDisabled", "colors"],
   data: function () {
     return {
-      gridSizesList: sudoku.gridSizesList,
+      gridSizesList: sudokuGenConfig.gridSizesList,
       size: this.gridSize,
     };
   },
