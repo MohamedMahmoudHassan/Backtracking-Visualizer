@@ -12,15 +12,6 @@
       :gridEmptiness="gridEmptiness"
       :chooseGridEmptiness="(emptiness) => chooseOption(emptiness, 'gridEmptiness')"
     ></grid-emptiness-options>
-    <v-card :color="colors.base" tile outlined>
-      <v-switch
-        :disabled="isDisabled"
-        v-model="diagonalsFirst"
-        label="Generate Diagonals First"
-        :color="colors.primary"
-        @change="chooseOption(diagonalsFirst, 'diagonalsFirst')"
-      ></v-switch>
-    </v-card>
   </v-card>
 </template>
 
@@ -35,7 +26,6 @@ export default {
     return {
       gridSize: this.options.gridSize,
       gridEmptiness: this.options.gridEmptiness,
-      diagonalsFirst: this.options.diagonalsFirst,
     };
   },
 };

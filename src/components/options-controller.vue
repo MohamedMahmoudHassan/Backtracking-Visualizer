@@ -6,18 +6,38 @@
       :colors="colors"
       :options="options"
       :chooseOption="chooseOption"
-      :StartVisualization="StartVisualization"
     ></sudoku-generator-options>
+    <sudoku-solver-options
+      v-else-if="problem == problemsEnum.sudokuSolver"
+      :isDisabled="isDisabled"
+      :colors="colors"
+      :options="options"
+      :chooseOption="chooseOption"
+    >
+    </sudoku-solver-options>
+    <v-btn
+      :color="colors.primary"
+      elevation="4"
+      block
+      tile
+      :disabled="isDisabled"
+      @click="StartVisualization"
+      style="margin-top: 20px"
+      >Start Visualization</v-btn
+    >
   </v-navigation-drawer>
 </template>
 
 <script>
 import sudokuGeneratorOptions from "./Sudoku/generator-options.vue";
+import sudokuSolverOptions from "./Sudoku/solver-options.vue";
 
-import { problemsEnum } from "../config";
+import { mainConfig } from "../config";
+var { problemsEnum } = mainConfig;
+
 export default {
   name: "options-controller",
-  components: { sudokuGeneratorOptions },
+  components: { sudokuGeneratorOptions, sudokuSolverOptions },
   props: ["options", "chooseOption", "isDisabled", "StartVisualization", "problem", "colors"],
   data: function () {
     return {

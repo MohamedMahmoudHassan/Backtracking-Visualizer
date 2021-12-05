@@ -7,6 +7,7 @@
       :color="colors.primary"
       max="70"
       min="30"
+      step="10"
       thumb-label
       :disabled="isDisabled"
     >

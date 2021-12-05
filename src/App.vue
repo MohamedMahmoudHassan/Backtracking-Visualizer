@@ -6,13 +6,13 @@
       :colors="colors"
       :options="options"
       :chooseOption="(opt, prop) => ChangeOption(opt, prop)"
-      :StartVisualization="(steps) => startVisualization(steps)"
+      :StartVisualization="(steps) => StartVisualization(steps)"
     ></options-controller>
     <app-header
       :colors="colors"
       :chooseColor="(c, prop) => (colors[prop] = c)"
       :problem="problem"
-      :chooseProblem="(p) => (problem = p)"
+      :chooseProblem="(p) => ChangeProblem(p)"
     ></app-header>
     <v-main color="grey lighten-4">
       <v-row no-gutters>
@@ -32,7 +32,7 @@
             :Pause="Pause"
             :StepForward="StepForward"
             :StepBack="StepBack"
-            :StopVisualization="StopVisualization"
+            :StopVisualization="InitProblem"
             :colors="colors"
             :isDisabled="visualization.mode == modesEnum.disabled"
           ></visualization-controller>
@@ -48,37 +48,61 @@ import optionsController from "./components/options-controller.vue";
 import problemGrid from "./components/problem-grid.vue";
 import visualizationController from "./components/visualization-controller.vue";
 
-import { InitGrid, Solve, ApplyForwardAction, ApplyBackAction } from "./utils/helpers";
-import { optionsDefault, visualConfig } from "./config";
+import {
+  InitGrid,
+  GetDefaultOptions,
+  GetOptionsNeedRecreate,
+  Solve,
+  ApplyForwardAction,
+  ApplyBackAction,
+} from "./utils/helpers";
+import { mainConfig, visualConfig } from "./config";
+var { defaultValues } = mainConfig;
 
 export default {
   name: "App",
   components: { appHeader, optionsController, problemGrid, visualizationController },
   data: function () {
     return {
-      problem: optionsDefault.problem,
-      colors: optionsDefault.colors,
+      problem: defaultValues.problem,
+      colors: defaultValues.colors,
       grid: {},
-      options: optionsDefault.options,
-      optionsNeedRecreate: optionsDefault.optionsNeedRecreate,
-      visualization: visualConfig.optionsDefault,
+      options: {},
+      optionsNeedRecreate: [],
+      visualization: { ...visualConfig.defaultValues },
       modesEnum: visualConfig.modesEnum,
     };
   },
   methods: {
-    ChangeOption: function (opt, prop) {
-      this.options[prop] = opt;
-      if (this.optionsNeedRecreate.includes(prop)) InitGrid(this.problem, this.options);
+    InitProblem: function () {
+      this.visualization = { ...visualConfig.defaultValues };
+      // this.visualization.mode = visualConfig.modesEnum.disabled;
+      this.grid = InitGrid(this.problem, this.options);
     },
 
-    startVisualization: function () {
-      this.StopVisualization();
+    ChangeOption: function (opt, prop) {
+      this.options[prop] = opt;
+      if (this.optionsNeedRecreate.includes(prop)) this.InitProblem();
+    },
+
+    ChangeProblem: function (problem) {
+      this.problem = problem;
+      this.options = GetDefaultOptions(problem);
+      this.optionsNeedRecreate = GetOptionsNeedRecreate(problem);
+      this.InitProblem();
+    },
+
+    StartVisualization: function () {
+      // this.InitProblem();
       this.visualization.steps = Solve(this.problem, this.options, this.grid);
       this.StartAutoPlay();
     },
 
     StepForward: function () {
-      if (this.visualization.currentStepId >= this.visualization.steps.length) return false;
+      if (this.visualization.currentStepId >= this.visualization.steps.length) {
+        this.Pause();
+        return false;
+      }
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
       ApplyForwardAction(this.problem, actions, this.grid);
 
@@ -120,15 +144,9 @@ export default {
     Pause: function () {
       this.visualization.mode = visualConfig.modesEnum.paused;
     },
-
-    StopVisualization: function () {
-      this.visualization.mode = visualConfig.modesEnum.disabled;
-      this.visualization.currentStepId = 0;
-      this.grid = InitGrid(this.problem, this.options);
-    },
   },
   created: function () {
-    this.grid = InitGrid(this.problem, this.options);
+    this.ChangeProblem(this.problem);
   },
 };
 </script>

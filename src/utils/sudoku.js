@@ -5,8 +5,6 @@ var { cellStatesEnum, optionsEnum } = sudokuGenConfig;
 var steps = [];
 
 var InitCells = function (options) {
-  // eslint-disable-next-line no-debugger
-  debugger;
   var cells = [];
   var size = options.gridSize * options.gridSize;
   for (var rowId = 1; rowId <= size; rowId++)
@@ -19,6 +17,15 @@ var InitCells = function (options) {
         state: cellStatesEnum.empty,
         value: 0,
       });
+  return cells;
+};
+
+var InitFilledCells = function (options) {
+  var cells = InitCells(options);
+  FillCellsWithBacktracking(cells, cells, 0, options);
+  UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
+  UpdateCells(cells, { state: cellStatesEnum.const }, options);
+  RemoveRandCells(cells, options);
   return cells;
 };
 
@@ -51,6 +58,18 @@ var FillGrid = function (options) {
     UpdateCells(cells, { state: cellStatesEnum.const }, options);
   }
   RemoveRandCells(cells, options);
+  return steps;
+};
+
+var SolveGrid = function (options, grid) {
+  steps = [];
+  var gridCells = grid.map((cell) => {
+    return { ...cell };
+  });
+  var cells = gridCells.filter((cell) => cell.state == cellStatesEnum.empty);
+  FillCellsWithBacktracking(cells, gridCells, 0, options);
+  UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
+  UpdateCells(cells, { state: cellStatesEnum.const }, options);
   return steps;
 };
 
@@ -162,4 +181,12 @@ var ApplyBackAction = function (actions, cells) {
   }
 };
 
-export { InitCells, InitGrid, FillGrid, ApplyForwardAction, ApplyBackAction };
+export {
+  InitCells,
+  InitFilledCells,
+  InitGrid,
+  FillGrid,
+  SolveGrid,
+  ApplyForwardAction,
+  ApplyBackAction,
+};

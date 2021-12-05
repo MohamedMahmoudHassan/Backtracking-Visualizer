@@ -2,7 +2,7 @@
   <v-card style="margin: 20px 20px 0px 0px; float: right" width="350">
     <v-progress-linear
       :color="colors.primary"
-      :value="(visualization.currentStepId * 100) / visualization.steps.length"
+      :value="isDisabled ? 0 : (visualization.currentStepId * 100) / visualization.steps.length"
     ></v-progress-linear>
     <v-card height="380" tile outlined>
       <v-timeline dense v-if="!isDisabled && visualization.speed <= 3">

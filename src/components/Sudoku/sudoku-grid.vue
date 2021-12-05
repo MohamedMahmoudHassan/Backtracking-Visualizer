@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row no-gutters v-for="row in grid" :key="row.id">
+    <v-row no-gutters v-for="row in sudokuGrid" :key="row.id">
       <v-col v-for="cell in row.value" :key="cell.row + '-' + cell.col">
         <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
           {{ cell.state == cellStatesEnum.empty ? "" : cell.value }}
@@ -11,13 +11,15 @@
 </template>
 
 <script>
+import { InitGrid } from "../../utils/sudoku";
 import { sudokuConfig } from "../../config";
 
 export default {
   name: "sudoku-grid",
-  props: ["grid", "options", "colors"],
+  props: ["grid", "changeGrid", "options", "colors"],
   data: function () {
     return {
+      sudokuGrid: [],
       cellStatesEnum: sudokuConfig.cellStatesEnum,
     };
   },
@@ -44,6 +46,14 @@ export default {
         height: this.getCellLength() + "px",
         fontSize: this.getFontSize() + "px",
       };
+    },
+  },
+  created: function () {
+    this.sudokuGrid = InitGrid(this.grid, this.options);
+  },
+  watch: {
+    grid: function () {
+      this.sudokuGrid = InitGrid(this.grid, this.options);
     },
   },
 };

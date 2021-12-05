@@ -35,8 +35,9 @@
 </template>
 
 <script>
-import { colorsList, problemsList } from "../config";
+import { mainConfig } from "../config";
 import { GetRandFromList } from "../utils/helpers";
+var { colorsList, problemsList } = mainConfig;
 
 export default {
   name: "app-header",

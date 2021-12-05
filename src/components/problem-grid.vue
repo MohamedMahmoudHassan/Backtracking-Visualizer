@@ -1,22 +1,24 @@
 <template>
   <v-card elevation="3" color="grey lighten-5" width="600" style="margin: 20px 0px 0px 350px">
-    <generator-grid
-      v-if="problem == problemsEnum.sudokuGenerator"
+    <sudoku-grid
+      v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
       :grid="grid"
       :changeGrid="changeGrid"
       :options="options"
       :colors="colors"
-    ></generator-grid>
+    ></sudoku-grid>
   </v-card>
 </template>
 
 <script>
-import generatorGrid from "./Sudoku/generator-grid.vue";
+import sudokuGrid from "./Sudoku/sudoku-grid.vue";
 
-import { problemsEnum } from "../config";
+import { mainConfig } from "../config";
+var { problemsEnum } = mainConfig;
+
 export default {
   name: "problem-grid",
-  components: { generatorGrid },
+  components: { sudokuGrid },
   props: ["grid", "changeGrid", "options", "problem", "colors"],
   data: function () {
     return {
