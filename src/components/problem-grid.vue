@@ -7,18 +7,20 @@
       :options="options"
       :colors="colors"
     ></sudoku-grid>
+    <n-queens-grid v-else :colors="colors"></n-queens-grid>
   </v-card>
 </template>
 
 <script>
 import sudokuGrid from "./Sudoku/sudoku-grid.vue";
+import nQueensGrid from "./NQueens/n-queens-grid.vue";
 
 import { mainConfig } from "../config";
 var { problemsEnum } = mainConfig;
 
 export default {
   name: "problem-grid",
-  components: { sudokuGrid },
+  components: { sudokuGrid, nQueensGrid },
   props: ["grid", "changeGrid", "options", "problem", "colors"],
   data: function () {
     return {

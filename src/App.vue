@@ -115,6 +115,7 @@ export default {
     },
 
     StepBack: function () {
+      this.Pause();
       if (!this.visualization.currentStepId) return false;
       const { actions } = this.visualization.steps[--this.visualization.currentStepId];
       ApplyBackAction(this.problem, actions, this.grid);

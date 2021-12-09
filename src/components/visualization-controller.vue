@@ -5,24 +5,18 @@
       :value="isDisabled ? 0 : (visualization.currentStepId * 100) / visualization.steps.length"
     ></v-progress-linear>
     <v-card height="380" tile outlined>
-      <v-timeline dense v-if="!isDisabled && visualization.speed <= 3">
+      <v-timeline dense v-if="!isDisabled && (visualization.speed <= 3 || visualization.mode != visualizationModes.active)">
         <v-slide-x-transition group hide-on-leave>
-          <v-timeline-item
-            v-for="step in visualization.descriptionList"
-            :key="step.id"
-            :color="colors.primary"
-            >{{ step.value }}</v-timeline-item
-          >
+          <v-timeline-item v-for="step in visualization.descriptionList" :key="step.id" :color="colors.primary">{{
+            step.value
+          }}</v-timeline-item>
         </v-slide-x-transition>
       </v-timeline>
+      <v-card v-else-if="!isDisabled" outlined class="unavailable-description" tile disabled>
+        Steps description is not available in fast mode, the animation looks bad :(
+      </v-card>
     </v-card>
-    <v-btn
-      :color="colors.primary"
-      elevation="4"
-      block
-      :disabled="isDisabled"
-      :dark="!isDisabled"
-      tile
+    <v-btn :color="colors.primary" elevation="4" block :disabled="isDisabled" :dark="!isDisabled" tile
       >{{ visualization.currentStepId }} of {{ visualization.steps.length }} steps</v-btn
     >
     <v-card tile outlined>
@@ -86,6 +80,10 @@
         </v-btn>
       </v-card>
     </v-card>
+    <v-snackbar v-model="showCompleteSnackbar" vertical>
+      Visualization steps are completed
+      <v-btn :color="colors.primary" text small @click="Stop"> Stop Visualization </v-btn>
+    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -93,21 +91,26 @@ import { visualConfig } from "../config";
 
 export default {
   name: "visualization-controller",
-  props: [
-    "visualization",
-    "AutoPlay",
-    "Pause",
-    "StepForward",
-    "StepBack",
-    "StopVisualization",
-    "isDisabled",
-    "colors",
-  ],
+  props: ["visualization", "AutoPlay", "Pause", "StepForward", "StepBack", "StopVisualization", "isDisabled", "colors"],
   data: function () {
     return {
       visualizationModes: visualConfig.modesEnum,
       visualizationSpeedsList: visualConfig.speedsList,
+      showCompleteSnackbar: false,
     };
+  },
+  methods: {
+    Stop: function () {
+      this.showCompleteSnackbar = false;
+      this.StopVisualization();
+    },
   },
 };
 </script>
+
+<style>
+.unavailable-description {
+  margin: 140px 30px;
+  padding: 10px;
+}
+</style>
