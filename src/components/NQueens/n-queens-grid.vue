@@ -3,7 +3,7 @@
     <v-row no-gutters v-for="row in 8" :key="row.id">
       <v-col v-for="col in 8" :key="row + '-' + col">
         <div :style="getCellStyle()" :class="getCellClass(row, col)" outlined tile>
-          <img src="../../assets/chees-queen.png" :height="getCellLength() * 2 / 3">
+          <img src="../../assets/queen_chess.svg" :height="getCellLength() * 2 / 3">
         </div>
       </v-col>
     </v-row>

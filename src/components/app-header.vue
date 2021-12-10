@@ -8,7 +8,7 @@
             class="mx-2"
             rounded
             :color="p.value == problem ? colors.primary : ''"
-            @click="chooseProblem(p.value)"
+            @click="ChooseProblem(p.value)"
           >
             {{ p.label }}
           </v-btn>
@@ -16,7 +16,7 @@
       </v-slide-group>
     </v-sheet>
 
-    <v-btn class="ma-2" @click="changeColor()" fab small>
+    <v-btn class="ma-2" @click="ChangeColor()" fab small>
       <v-icon> mdi-palette </v-icon>
     </v-btn>
     <v-btn class="ma-2" fab small>
@@ -41,16 +41,16 @@ var { colorsList, problemsList } = mainConfig;
 
 export default {
   name: "app-header",
-  props: ["colors", "chooseColor", "problem", "chooseProblem"],
+  props: ["colors", "ChooseColor", "problem", "ChooseProblem"],
   data: function () {
     return {
       problemsList: problemsList,
     };
   },
   methods: {
-    changeColor: function () {
+    ChangeColor: function () {
       var color = GetRandFromList(colorsList);
-      this.chooseColor(color.value, "primary");
+      this.ChooseColor(color.value, "primary");
     },
   },
 };

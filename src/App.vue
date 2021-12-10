@@ -5,36 +5,36 @@
       :problem="problem"
       :colors="colors"
       :options="options"
-      :chooseOption="(opt, prop) => ChangeOption(opt, prop)"
+      :ChooseOption="(opt, prop) => ChangeOption(opt, prop)"
       :StartVisualization="(steps) => StartVisualization(steps)"
     ></options-controller>
     <app-header
-      :colors="colors"
-      :chooseColor="(c, prop) => (colors[prop] = c)"
       :problem="problem"
-      :chooseProblem="(p) => ChangeProblem(p)"
+      :colors="colors"
+      :ChooseColor="(c, prop) => (colors[prop] = c)"
+      :ChooseProblem="(p) => ChangeProblem(p)"
     ></app-header>
-    <v-main color="grey lighten-4">
+    <v-main class="grey lighten-4">
       <v-row no-gutters>
         <v-col>
           <problem-grid
             :grid="grid"
             :problem="problem"
-            :changeGrid="(newGrid) => (grid = newGrid)"
+            :ChangeGrid="(newGrid) => (grid = newGrid)"
             :options="options"
             :colors="colors"
           ></problem-grid>
         </v-col>
         <v-col>
           <visualization-controller
+            :isDisabled="visualization.mode == modesEnum.disabled"
+            :colors="colors"
             :visualization="visualization"
             :AutoPlay="StartAutoPlay"
             :Pause="Pause"
             :StepForward="StepForward"
             :StepBack="StepBack"
             :StopVisualization="InitProblem"
-            :colors="colors"
-            :isDisabled="visualization.mode == modesEnum.disabled"
           ></visualization-controller>
         </v-col>
       </v-row>
@@ -71,12 +71,12 @@ export default {
       optionsNeedRecreate: [],
       visualization: { ...visualConfig.defaultValues },
       modesEnum: visualConfig.modesEnum,
+      showVisCompleteSnackbar: false,
     };
   },
   methods: {
     InitProblem: function () {
       this.visualization = { ...visualConfig.defaultValues };
-      // this.visualization.mode = visualConfig.modesEnum.disabled;
       this.grid = InitGrid(this.problem, this.options);
     },
 
@@ -95,12 +95,14 @@ export default {
     StartVisualization: function () {
       // this.InitProblem();
       this.visualization.steps = Solve(this.problem, this.options, this.grid);
+      if (this.visualization.steps == -1) return this.StartVisualization();
       this.StartAutoPlay();
     },
 
     StepForward: function () {
       if (this.visualization.currentStepId >= this.visualization.steps.length) {
         this.Pause();
+        this.showVisCompleteSnackbar = true;
         return false;
       }
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
@@ -110,7 +112,8 @@ export default {
         { value: description, id: this.visualization.currentStepId },
         ...this.visualization.descriptionList,
       ];
-      if (this.visualization.descriptionList.length > 5) this.visualization.descriptionList.pop();
+      if (this.visualization.descriptionList.length > visualConfig.defaultValues.descriptionNoLimit)
+        this.visualization.descriptionList.pop();
       return true;
     },
 
@@ -121,10 +124,10 @@ export default {
       ApplyBackAction(this.problem, actions, this.grid);
 
       this.visualization.descriptionList.splice(0, 1);
-      if (this.visualization.currentStepId > 4)
+      if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1)
         this.visualization.descriptionList.push({
           value: this.visualization.steps[this.visualization.currentStepId - 5].description,
-          id: this.visualization.currentStepId - 5,
+          id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
         });
       return true;
     },
@@ -151,3 +154,21 @@ export default {
   },
 };
 </script>
+
+<style>
+.const-step {
+  background-color: rgba(50, 50, 50, 0.05);
+}
+
+.try-step {
+  background-color: #80d8ff;
+}
+
+.failed-step {
+  background-color: #ff8a80;
+}
+
+.succeed-step {
+  background-color: #ccff90;
+}
+</style>

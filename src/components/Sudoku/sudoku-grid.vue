@@ -85,24 +85,4 @@ export default {
 .last-group-column {
   border-right-color: rgba(0, 0, 0, 0.4);
 }
-
-.const-cell {
-  background-color: rgba(50, 50, 50, 0.05);
-}
-
-.try-cell {
-  background-color: #80d8ff;
-}
-
-.failed-cell {
-  background-color: #ff8a80;
-}
-
-.succeed-cell {
-  background-color: #b9f6ca;
-}
-
-.invalid-cell {
-  background-color: rgb(228, 231, 17, 0.5);
-}
 </style>

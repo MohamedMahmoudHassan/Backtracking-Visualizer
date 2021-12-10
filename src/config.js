@@ -35,6 +35,8 @@ var mainConfig = {
     colors: {
       primary: "orange",
       base: "secondary",
+      try: "light-blue",
+      failed: "red",
     },
   },
 };
@@ -58,6 +60,8 @@ var visualConfig = {
     currentStepId: 0,
     steps: [],
     descriptionList: [],
+    stepsNoLimit: 10000,
+    descriptionNoLimit: 7
   },
 };
 
@@ -69,20 +73,20 @@ var sudokuConfig = {
     { id: 4, label: "4 x 4", value: 4 },
   ],
   cellStatesList: [
-    { id: 1, label: "Empty", value: "empty-cell" },
-    { id: 2, label: "Const", value: "const-cell" },
-    { id: 3, label: "Try", value: "try-cell" },
-    { id: 4, label: "Failed", value: "failed-cell" },
-    { id: 5, label: "Succeed", value: "succeed-cell" },
-    { id: 6, label: "Invalid", value: "invalid-cell" },
+    { id: 1, label: "Empty", value: "empty-step" },
+    { id: 2, label: "Const", value: "const-step" },
+    { id: 3, label: "Try", value: "try-step" },
+    { id: 4, label: "Failed", value: "failed-step" },
+    { id: 5, label: "Succeed", value: "succeed-step" },
+    { id: 6, label: "Invalid", value: "invalid-step" },
   ],
   cellStatesEnum: {
-    empty: "empty-cell",
-    const: "const-cell",
-    try: "try-cell",
-    failed: "failed-cell",
-    succeed: "succeed-cell",
-    invalid: "invalid-cell",
+    empty: "empty-step",
+    const: "const-step",
+    try: "try-step",
+    failed: "failed-step",
+    succeed: "succeed-step",
+    invalid: "invalid-step",
   },
 };
 

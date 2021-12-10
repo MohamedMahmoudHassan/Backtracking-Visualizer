@@ -1,15 +1,15 @@
 <template>
-  <v-card :color="colors.base" tile outlined style="margin-top: 20px">
+  <v-card :color="colors.base" tile outlined class="option-item">
     <v-subheader class="pl-0">Grid Emptiness Level</v-subheader>
     <v-slider
       v-model="emptiness"
-      @change="chooseGridEmptiness(emptiness)"
-      :color="colors.primary"
-      max="70"
       min="30"
+      max="70"
       step="10"
       thumb-label
       :disabled="isDisabled"
+      :color="colors.primary"
+      @change="ChooseGridEmptiness(emptiness)"
     >
       <template v-slot:thumb-label="{ value }">
         {{ value + "%" }}
@@ -21,7 +21,7 @@
 <script>
 export default {
   name: "grid-emptiness-options",
-  props: ["gridEmptiness", "chooseGridEmptiness", "isDisabled", "colors"],
+  props: ["gridEmptiness", "isDisabled", "colors", "ChooseGridEmptiness"],
   data: function () {
     return {
       emptiness: this.gridEmptiness,

@@ -5,26 +5,26 @@
       :isDisabled="isDisabled"
       :colors="colors"
       :options="options"
-      :chooseOption="chooseOption"
+      :ChooseOption="ChooseOption"
     ></sudoku-generator-options>
     <sudoku-solver-options
       v-else-if="problem == problemsEnum.sudokuSolver"
       :isDisabled="isDisabled"
       :colors="colors"
       :options="options"
-      :chooseOption="chooseOption"
+      :ChooseOption="ChooseOption"
     >
     </sudoku-solver-options>
     <v-btn
-      :color="colors.primary"
+      class="option-item"
       elevation="4"
       block
       tile
       :disabled="isDisabled"
+      :color="colors.primary"
       @click="StartVisualization"
-      style="margin-top: 20px"
-      >Start Visualization</v-btn
-    >
+      >Start Visualization
+    </v-btn>
   </v-navigation-drawer>
 </template>
 
@@ -38,7 +38,7 @@ var { problemsEnum } = mainConfig;
 export default {
   name: "options-controller",
   components: { sudokuGeneratorOptions, sudokuSolverOptions },
-  props: ["options", "chooseOption", "isDisabled", "StartVisualization", "problem", "colors"],
+  props: ["options", "ChooseOption", "isDisabled", "StartVisualization", "problem", "colors"],
   data: function () {
     return {
       problemsEnum: problemsEnum,
@@ -46,3 +46,12 @@ export default {
   },
 };
 </script>
+<style>
+.options-container {
+  margin: 80px 10px 0px 10px;
+}
+
+.option-item {
+  margin-top: 20px;
+}
+</style>

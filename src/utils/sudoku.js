@@ -1,4 +1,4 @@
-import { sudokuGenConfig } from "../config";
+import { visualConfig, sudokuGenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum, optionsEnum } = sudokuGenConfig;
@@ -22,7 +22,7 @@ var InitCells = function (options) {
 
 var InitFilledCells = function (options) {
   var cells = InitCells(options);
-  FillCellsWithBacktracking(cells, cells, 0, options);
+  if (!FillCellsWithBacktracking(cells, cells, 0, options)) return InitFilledCells(options);
   UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
   UpdateCells(cells, { state: cellStatesEnum.const }, options);
   RemoveRandCells(cells, options);
@@ -49,11 +49,11 @@ var FillGrid = function (options) {
     FillDiagonalSubGrids(diagSubGridsCells, options);
 
     var nonDiagSubGridsCells = cells.filter((cell) => cell.subGridRow != cell.subGridCol);
-    FillCellsWithBacktracking(nonDiagSubGridsCells, cells, 0, options);
+    if (!FillCellsWithBacktracking(nonDiagSubGridsCells, cells, 0, options)) return -1;
     UpdateCells(nonDiagSubGridsCells, { state: cellStatesEnum.succeed }, options);
     UpdateCells(nonDiagSubGridsCells, { state: cellStatesEnum.const }, options);
   } else {
-    FillCellsWithBacktracking(cells, cells, 0, options);
+    if (!FillCellsWithBacktracking(cells, cells, 0, options)) return -1;
     UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
     UpdateCells(cells, { state: cellStatesEnum.const }, options);
   }
@@ -88,6 +88,7 @@ var FillCellsWithBacktracking = function (cells, gridCells, id, options) {
       options
     );
     if (FillCellsWithBacktracking(cells, gridCells, id + 1, options)) return true;
+    if (steps.length > visualConfig.defaultValues.stepsNoLimit) return false;
 
     validValues = validValues.filter((val) => val != cell.value);
     UpdateCells([cell], { state: cellStatesEnum.failed }, options);
@@ -126,15 +127,15 @@ var GetValidCellValues = function (cells, cell, options) {
 
 var DescribeStep = function (cells, step, options) {
   if (step.state == cellStatesEnum.succeed) return "Success!";
-  if (step.state == cellStatesEnum.failed) return "Can't continue with value " + cells[0].value;
-  if (step.state == cellStatesEnum.empty) return "Removing value " + cells[0].value;
+  if (step.state == cellStatesEnum.failed) return "Can't continue with value: " + cells[0].value;
+  if (step.state == cellStatesEnum.empty) return "Removing value: " + cells[0].value;
   if (step.state == cellStatesEnum.const)
     return cells.length == options.gridSize * options.gridSize
       ? "Putting value " + cells[0].value
       : "Grid is complete!";
   if (step.state == cellStatesEnum.try)
     return step.validValues.length
-      ? "Valid values: " + step.validValues + " | trying: " + step.value
+      ? step.validValues.length + " valid values, Trying: " + step.value
       : "No valid values";
 };
 
