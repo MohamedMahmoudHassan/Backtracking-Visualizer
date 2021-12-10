@@ -30,6 +30,22 @@ var mainConfig = {
     sudokuSolver: "SudokuSolver",
     nQueens: "NQueens",
   },
+  cellStatesList: [
+    { id: 1, label: "Empty", value: "empty-step" },
+    { id: 2, label: "Const", value: "const-step" },
+    { id: 3, label: "Try", value: "try-step" },
+    { id: 4, label: "Failed", value: "failed-step" },
+    { id: 5, label: "Succeed", value: "succeed-step" },
+    { id: 6, label: "Invalid", value: "invalid-step" },
+  ],
+  cellStatesEnum: {
+    empty: "empty-step",
+    const: "const-step",
+    try: "try-step",
+    failed: "failed-step",
+    succeed: "succeed-step",
+    invalid: "invalid-step",
+  },
   defaultValues: {
     problem: "SudokuGenerator",
     colors: {
@@ -61,7 +77,7 @@ var visualConfig = {
     steps: [],
     descriptionList: [],
     stepsNoLimit: 10000,
-    descriptionNoLimit: 7
+    descriptionNoLimit: 7,
   },
 };
 
@@ -72,28 +88,12 @@ var sudokuConfig = {
     { id: 3, label: "3 x 3", value: 3 },
     { id: 4, label: "4 x 4", value: 4 },
   ],
-  cellStatesList: [
-    { id: 1, label: "Empty", value: "empty-step" },
-    { id: 2, label: "Const", value: "const-step" },
-    { id: 3, label: "Try", value: "try-step" },
-    { id: 4, label: "Failed", value: "failed-step" },
-    { id: 5, label: "Succeed", value: "succeed-step" },
-    { id: 6, label: "Invalid", value: "invalid-step" },
-  ],
-  cellStatesEnum: {
-    empty: "empty-step",
-    const: "const-step",
-    try: "try-step",
-    failed: "failed-step",
-    succeed: "succeed-step",
-    invalid: "invalid-step",
-  },
 };
 
 var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
-  cellStatesList: sudokuConfig.cellStatesList,
-  cellStatesEnum: sudokuConfig.cellStatesEnum,
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -109,8 +109,8 @@ var sudokuGenConfig = {
 
 var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
-  cellStatesList: sudokuConfig.cellStatesList,
-  cellStatesEnum: sudokuConfig.cellStatesEnum,
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -122,4 +122,22 @@ var sudokuSolConfig = {
   optionsNeedRecreate: ["gridSize", "gridEmptiness"],
 };
 
-export { mainConfig, visualConfig, sudokuConfig, sudokuGenConfig, sudokuSolConfig };
+var nQueenConfig = {
+  gridSizesList: [
+    // { id: 1, label: "1", value: 1 },
+    { id: 2, label: "4", value: 4 },
+    { id: 3, label: "6", value: 6 },
+    { id: 4, label: "8", value: 8 },
+  ],
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
+  optionsEnum: {
+    gridSize: "gridSize",
+  },
+  defaultValues: {
+    gridSize: 8,
+  },
+  optionsNeedRecreate: ["gridSize"],
+};
+
+export { mainConfig, visualConfig, sudokuConfig, sudokuGenConfig, sudokuSolConfig, nQueenConfig };

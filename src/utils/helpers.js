@@ -1,4 +1,4 @@
-import { mainConfig, sudokuGenConfig, sudokuSolConfig } from "../config";
+import { mainConfig, sudokuGenConfig, sudokuSolConfig, nQueenConfig } from "../config";
 
 import {
   InitCells as SudokuGenInit,
@@ -9,6 +9,8 @@ import {
   ApplyBackAction as SudokuApplyBack,
 } from "./sudoku";
 
+import { InitQueens } from "./nQueens";
+
 var { problemsEnum } = mainConfig;
 
 var GetRandFromList = function (items) {
@@ -18,16 +20,19 @@ var GetRandFromList = function (items) {
 var GetDefaultOptions = function (problem) {
   if (problem == problemsEnum.sudokuGenerator) return sudokuGenConfig.defaultValues;
   if (problem == problemsEnum.sudokuSolver) return sudokuSolConfig.defaultValues;
+  if (problem == problemsEnum.nQueens) return nQueenConfig.defaultValues;
 };
 
 var GetOptionsNeedRecreate = function (problem) {
   if (problem == problemsEnum.sudokuGenerator) return sudokuGenConfig.optionsNeedRecreate;
   if (problem == problemsEnum.sudokuSolver) return sudokuSolConfig.optionsNeedRecreate;
+  if (problem == problemsEnum.nQueens) return nQueenConfig.optionsNeedRecreate;
 };
 
 var InitGrid = function (problem, options) {
   if (problem == problemsEnum.sudokuGenerator) return SudokuGenInit(options);
   if (problem == problemsEnum.sudokuSolver) return SudokuSolInit(options);
+  if (problem == problemsEnum.nQueens) return InitQueens(options);
 };
 
 var Solve = function (problem, options, grid) {

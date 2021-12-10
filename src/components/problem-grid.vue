@@ -1,13 +1,12 @@
 <template>
-  <v-card elevation="3"  width="600" class="main-grid">
+  <v-card elevation="3" width="600" class="main-grid">
     <sudoku-grid
       v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
       :grid="grid"
       :options="options"
       :colors="colors"
-      :ChangeGrid="ChangeGrid"
     ></sudoku-grid>
-    <n-queens-grid v-else :colors="colors"></n-queens-grid>
+    <n-queens-grid v-else :grid="grid" :options="options" :colors="colors"></n-queens-grid>
   </v-card>
 </template>
 
@@ -21,7 +20,7 @@ var { problemsEnum } = mainConfig;
 export default {
   name: "problem-grid",
   components: { sudokuGrid, nQueensGrid },
-  props: ["grid", "problem", "options", "colors", "ChangeGrid"],
+  props: ["grid", "problem", "options", "colors"],
   data: function () {
     return {
       problemsEnum: problemsEnum,

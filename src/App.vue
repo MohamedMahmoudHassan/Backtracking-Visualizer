@@ -20,7 +20,6 @@
           <problem-grid
             :grid="grid"
             :problem="problem"
-            :ChangeGrid="(newGrid) => (grid = newGrid)"
             :options="options"
             :colors="colors"
           ></problem-grid>

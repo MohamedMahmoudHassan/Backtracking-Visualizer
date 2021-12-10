@@ -12,15 +12,15 @@
 
 <script>
 import { InitGrid } from "../../utils/sudoku";
-import { sudokuConfig } from "../../config";
+import { mainConfig } from "../../config";
 
 export default {
   name: "sudoku-grid",
-  props: ["grid", "changeGrid", "options", "colors"],
+  props: ["grid", "options", "colors"],
   data: function () {
     return {
       sudokuGrid: [],
-      cellStatesEnum: sudokuConfig.cellStatesEnum,
+      cellStatesEnum: mainConfig.cellStatesEnum,
     };
   },
   methods: {
