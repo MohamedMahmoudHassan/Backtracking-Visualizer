@@ -1,4 +1,4 @@
-import { visualConfig, nQueenConfig } from "../config";
+import { mainConfig, visualConfig, nQueenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum } = nQueenConfig;
@@ -99,17 +99,21 @@ var SolveWithBacktracking = function (queens, id, options) {
 var DescribeStep = function (queens, step, options) {
   var oldCell = "(" + queens[0].row + ", " + queens[0].col + ")";
   var newCell = "(" + step.row + ", " + step.col + ")";
-  if (step.state == cellStatesEnum.succeed) return "Success!";
-  if (step.state == cellStatesEnum.failed) return "Can't continue with: " + oldCell;
-  if (step.state == cellStatesEnum.empty) return "Removing queen from: " + oldCell;
+  var text = "";
+  if (step.state == cellStatesEnum.succeed) text = "Success!";
+  if (step.state == cellStatesEnum.failed) text = "Can't continue with: " + oldCell;
+  if (step.state == cellStatesEnum.empty) text = "Removing queen from: " + oldCell;
   if (step.state == cellStatesEnum.const)
-    return queens.length == options.gridSize * options.gridSize
-      ? "Putting queen in " + newCell
-      : "Grid is complete!";
+    text =
+      queens.length == options.gridSize * options.gridSize
+        ? "Putting queen in " + newCell
+        : "Grid is complete!";
   if (step.state == cellStatesEnum.try)
-    return step.validValues.length
+    text = step.validValues.length
       ? step.validValues.length + " valid cells, Trying: " + newCell
       : "No valid cells";
+  var color = mainConfig.cellStatesList.find((state) => state.value == step.state).color;
+  return { text, color };
 };
 
 var AddStep = function (queens, after, options) {

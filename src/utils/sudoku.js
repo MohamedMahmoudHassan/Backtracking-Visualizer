@@ -1,4 +1,4 @@
-import { visualConfig, sudokuGenConfig } from "../config";
+import { mainConfig, visualConfig, sudokuGenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum, optionsEnum } = sudokuGenConfig;
@@ -142,17 +142,21 @@ var GetValidValues = function (cells, cell, options) {
 };
 
 var DescribeStep = function (cells, step, options) {
-  if (step.state == cellStatesEnum.succeed) return "Success!";
-  if (step.state == cellStatesEnum.failed) return "Can't continue with value: " + cells[0].value;
-  if (step.state == cellStatesEnum.empty) return "Removing value: " + cells[0].value;
+  var text = "";
+  if (step.state == cellStatesEnum.succeed) text = "Success!";
+  if (step.state == cellStatesEnum.failed) text = "Can't continue with value: " + cells[0].value;
+  if (step.state == cellStatesEnum.empty) text = "Removing value: " + cells[0].value;
   if (step.state == cellStatesEnum.const)
-    return cells.length == options.gridSize * options.gridSize
-      ? "Putting value " + cells[0].value
-      : "Grid is complete!";
+    text =
+      cells.length == options.gridSize * options.gridSize
+        ? "Putting value " + cells[0].value
+        : "Grid is complete!";
   if (step.state == cellStatesEnum.try)
-    return step.validValues.length
+    text = step.validValues.length
       ? step.validValues.length + " valid values, Trying: " + step.value
       : "No valid values";
+  var color = mainConfig.cellStatesList.find((state) => state.value == step.state).color;
+  return { text, color };
 };
 
 var UpdateCells = function (cells, after, options) {

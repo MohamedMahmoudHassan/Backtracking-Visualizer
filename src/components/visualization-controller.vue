@@ -11,9 +11,9 @@
             v-for="step in visualization.descriptionList"
             :key="step.id"
             small
-            :color="colors.failed"
+            :color="colors[step.color]"
           >
-            <span>{{ step.value }}</span>
+            <span>{{ step.text }}</span>
           </v-timeline-item>
         </v-slide-x-transition>
       </v-timeline>

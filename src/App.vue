@@ -104,8 +104,9 @@ export default {
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
       ApplyForwardAction(this.problem, actions, this.grid);
 
+      var { text, color } = description;
       this.visualization.descriptionList = [
-        { value: description, id: this.visualization.currentStepId },
+        { text, color, id: this.visualization.currentStepId },
         ...this.visualization.descriptionList,
       ];
       if (this.visualization.descriptionList.length > visualConfig.defaultValues.descriptionNoLimit)
@@ -121,10 +122,13 @@ export default {
 
       this.visualization.descriptionList.splice(0, 1);
       if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1)
-        this.visualization.descriptionList.push({
-          value: this.visualization.steps[this.visualization.currentStepId - 5].description,
-          id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
-        });
+        var { text, color } =
+          this.visualization.steps[this.visualization.currentStepId - 5].description;
+      this.visualization.descriptionList.push({
+        text,
+        color,
+        id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
+      });
       return true;
     },
 
