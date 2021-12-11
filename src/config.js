@@ -24,11 +24,13 @@ var mainConfig = {
     { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
     { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "red" },
     { id: 3, label: "N-Queen", value: "NQueens", color: "purple" },
+    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "green" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
     sudokuSolver: "SudokuSolver",
     nQueens: "NQueens",
+    knightTour: "KnightTour",
   },
   cellStatesList: [
     { id: 1, label: "Empty", value: "empty-cell", color: "empty" },
@@ -36,7 +38,8 @@ var mainConfig = {
     { id: 3, label: "Try", value: "try-cell", color: "try" },
     { id: 4, label: "Failed", value: "failed-cell", color: "failed" },
     { id: 5, label: "Succeed", value: "succeed-cell", color: "succeed" },
-    { id: 6, label: "Invalid", value: "invalid-cell", color: "invalid" },
+    { id: 6, label: "Normal", value: "normal-cell", color: "const" },
+    { id: 7, label: "Invalid", value: "invalid-cell", color: "invalid" },
   ],
   cellStatesEnum: {
     empty: "empty-cell",
@@ -44,12 +47,13 @@ var mainConfig = {
     try: "try-cell",
     failed: "failed-cell",
     succeed: "succeed-cell",
+    normal: "normal-cell",
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "NQueens",
+    problem: "KnightTour",
     colors: {
-      primary: "red",
+      primary: "purple",
       base: "secondary",
       try: "blue",
       failed: "red",
@@ -142,4 +146,25 @@ var nQueenConfig = {
   optionsNeedRecreate: ["gridSize"],
 };
 
-export { mainConfig, visualConfig, sudokuConfig, sudokuGenConfig, sudokuSolConfig, nQueenConfig };
+var knightTourConfig = {
+  gridSizeLimits: { min: 5, max: 7 },
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
+  optionsEnum: {
+    gridSize: "gridSize",
+  },
+  defaultValues: {
+    gridSize: 7,
+  },
+  optionsNeedRecreate: ["gridSize"],
+};
+
+export {
+  mainConfig,
+  visualConfig,
+  sudokuConfig,
+  sudokuGenConfig,
+  sudokuSolConfig,
+  nQueenConfig,
+  knightTourConfig,
+};

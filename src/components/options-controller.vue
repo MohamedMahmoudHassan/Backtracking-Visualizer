@@ -16,7 +16,7 @@
     >
     </sudoku-solver-options>
     <nQueensOptions
-      v-else-if="problem == problemsEnum.nQueens"
+      v-else
       :isDisabled="isDisabled"
       :colors="colors"
       :options="options"
