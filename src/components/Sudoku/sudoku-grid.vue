@@ -59,17 +59,7 @@ export default {
 };
 </script>
 
-<style>
-.grid-cell {
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: "center";
-}
-
+<style scoped>
 .first-row {
   border-top-color: rgba(0, 0, 0, 0.4);
 }

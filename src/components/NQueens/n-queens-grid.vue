@@ -4,7 +4,7 @@
       <v-col v-for="cell in row.value" :key="cell.Id">
         <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
           <img
-            v-if="row.queen.col == cell.col"
+            v-if="grid.filter((q) => q.row == cell.row && q.col == cell.col).length"
             src="../../assets/queen_chess.svg"
             :height="getQueenHeight()"
           />
@@ -34,8 +34,16 @@ export default {
     getFontSize: function () {
       return (36 * 6) / this.options.gridSize;
     },
-    getCellClass: function ({ row, col }) {
-      return ["grid-cell pa-24", (row + col) % 2 ? "black-cell" : "white-cell"];
+    getCellClass: function (cell) {
+      var queen = this.grid.filter((q) => q.row == cell.row && q.col == cell.col);
+      return [
+        "grid-cell pa-24",
+        queen.length && queen[0].state != this.cellStatesEnum.const
+          ? queen[0].state
+          : (cell.row + cell.col) % 2
+          ? "black-cell"
+          : "white-cell",
+      ];
     },
     getQueenHeight: function () {
       return (this.getCellLength() * 3) / 4;
@@ -48,32 +56,12 @@ export default {
     },
   },
   created: function () {
-    this.chessGrid = InitGrid(this.grid, this.options);
+    this.chessGrid = InitGrid(this.options);
   },
   watch: {
     grid: function () {
-      this.chessGrid = InitGrid(this.grid, this.options);
+      this.chessGrid = InitGrid(this.options);
     },
   },
 };
 </script>
-
-<style>
-.grid-cell {
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: "center";
-}
-
-.black-cell {
-  background-color: #7e7e7e;
-}
-
-.white-cell {
-  background-color: #80d9ff00;
-}
-</style>

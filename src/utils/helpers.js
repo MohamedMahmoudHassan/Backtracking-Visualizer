@@ -9,7 +9,12 @@ import {
   ApplyBackAction as SudokuApplyBack,
 } from "./sudoku";
 
-import { InitQueens } from "./nQueens";
+import {
+  InitQueens as NQueensInit,
+  Solve as SolveNQueens,
+  ApplyForwardAction as NQueensApplyForward,
+  ApplyBackAction as NQueensApplyBack,
+} from "./nQueens";
 
 var { problemsEnum } = mainConfig;
 
@@ -32,22 +37,25 @@ var GetOptionsNeedRecreate = function (problem) {
 var InitGrid = function (problem, options) {
   if (problem == problemsEnum.sudokuGenerator) return SudokuGenInit(options);
   if (problem == problemsEnum.sudokuSolver) return SudokuSolInit(options);
-  if (problem == problemsEnum.nQueens) return InitQueens(options);
+  if (problem == problemsEnum.nQueens) return NQueensInit(options);
 };
 
 var Solve = function (problem, options, grid) {
-  if (problem == problemsEnum.sudokuGenerator) return SudokuGenSolve(options, grid);
+  if (problem == problemsEnum.sudokuGenerator) return SudokuGenSolve(options);
   if (problem == problemsEnum.sudokuSolver) return SudokuSolSolve(options, grid);
+  if (problem == problemsEnum.nQueens) return SolveNQueens(options);
 };
 
 var ApplyForwardAction = function (problem, actions, grid) {
   if (problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver)
     return SudokuApplyForward(actions, grid);
+  if (problem == problemsEnum.nQueens) return NQueensApplyForward(actions, grid);
 };
 
 var ApplyBackAction = function (problem, actions, grid) {
   if (problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver)
     return SudokuApplyBack(actions, grid);
+  if (problem == problemsEnum.nQueens) return NQueensApplyBack(actions, grid);
 };
 
 export {

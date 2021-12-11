@@ -70,7 +70,6 @@ export default {
       optionsNeedRecreate: [],
       visualization: { ...visualConfig.defaultValues },
       modesEnum: visualConfig.modesEnum,
-      showVisCompleteSnackbar: false,
     };
   },
   methods: {
@@ -92,7 +91,6 @@ export default {
     },
 
     StartVisualization: function () {
-      // this.InitProblem();
       this.visualization.steps = Solve(this.problem, this.options, this.grid);
       if (this.visualization.steps == -1) return this.StartVisualization();
       this.StartAutoPlay();
@@ -101,7 +99,6 @@ export default {
     StepForward: function () {
       if (this.visualization.currentStepId >= this.visualization.steps.length) {
         this.Pause();
-        this.showVisCompleteSnackbar = true;
         return false;
       }
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
@@ -155,19 +152,37 @@ export default {
 </script>
 
 <style>
-.const-step {
-  background-color: rgba(50, 50, 50, 0.05);
+.grid-cell {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: "center";
 }
 
-.try-step {
+.const-cell {
+  background-color: #eeeeee;
+}
+
+.try-cell {
   background-color: #80d8ff;
 }
 
-.failed-step {
+.failed-cell {
   background-color: #ff8a80;
 }
 
-.succeed-step {
+.succeed-cell {
   background-color: #ccff90;
+}
+
+.black-cell {
+  background-color: #757575;
+}
+
+.white-cell {
+  background-color: #eeeeee;
 }
 </style>
