@@ -5,36 +5,35 @@
       :problem="problem"
       :colors="colors"
       :options="options"
-      :chooseOption="(opt, prop) => ChangeOption(opt, prop)"
+      :ChooseOption="(opt, prop) => ChangeOption(opt, prop)"
       :StartVisualization="(steps) => StartVisualization(steps)"
     ></options-controller>
     <app-header
-      :colors="colors"
-      :chooseColor="(c, prop) => (colors[prop] = c)"
       :problem="problem"
-      :chooseProblem="(p) => ChangeProblem(p)"
+      :colors="colors"
+      :ChooseColor="(c, prop) => (colors[prop] = c)"
+      :ChooseProblem="(p) => ChangeProblem(p)"
     ></app-header>
-    <v-main color="grey lighten-4">
+    <v-main class="grey lighten-4">
       <v-row no-gutters>
         <v-col>
           <problem-grid
             :grid="grid"
             :problem="problem"
-            :changeGrid="(newGrid) => (grid = newGrid)"
             :options="options"
             :colors="colors"
           ></problem-grid>
         </v-col>
         <v-col>
           <visualization-controller
+            :isDisabled="visualization.mode == modesEnum.disabled"
+            :colors="colors"
             :visualization="visualization"
             :AutoPlay="StartAutoPlay"
             :Pause="Pause"
             :StepForward="StepForward"
             :StepBack="StepBack"
             :StopVisualization="InitProblem"
-            :colors="colors"
-            :isDisabled="visualization.mode == modesEnum.disabled"
           ></visualization-controller>
         </v-col>
       </v-row>
@@ -76,7 +75,6 @@ export default {
   methods: {
     InitProblem: function () {
       this.visualization = { ...visualConfig.defaultValues };
-      // this.visualization.mode = visualConfig.modesEnum.disabled;
       this.grid = InitGrid(this.problem, this.options);
     },
 
@@ -93,8 +91,8 @@ export default {
     },
 
     StartVisualization: function () {
-      // this.InitProblem();
       this.visualization.steps = Solve(this.problem, this.options, this.grid);
+      if (this.visualization.steps == -1) return this.StartVisualization();
       this.StartAutoPlay();
     },
 
@@ -106,25 +104,31 @@ export default {
       const { actions, description } = this.visualization.steps[this.visualization.currentStepId++];
       ApplyForwardAction(this.problem, actions, this.grid);
 
+      var { text, color } = description;
       this.visualization.descriptionList = [
-        { value: description, id: this.visualization.currentStepId },
+        { text, color, id: this.visualization.currentStepId },
         ...this.visualization.descriptionList,
       ];
-      if (this.visualization.descriptionList.length > 5) this.visualization.descriptionList.pop();
+      if (this.visualization.descriptionList.length > visualConfig.defaultValues.descriptionNoLimit)
+        this.visualization.descriptionList.pop();
       return true;
     },
 
     StepBack: function () {
+      this.Pause();
       if (!this.visualization.currentStepId) return false;
       const { actions } = this.visualization.steps[--this.visualization.currentStepId];
       ApplyBackAction(this.problem, actions, this.grid);
 
       this.visualization.descriptionList.splice(0, 1);
-      if (this.visualization.currentStepId > 4)
-        this.visualization.descriptionList.push({
-          value: this.visualization.steps[this.visualization.currentStepId - 5].description,
-          id: this.visualization.currentStepId - 5,
-        });
+      if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1)
+        var { text, color } =
+          this.visualization.steps[this.visualization.currentStepId - 5].description;
+      this.visualization.descriptionList.push({
+        text,
+        color,
+        id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
+      });
       return true;
     },
 
@@ -150,3 +154,39 @@ export default {
   },
 };
 </script>
+
+<style>
+.grid-cell {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: "center";
+}
+
+.const-cell {
+  background-color: #eeeeee;
+}
+
+.try-cell {
+  background-color: #80d8ff;
+}
+
+.failed-cell {
+  background-color: #ff8a80;
+}
+
+.succeed-cell {
+  background-color: #ccff90;
+}
+
+.black-cell {
+  background-color: #757575;
+}
+
+.white-cell {
+  background-color: #eeeeee;
+}
+</style>

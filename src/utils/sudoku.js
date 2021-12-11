@@ -1,4 +1,4 @@
-import { sudokuGenConfig } from "../config";
+import { mainConfig, visualConfig, sudokuGenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum, optionsEnum } = sudokuGenConfig;
@@ -22,7 +22,7 @@ var InitCells = function (options) {
 
 var InitFilledCells = function (options) {
   var cells = InitCells(options);
-  FillCellsWithBacktracking(cells, cells, 0, options);
+  if (!SolveWithBacktracking(cells, cells, 0, options)) return InitFilledCells(options);
   UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
   UpdateCells(cells, { state: cellStatesEnum.const }, options);
   RemoveRandCells(cells, options);
@@ -49,11 +49,11 @@ var FillGrid = function (options) {
     FillDiagonalSubGrids(diagSubGridsCells, options);
 
     var nonDiagSubGridsCells = cells.filter((cell) => cell.subGridRow != cell.subGridCol);
-    FillCellsWithBacktracking(nonDiagSubGridsCells, cells, 0, options);
+    if (!SolveWithBacktracking(nonDiagSubGridsCells, cells, 0, options)) return -1;
     UpdateCells(nonDiagSubGridsCells, { state: cellStatesEnum.succeed }, options);
     UpdateCells(nonDiagSubGridsCells, { state: cellStatesEnum.const }, options);
   } else {
-    FillCellsWithBacktracking(cells, cells, 0, options);
+    if (!SolveWithBacktracking(cells, cells, 0, options)) return -1;
     UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
     UpdateCells(cells, { state: cellStatesEnum.const }, options);
   }
@@ -67,16 +67,30 @@ var SolveGrid = function (options, grid) {
     return { ...cell };
   });
   var cells = gridCells.filter((cell) => cell.state == cellStatesEnum.empty);
-  FillCellsWithBacktracking(cells, gridCells, 0, options);
+  SolveWithBacktracking(cells, gridCells, 0, options);
   UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
   UpdateCells(cells, { state: cellStatesEnum.const }, options);
   return steps;
 };
 
-var FillCellsWithBacktracking = function (cells, gridCells, id, options) {
+var getNextCellId = function (cells, id, options) {
+  cells;
+  options;
+  var [cellId, cellValuesNo] = [id, GetValidValues(cells, cells[id], options).length];
+  cells.forEach((cell) => {
+    if (cell.state == cellStatesEnum.empty) {
+      var tempCellValuesNo = GetValidValues(cells, cell, options).length;
+      if (tempCellValuesNo < cellValuesNo) [cellId, cellValuesNo] = [cell.Id, tempCellValuesNo];
+    }
+  });
+  cellId;
+  return id + 1;
+};
+
+var SolveWithBacktracking = function (cells, gridCells, id, options) {
   if (id == cells.length) return true;
   var cell = cells[id];
-  var validValues = GetValidCellValues(gridCells, cell, options);
+  var validValues = GetValidValues(gridCells, cell, options);
   while (validValues.length) {
     UpdateCells(
       [cell],
@@ -87,7 +101,10 @@ var FillCellsWithBacktracking = function (cells, gridCells, id, options) {
       },
       options
     );
-    if (FillCellsWithBacktracking(cells, gridCells, id + 1, options)) return true;
+
+    var nextCellId = getNextCellId(cells, id, options);
+    if (SolveWithBacktracking(cells, gridCells, nextCellId, options)) return true;
+    if (steps.length > visualConfig.defaultValues.stepsNoLimit) return false;
 
     validValues = validValues.filter((val) => val != cell.value);
     UpdateCells([cell], { state: cellStatesEnum.failed }, options);
@@ -101,7 +118,7 @@ var FillDiagonalSubGrids = function (cells, options) {
     UpdateCells(
       [cell],
       {
-        value: GetRandFromList(GetValidCellValues(cells, cell, options)),
+        value: GetRandFromList(GetValidValues(cells, cell, options)),
         state: cellStatesEnum.const,
       },
       options
@@ -116,7 +133,7 @@ var CellsConflict = function (cell1, cell2) {
   );
 };
 
-var GetValidCellValues = function (cells, cell, options) {
+var GetValidValues = function (cells, cell, options) {
   var maxValue = options.gridSize * options.gridSize;
   var validValues = Array.from({ length: maxValue }, (_, i) => i + 1);
   for (const c of cells)
@@ -125,17 +142,21 @@ var GetValidCellValues = function (cells, cell, options) {
 };
 
 var DescribeStep = function (cells, step, options) {
-  if (step.state == cellStatesEnum.succeed) return "Success!";
-  if (step.state == cellStatesEnum.failed) return "Can't continue with value " + cells[0].value;
-  if (step.state == cellStatesEnum.empty) return "Removing value " + cells[0].value;
+  var text = "";
+  if (step.state == cellStatesEnum.succeed) text = "Success!";
+  if (step.state == cellStatesEnum.failed) text = "Can't continue with value: " + cells[0].value;
+  if (step.state == cellStatesEnum.empty) text = "Removing value: " + cells[0].value;
   if (step.state == cellStatesEnum.const)
-    return cells.length == options.gridSize * options.gridSize
-      ? "Putting value " + cells[0].value
-      : "Grid is complete!";
+    text =
+      cells.length == options.gridSize * options.gridSize
+        ? "Putting value " + cells[0].value
+        : "Grid is complete!";
   if (step.state == cellStatesEnum.try)
-    return step.validValues.length
-      ? "Valid values: " + step.validValues + " | trying: " + step.value
+    text = step.validValues.length
+      ? step.validValues.length + " valid values, Trying: " + step.value
       : "No valid values";
+  var color = mainConfig.cellStatesList.find((state) => state.value == step.state).color;
+  return { text, color };
 };
 
 var UpdateCells = function (cells, after, options) {

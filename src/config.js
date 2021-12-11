@@ -23,18 +23,41 @@ var mainConfig = {
   problemsList: [
     { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
     { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "red" },
-    { id: 3, label: "N-Queens", value: "NQueens", color: "purple" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "purple" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
     sudokuSolver: "SudokuSolver",
     nQueens: "NQueens",
   },
+  cellStatesList: [
+    { id: 1, label: "Empty", value: "empty-cell", color: "empty" },
+    { id: 2, label: "Const", value: "const-cell", color: "const" },
+    { id: 3, label: "Try", value: "try-cell", color: "try" },
+    { id: 4, label: "Failed", value: "failed-cell", color: "failed" },
+    { id: 5, label: "Succeed", value: "succeed-cell", color: "succeed" },
+    { id: 6, label: "Invalid", value: "invalid-cell", color: "invalid" },
+  ],
+  cellStatesEnum: {
+    empty: "empty-cell",
+    const: "const-cell",
+    try: "try-cell",
+    failed: "failed-cell",
+    succeed: "succeed-cell",
+    invalid: "invalid-cell",
+  },
   defaultValues: {
-    problem: "SudokuGenerator",
+    problem: "NQueens",
     colors: {
-      primary: "orange",
+      primary: "red",
       base: "secondary",
+      try: "blue",
+      failed: "red",
+      succeed: "green",
+      const: "secondary",
+      empty: "secondary",
+      white: "white",
+      black: "black",
     },
   },
 };
@@ -58,6 +81,8 @@ var visualConfig = {
     currentStepId: 0,
     steps: [],
     descriptionList: [],
+    stepsNoLimit: 10000,
+    descriptionNoLimit: 7,
   },
 };
 
@@ -68,28 +93,12 @@ var sudokuConfig = {
     { id: 3, label: "3 x 3", value: 3 },
     { id: 4, label: "4 x 4", value: 4 },
   ],
-  cellStatesList: [
-    { id: 1, label: "Empty", value: "empty-cell" },
-    { id: 2, label: "Const", value: "const-cell" },
-    { id: 3, label: "Try", value: "try-cell" },
-    { id: 4, label: "Failed", value: "failed-cell" },
-    { id: 5, label: "Succeed", value: "succeed-cell" },
-    { id: 6, label: "Invalid", value: "invalid-cell" },
-  ],
-  cellStatesEnum: {
-    empty: "empty-cell",
-    const: "const-cell",
-    try: "try-cell",
-    failed: "failed-cell",
-    succeed: "succeed-cell",
-    invalid: "invalid-cell",
-  },
 };
 
 var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
-  cellStatesList: sudokuConfig.cellStatesList,
-  cellStatesEnum: sudokuConfig.cellStatesEnum,
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -105,8 +114,8 @@ var sudokuGenConfig = {
 
 var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
-  cellStatesList: sudokuConfig.cellStatesList,
-  cellStatesEnum: sudokuConfig.cellStatesEnum,
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -118,4 +127,19 @@ var sudokuSolConfig = {
   optionsNeedRecreate: ["gridSize", "gridEmptiness"],
 };
 
-export { mainConfig, visualConfig, sudokuConfig, sudokuGenConfig, sudokuSolConfig };
+var nQueenConfig = {
+  gridSizeLimits: { min: 4, max: 16, forceRowByRow: 10 },
+  cellStatesList: mainConfig.cellStatesList,
+  cellStatesEnum: mainConfig.cellStatesEnum,
+  optionsEnum: {
+    gridSize: "gridSize",
+    rowByRow: "rowByRow",
+  },
+  defaultValues: {
+    gridSize: 8,
+    rowByRow: true,
+  },
+  optionsNeedRecreate: ["gridSize"],
+};
+
+export { mainConfig, visualConfig, sudokuConfig, sudokuGenConfig, sudokuSolConfig, nQueenConfig };

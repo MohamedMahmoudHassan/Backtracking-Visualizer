@@ -12,15 +12,15 @@
 
 <script>
 import { InitGrid } from "../../utils/sudoku";
-import { sudokuConfig } from "../../config";
+import { mainConfig } from "../../config";
 
 export default {
   name: "sudoku-grid",
-  props: ["grid", "changeGrid", "options", "colors"],
+  props: ["grid", "options", "colors"],
   data: function () {
     return {
       sudokuGrid: [],
-      cellStatesEnum: sudokuConfig.cellStatesEnum,
+      cellStatesEnum: mainConfig.cellStatesEnum,
     };
   },
   methods: {
@@ -59,17 +59,7 @@ export default {
 };
 </script>
 
-<style>
-.grid-cell {
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: "center";
-}
-
+<style scoped>
 .first-row {
   border-top-color: rgba(0, 0, 0, 0.4);
 }
@@ -84,25 +74,5 @@ export default {
 
 .last-group-column {
   border-right-color: rgba(0, 0, 0, 0.4);
-}
-
-.const-cell {
-  background-color: rgba(50, 50, 50, 0.05);
-}
-
-.try-cell {
-  background-color: #80d8ff;
-}
-
-.failed-cell {
-  background-color: #ff8a80;
-}
-
-.succeed-cell {
-  background-color: #b9f6ca;
-}
-
-.invalid-cell {
-  background-color: rgb(228, 231, 17, 0.5);
 }
 </style>

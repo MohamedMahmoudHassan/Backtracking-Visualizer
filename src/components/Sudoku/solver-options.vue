@@ -1,16 +1,16 @@
 <template>
-  <v-card :color="colors.base" tile outlined style="margin: 80px 10px 0px 10px">
+  <v-card :color="colors.base" tile outlined class="options-container">
     <grid-size-options
+      :gridSize="gridSize"
       :isDisabled="isDisabled"
       :colors="colors"
-      :gridSize="gridSize"
-      :chooseGridSize="(size) => chooseOption(size, 'gridSize')"
+      :ChooseGridSize="(size) => ChooseOption(size, 'gridSize')"
     ></grid-size-options>
     <grid-emptiness-options
+      :gridEmptiness="gridEmptiness"
       :isDisabled="isDisabled"
       :colors="colors"
-      :gridEmptiness="gridEmptiness"
-      :chooseGridEmptiness="(emptiness) => chooseOption(emptiness, 'gridEmptiness')"
+      :ChooseGridEmptiness="(emptiness) => ChooseOption(emptiness, 'gridEmptiness')"
     ></grid-emptiness-options>
   </v-card>
 </template>
@@ -21,7 +21,7 @@ import gridEmptinessOptions from "./grid-emptiness-options.vue";
 export default {
   name: "generator-options",
   components: { gridSizeOptions, gridEmptinessOptions },
-  props: ["options", "chooseOption", "isDisabled", "colors"],
+  props: ["options", "isDisabled", "colors", "ChooseOption"],
   data: function () {
     return {
       gridSize: this.options.gridSize,
