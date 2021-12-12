@@ -32,7 +32,7 @@ var InitGrid = function (options) {
 var Solve = function (options) {
   steps = [];
   var queens = InitQueens(options);
-  if (!SolveWithBacktracking(queens, 0, options)) Solve(options);
+  if (!SolveWithBacktracking(queens, 0, options)) return Solve(options);
   AddStep(queens, { state: cellStatesEnum.succeed }, options);
   AddStep(queens, { state: cellStatesEnum.const }, options);
   return steps;

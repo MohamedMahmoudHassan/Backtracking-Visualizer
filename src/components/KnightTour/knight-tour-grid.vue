@@ -1,13 +1,14 @@
 <template>
   <v-container>
     <v-row no-gutters v-for="row in chessGrid" :key="row.id">
-      <v-col v-for="cell in row.value" :key="cell.Id">
+      <v-col v-for="cell in row.value" :key="cell.id">
         <div :style="getCellStyle()" :class="getCellClass(cell)">
           <img
-            v-if="grid.filter((q) => q.row == cell.row && q.col == cell.col).length"
-            src="../../assets/queen_chess.svg"
+            v-if="cell.value == Math.max(...grid.map((c) => c.value))"
+            src="../../assets/knight_chess.svg"
             class="chess-image"
           />
+          <div v-else-if="cell.value != -1">{{ cell.value }}</div>
         </div>
       </v-col>
     </v-row>
@@ -15,11 +16,11 @@
 </template>
 
 <script>
-import { InitGrid } from "../../utils/nQueens";
+import { InitGrid } from "../../utils/knightTour";
 import { mainConfig } from "../../config";
 
 export default {
-  name: "n-queens-grid",
+  name: "knight-tour-grid",
   props: ["grid", "options", "colors"],
   data: function () {
     return {
@@ -35,11 +36,10 @@ export default {
       return (36 * 6) / this.options.gridSize;
     },
     getCellClass: function (cell) {
-      var queen = this.grid.filter((q) => q.row == cell.row && q.col == cell.col);
       return [
         "grid-cell pa-24",
-        queen.length && queen[0].state != this.cellStatesEnum.const
-          ? queen[0].state
+        cell.state != this.cellStatesEnum.empty && cell.state != this.cellStatesEnum.normal
+          ? cell.state
           : (cell.row + cell.col) % 2
           ? "black-cell"
           : "white-cell",
@@ -53,15 +53,16 @@ export default {
     },
   },
   created: function () {
-    this.chessGrid = InitGrid(this.options);
+    this.chessGrid = InitGrid(this.grid, this.options);
   },
   watch: {
     grid: function () {
-      this.chessGrid = InitGrid(this.options);
+      this.chessGrid = InitGrid(this.grid, this.options);
     },
   },
 };
 </script>
+
 <style>
 .chess-image {
   height: 80%;
