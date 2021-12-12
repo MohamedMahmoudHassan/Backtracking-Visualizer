@@ -1,20 +1,31 @@
 <template>
   <v-card :color="colors.base" tile outlined class="options-container">
+    <v-card :color="colors.base" tile outlined class="option-item">
+      <v-subheader class="pl-0">Grid Size</v-subheader>
+      <v-slider
+        v-model="gridSize"
+        :min="gridSizeLimits.min"
+        :max="gridSizeLimits.max"
+        :step="1"
+        thumb-label
+        :disabled="isDisabled"
+        :color="colors.primary"
+        @change="ChooseOption(gridSize, 'gridSize')"
+      >
+      </v-slider>
+    </v-card>
   </v-card>
 </template>
-
 <script>
-import { nQueenConfig } from "../../config";
+import { knightTourConfig } from "../../config";
 
 export default {
-  name: "n-queens-options",
+  name: "knight-tour-options",
   props: ["options", "isDisabled", "colors", "ChooseOption"],
   data: function () {
     return {
       gridSize: this.options.gridSize,
-      rowByRow: this.options.rowByRow,
-      disableRowByRow: false,
-      gridSizeLimits: nQueenConfig.gridSizeLimits,
+      gridSizeLimits: knightTourConfig.gridSizeLimits,
     };
   },
 };

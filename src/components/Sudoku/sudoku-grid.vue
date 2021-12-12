@@ -2,7 +2,7 @@
   <v-container>
     <v-row no-gutters v-for="row in sudokuGrid" :key="row.id">
       <v-col v-for="cell in row.value" :key="cell.row + '-' + cell.col">
-        <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
+        <div :style="getCellStyle()" :class="getCellClass(cell)">
           {{ cell.state == cellStatesEnum.empty ? "" : cell.value }}
         </div>
       </v-col>

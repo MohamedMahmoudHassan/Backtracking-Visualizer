@@ -2,7 +2,7 @@
   <v-container>
     <v-row no-gutters v-for="row in chessGrid" :key="row.id">
       <v-col v-for="cell in row.value" :key="cell.Id">
-        <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
+        <div :style="getCellStyle()" :class="getCellClass(cell)">
           <img
             v-if="grid.filter((q) => q.row == cell.row && q.col == cell.col).length"
             src="../../assets/queen_chess.svg"

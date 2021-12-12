@@ -11,7 +11,7 @@
     <app-header
       :problem="problem"
       :colors="colors"
-      :ChooseColor="(c, prop) => (colors[prop] = c)"
+      :ChooseColor="(c, prop) => ChangeColor(c, prop)"
       :ChooseProblem="(p) => ChangeProblem(p)"
     ></app-header>
     <v-main class="grey lighten-4">
@@ -83,8 +83,13 @@ export default {
       if (this.optionsNeedRecreate.includes(prop)) this.InitProblem();
     },
 
+    ChangeColor: function (color, prop) {
+      this.colors[prop] = color;
+    },
+
     ChangeProblem: function (problem) {
       this.problem = problem;
+      this.ChangeColor(mainConfig.problemsList.find(p => p.value == problem).color, "primary");
       this.options = GetDefaultOptions(problem);
       this.optionsNeedRecreate = GetOptionsNeedRecreate(problem);
       this.InitProblem();
@@ -121,14 +126,17 @@ export default {
       ApplyBackAction(this.problem, actions, this.grid);
 
       this.visualization.descriptionList.splice(0, 1);
-      if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1)
+      if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1) {
         var { text, color } =
-          this.visualization.steps[this.visualization.currentStepId - 5].description;
-      this.visualization.descriptionList.push({
-        text,
-        color,
-        id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
-      });
+          this.visualization.steps[
+            this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit
+          ].description;
+        this.visualization.descriptionList.push({
+          text,
+          color,
+          id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
+        });
+      }
       return true;
     },
 
@@ -180,6 +188,10 @@ export default {
 
 .succeed-cell {
   background-color: #ccff90;
+}
+
+.valid-cell {
+  background-color: #ea80fc;
 }
 
 .black-cell {

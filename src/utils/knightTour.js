@@ -48,13 +48,12 @@ var ApplyForwardAction = function (actions, cells) {
   }
 };
 
-var ApplyBackAction = function (actions, queens) {
+var ApplyBackAction = function (actions, cells) {
   for (const action of actions) {
-    const { queen, before } = action;
-    var gridQueen = queens.find((q) => q.id == queen.id);
-    gridQueen.row = before.row;
-    gridQueen.col = before.col;
-    gridQueen.state = before.state;
+    const { cell, before } = action;
+    var gridCell = cells.find((c) => c.id == cell.id);
+    gridCell.value = before.value;
+    gridCell.state = before.state;
   }
 };
 

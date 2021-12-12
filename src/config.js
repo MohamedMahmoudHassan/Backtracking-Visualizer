@@ -12,18 +12,18 @@ var mainConfig = {
     { id: 10, label: "Green", value: "green" },
     { id: 11, label: "Light Green", value: "light-green" },
     { id: 12, label: "Lime", value: "lime" },
-    { id: 13, label: "Yellow", value: "yellow" },
+    // { id: 13, label: "Yellow", value: "yellow" },
     { id: 14, label: "Amber", value: "amber" },
     { id: 15, label: "Orange", value: "orange" },
     { id: 16, label: "Deep Orange", value: "deep-orange" },
-    { id: 17, label: "Brown", value: "brown" },
-    { id: 18, label: "Blue Grey", value: "blue-grey" },
-    { id: 19, label: "Grey", value: "grey" },
+    // { id: 17, label: "Brown", value: "brown" },
+    // { id: 18, label: "Blue Grey", value: "blue-grey" },
+    // { id: 19, label: "Grey", value: "grey" },
   ],
   problemsList: [
     { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
-    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "red" },
-    { id: 3, label: "N-Queen", value: "NQueens", color: "purple" },
+    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "indigo" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "red" },
     { id: 4, label: "Knight's Tour", value: "KnightTour", color: "green" },
   ],
   problemsEnum: {
@@ -39,7 +39,8 @@ var mainConfig = {
     { id: 4, label: "Failed", value: "failed-cell", color: "failed" },
     { id: 5, label: "Succeed", value: "succeed-cell", color: "succeed" },
     { id: 6, label: "Normal", value: "normal-cell", color: "const" },
-    { id: 7, label: "Invalid", value: "invalid-cell", color: "invalid" },
+    { id: 7, label: "valid", value: "valid-cell", color: "valid" },
+    { id: 8, label: "Invalid", value: "invalid-cell", color: "invalid" },
   ],
   cellStatesEnum: {
     empty: "empty-cell",
@@ -48,6 +49,7 @@ var mainConfig = {
     failed: "failed-cell",
     succeed: "succeed-cell",
     normal: "normal-cell",
+    valid: "valid-cell",
     invalid: "invalid-cell",
   },
   defaultValues: {
@@ -58,6 +60,7 @@ var mainConfig = {
       try: "blue",
       failed: "red",
       succeed: "green",
+      valid: "purple",
       const: "secondary",
       empty: "secondary",
       white: "white",
@@ -93,9 +96,9 @@ var visualConfig = {
 var sudokuConfig = {
   gridSizesList: [
     // { id: 1, label: "1 x 1", value: 1 },
-    { id: 2, label: "2 x 2", value: 2 },
-    { id: 3, label: "3 x 3", value: 3 },
-    { id: 4, label: "4 x 4", value: 4 },
+    { id: 2, label: "4 x 4", value: 2 },
+    { id: 3, label: "9 x 9", value: 3 },
+    { id: 4, label: "16 x 16", value: 4 },
   ],
 };
 
@@ -154,7 +157,7 @@ var knightTourConfig = {
     gridSize: "gridSize",
   },
   defaultValues: {
-    gridSize: 7,
+    gridSize: 5,
   },
   optionsNeedRecreate: ["gridSize"],
 };

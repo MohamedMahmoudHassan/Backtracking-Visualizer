@@ -2,7 +2,7 @@
   <v-container>
     <v-row no-gutters v-for="row in chessGrid" :key="row.id">
       <v-col v-for="cell in row.value" :key="cell.id">
-        <div :style="getCellStyle()" :class="getCellClass(cell)" outlined tile>
+        <div :style="getCellStyle()" :class="getCellClass(cell)">
           <img
             v-if="cell.value == Math.max(...grid.map((c) => c.value))"
             src="../../assets/knight_chess.svg"
