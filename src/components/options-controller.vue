@@ -15,13 +15,20 @@
       :ChooseOption="ChooseOption"
     >
     </sudoku-solver-options>
-    <nQueensOptions
+    <n-queens-options
       v-else-if="problem == problemsEnum.nQueens"
       :isDisabled="isDisabled"
       :colors="colors"
       :options="options"
       :ChooseOption="ChooseOption"
-    ></nQueensOptions>
+    ></n-queens-options>
+    <knight-tour-options
+      v-else-if="problem == problemsEnum.knightTour"
+      :isDisabled="isDisabled"
+      :colors="colors"
+      :options="options"
+      :ChooseOption="ChooseOption"
+    ></knight-tour-options>
     <v-btn
       class="option-item"
       elevation="4"
@@ -39,14 +46,15 @@
 <script>
 import sudokuGeneratorOptions from "./Sudoku/generator-options.vue";
 import sudokuSolverOptions from "./Sudoku/solver-options.vue";
-import nQueensOptions from "./NQueens/n-queens-options";
+import nQueensOptions from "./NQueens/n-queens-options.vue";
+import knightTourOptions from "./KnightTour/knight-tour-options.vue";
 
 import { mainConfig } from "../config";
 var { problemsEnum } = mainConfig;
 
 export default {
   name: "options-controller",
-  components: { sudokuGeneratorOptions, sudokuSolverOptions, nQueensOptions },
+  components: { sudokuGeneratorOptions, sudokuSolverOptions, nQueensOptions, knightTourOptions },
   props: ["options", "ChooseOption", "isDisabled", "StartVisualization", "problem", "colors"],
   data: function () {
     return {
