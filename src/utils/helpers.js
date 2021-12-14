@@ -7,13 +7,18 @@ import {
 } from "../config";
 
 import {
-  InitCells as SudokuGenInit,
   InitFilledCells as SudokuSolInit,
-  FillGrid as SudokuGenSolve,
   SolveGrid as SudokuSolSolve,
   ApplyForwardAction as SudokuApplyForward,
   ApplyBackAction as SudokuApplyBack,
 } from "./sudoku";
+
+import {
+  InitCells as SudokuGeneratorInit,
+  Solve as SolveSudokuGenerator,
+  ApplyForwardAction as SudokuGeneratorApplyForward,
+  ApplyBackAction as SudokuGeneratorApplyBack,
+} from "./SudokuGenerator";
 
 import {
   InitQueens as NQueensInit,
@@ -50,29 +55,29 @@ var GetOptionsNeedRecreate = function (problem) {
 };
 
 var InitGrid = function (problem, options) {
-  if (problem == problemsEnum.sudokuGenerator) return SudokuGenInit(options);
+  if (problem == problemsEnum.sudokuGenerator) return SudokuGeneratorInit(options);
   if (problem == problemsEnum.sudokuSolver) return SudokuSolInit(options);
   if (problem == problemsEnum.nQueens) return NQueensInit(options);
   if (problem == problemsEnum.knightTour) return KnightTourInit(options);
 };
 
 var Solve = function (problem, options, grid) {
-  if (problem == problemsEnum.sudokuGenerator) return SudokuGenSolve(options);
+  if (problem == problemsEnum.sudokuGenerator) return SolveSudokuGenerator(options);
   if (problem == problemsEnum.sudokuSolver) return SudokuSolSolve(options, grid);
   if (problem == problemsEnum.nQueens) return SolveNQueens(options);
   if (problem == problemsEnum.knightTour) return SolveKnightTour(options);
 };
 
 var ApplyForwardAction = function (problem, actions, grid) {
-  if (problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver)
-    return SudokuApplyForward(actions, grid);
+  if (problem == problemsEnum.sudokuGenerator) SudokuGeneratorApplyForward(actions, grid);
+  if (problem == problemsEnum.sudokuSolver) return SudokuApplyForward(actions, grid);
   if (problem == problemsEnum.nQueens) return NQueensApplyForward(actions, grid);
   if (problem == problemsEnum.knightTour) return KnightTourApplyForward(actions, grid);
 };
 
 var ApplyBackAction = function (problem, actions, grid) {
-  if (problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver)
-    return SudokuApplyBack(actions, grid);
+  if (problem == problemsEnum.sudokuGenerator) SudokuGeneratorApplyBack(actions, grid);
+  if (problem == problemsEnum.sudokuSolver) return SudokuApplyBack(actions, grid);
   if (problem == problemsEnum.nQueens) return NQueensApplyBack(actions, grid);
   if (problem == problemsEnum.knightTour) return KnightTourApplyBack(actions, grid);
 };

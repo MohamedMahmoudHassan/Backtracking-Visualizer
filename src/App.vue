@@ -60,7 +60,12 @@ var { defaultValues } = mainConfig;
 
 export default {
   name: "App",
-  components: { appHeader, optionsController, problemGrid, visualizationController },
+  components: {
+    appHeader,
+    optionsController,
+    problemGrid,
+    visualizationController,
+  },
   data: function () {
     return {
       problem: defaultValues.problem,
@@ -89,15 +94,19 @@ export default {
 
     ChangeProblem: function (problem) {
       this.problem = problem;
-      this.ChangeColor(mainConfig.problemsList.find(p => p.value == problem).color, "primary");
+      this.ChangeColor(mainConfig.problemsList.find((p) => p.value == problem).color, "primary");
       this.options = GetDefaultOptions(problem);
       this.optionsNeedRecreate = GetOptionsNeedRecreate(problem);
       this.InitProblem();
     },
 
     StartVisualization: function () {
-      this.visualization.steps = Solve(this.problem, this.options, this.grid);
-      if (this.visualization.steps == -1) return this.StartVisualization();
+      var solution = Solve(this.problem, this.options, this.grid);
+      if (solution == -1) {
+        console.log("Too many steps");
+        return;
+      }
+      this.visualization.steps = solution;
       this.StartAutoPlay();
     },
 
@@ -121,20 +130,21 @@ export default {
 
     StepBack: function () {
       this.Pause();
-      if (!this.visualization.currentStepId) return false;
+      var { currentStepId } = this.visualization;
+      if (!currentStepId) return false;
+
       const { actions } = this.visualization.steps[--this.visualization.currentStepId];
       ApplyBackAction(this.problem, actions, this.grid);
-
       this.visualization.descriptionList.splice(0, 1);
-      if (this.visualization.currentStepId > visualConfig.defaultValues.descriptionNoLimit - 1) {
+
+      var { descriptionNoLimit } = visualConfig.defaultValues;
+      if (currentStepId > descriptionNoLimit - 1) {
         var { text, color } =
-          this.visualization.steps[
-            this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit
-          ].description;
+          this.visualization.steps[currentStepId - descriptionNoLimit].description;
         this.visualization.descriptionList.push({
           text,
           color,
-          id: this.visualization.currentStepId - visualConfig.defaultValues.descriptionNoLimit,
+          id: currentStepId - descriptionNoLimit,
         });
       }
       return true;
@@ -175,6 +185,10 @@ export default {
 }
 
 .const-cell {
+  background-color: #eeeeee;
+}
+
+.normal-cell {
   background-color: #eeeeee;
 }
 
