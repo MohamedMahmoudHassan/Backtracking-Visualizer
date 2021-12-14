@@ -1,4 +1,11 @@
-# sudoku-solver-visualizer
+# Backtracking-Visualizer
+Backtracking visualizer is a visualization tool for some backtracking standard problems, which helps to understand backtracking technique in general and how to use it to solve these problems in particular.
+
+### So far the visualizer includes 4 problems:
+  - Sudoku Generator.
+  - Sudoku Solver.
+  - N Queens.
+  - Knight's Tour.
 
 ## Project setup
 ```
