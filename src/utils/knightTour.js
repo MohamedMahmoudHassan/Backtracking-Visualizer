@@ -1,14 +1,15 @@
-import { mainConfig, visualConfig, knightTourConfig } from "../config";
+import { mainConfig, knightTourConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum } = knightTourConfig;
 
 var InitCells = function (options) {
   var cells = [];
+  var id = 0;
   for (var rowId = 1; rowId <= options.gridSize; rowId++)
     for (var colId = 1; colId <= options.gridSize; colId++)
       cells.push({
-        id: (rowId - 1) * options.gridSize + colId,
+        id: id++,
         row: rowId,
         col: colId,
         value: -1,
@@ -21,11 +22,11 @@ var InitCells = function (options) {
 var InitGrid = function (cells, options) {
   var grid = [];
   var size = options.gridSize;
+  var id = 0;
   for (var rowId = 1; rowId <= size; rowId++) {
     var row = { id: rowId, value: [] };
     grid.push(row);
-    for (var colId = 1; colId <= size; colId++)
-      row.value.push(cells.find((cell) => cell.row == rowId && cell.col == colId));
+    for (var colId = 1; colId <= size; colId++) row.value.push(cells[id++]);
   }
   return grid;
 };
@@ -33,7 +34,7 @@ var InitGrid = function (cells, options) {
 var Solve = function (options) {
   var steps = [];
   var cells = InitCells(options);
-  if (!SolveWithBacktracking(cells, 1, options, steps)) return Solve(options);
+  if (!SolveWithBacktracking(1, cells, options, steps)) return -1;
   AddStep(steps, cells, cellStatesEnum.succeed);
   AddStep(steps, cells, cellStatesEnum.normal);
   return steps;
@@ -66,9 +67,13 @@ var GetValidValues = function (knightCell, cells) {
   );
 };
 
-var SolveWithBacktracking = function (cells, id, options, steps) {
+var GetKnightCell = function(cells, id){
+  return cells.find((c) => c.value == id);
+}
+
+var SolveWithBacktracking = function (id, cells, options, steps) {
   if (id == cells.length) return true;
-  var knightCell = cells.find((c) => c.value == id);
+  var knightCell = GetKnightCell(cells, id);
   var validValues = GetValidValues(knightCell, cells, options);
   while (validValues.length) {
     var cell = GetRandFromList(validValues);
@@ -76,8 +81,8 @@ var SolveWithBacktracking = function (cells, id, options, steps) {
       validValuesNo: validValues.length,
       value: id + 1,
     });
-    if (SolveWithBacktracking(cells, id + 1, options, steps)) return true;
-    if (steps.length > visualConfig.defaultValues.stepsNoLimit) return false;
+    if (SolveWithBacktracking(id + 1, cells, options, steps)) return true;
+    if (steps.length > knightTourConfig.stepsNoLimit) return false;
     validValues = validValues.filter((val) => val.id != cell.id);
     AddStep(steps, [cell], cellStatesEnum.failed);
     AddStep(steps, [cell], cellStatesEnum.empty);

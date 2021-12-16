@@ -53,7 +53,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "KnightTour",
+    problem: "SudokuGenerator",
     colors: {
       primary: "purple",
       base: "secondary",
@@ -111,6 +111,7 @@ var sudokuGenConfig = {
     gridEmptiness: "gridEmptiness",
     diagonalsFirst: "diagonalsFirst",
   },
+  stepsNoLimit: 30000,
   defaultValues: {
     gridSize: 3,
     gridEmptiness: 50,
@@ -153,6 +154,7 @@ var knightTourConfig = {
   gridSizeLimits: { min: 5, max: 7 },
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  stepsNoLimit: 1000,
   optionsEnum: {
     gridSize: "gridSize",
   },
