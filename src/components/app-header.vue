@@ -10,6 +10,26 @@
             :color="p.value == problem ? colors.primary : ''"
             @click="ChooseProblem(p.value)"
           >
+            <img
+              v-if="p.value == problemsEnum.sudokuGenerator"
+              src="../assets/images/sudoku-9-empty.svg"
+              class="problem-icon"
+            />
+            <img
+              v-if="p.value == problemsEnum.sudokuSolver"
+              src="../assets/images/sudoku-9-full.svg"
+              class="problem-icon"
+            />
+            <img
+              v-if="p.value == problemsEnum.nQueens"
+              src="../assets/images/queen_chess.svg"
+              class="problem-icon"
+            />
+            <img
+              v-if="p.value == problemsEnum.knightTour"
+              src="../assets/images/knight_chess.svg"
+              class="problem-icon"
+            />
             {{ p.label }}
           </v-btn>
         </v-slide-item>
@@ -37,7 +57,7 @@
 <script>
 import { mainConfig } from "../config";
 import { GetRandFromList } from "../utils/helpers";
-var { colorsList, problemsList } = mainConfig;
+var { colorsList, problemsList, problemsEnum } = mainConfig;
 
 export default {
   name: "app-header",
@@ -45,6 +65,7 @@ export default {
   data: function () {
     return {
       problemsList: problemsList,
+      problemsEnum: problemsEnum,
     };
   },
   methods: {
@@ -56,4 +77,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.problem-icon {
+  height: 25px;
+  margin-right: 5px;
+}
+</style>

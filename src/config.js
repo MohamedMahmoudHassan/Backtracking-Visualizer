@@ -154,7 +154,7 @@ var knightTourConfig = {
   gridSizeLimits: { min: 5, max: 7 },
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
-  stepsNoLimit: 30000,
+  stepsNoLimit: 1000,
   optionsEnum: {
     gridSize: "gridSize",
   },

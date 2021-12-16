@@ -7,7 +7,6 @@ import {
 } from "../config";
 
 import {
-  InitFilledCells as SudokuSolInit,
   SolveGrid as SudokuSolSolve,
   ApplyForwardAction as SudokuApplyForward,
   ApplyBackAction as SudokuApplyBack,
@@ -18,7 +17,9 @@ import {
   Solve as SolveSudokuGenerator,
   ApplyForwardAction as SudokuGeneratorApplyForward,
   ApplyBackAction as SudokuGeneratorApplyBack,
-} from "./SudokuGenerator";
+} from "./sudokuGenerator";
+
+import { Solve as SudokuSolverInit } from "./sudokuSolver";
 
 import {
   InitQueens as NQueensInit,
@@ -56,7 +57,7 @@ var GetOptionsNeedRecreate = function (problem) {
 
 var InitGrid = function (problem, options) {
   if (problem == problemsEnum.sudokuGenerator) return SudokuGeneratorInit(options);
-  if (problem == problemsEnum.sudokuSolver) return SudokuSolInit(options);
+  if (problem == problemsEnum.sudokuSolver) return SudokuSolverInit(options);
   if (problem == problemsEnum.nQueens) return NQueensInit(options);
   if (problem == problemsEnum.knightTour) return KnightTourInit(options);
 };

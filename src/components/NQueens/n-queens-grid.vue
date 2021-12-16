@@ -5,7 +5,7 @@
         <div :style="getCellStyle()" :class="getCellClass(cell)">
           <img
             v-if="grid.filter((q) => q.row == cell.row && q.col == cell.col).length"
-            src="../../assets/queen_chess.svg"
+            src="../../assets/images/queen_chess.svg"
             class="chess-image"
           />
         </div>
