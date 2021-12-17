@@ -50,7 +50,7 @@ import visualizationController from "./components/visualization-controller.vue";
 import {
   InitGrid,
   GetDefaultOptions,
-  GetOptionsNeedRecreate,
+  UpdateGrid,
   Solve,
   ApplyForwardAction,
   ApplyBackAction,
@@ -68,7 +68,7 @@ export default {
   },
   data: function () {
     return {
-      problem: defaultValues.problem,
+      problem: "",
       colors: defaultValues.colors,
       grid: {},
       options: {},
@@ -84,8 +84,9 @@ export default {
     },
 
     ChangeOption: function (opt, prop) {
+      if (this.options[prop] == opt) return;
       this.options[prop] = opt;
-      if (this.optionsNeedRecreate.includes(prop)) this.InitProblem();
+      this.grid = UpdateGrid(this.problem, this.options, prop, this.grid);
     },
 
     ChangeColor: function (color, prop) {
@@ -93,10 +94,10 @@ export default {
     },
 
     ChangeProblem: function (problem) {
+      if (this.problem == problem) return;
       this.problem = problem;
       this.ChangeColor(mainConfig.problemsList.find((p) => p.value == problem).color, "primary");
       this.options = GetDefaultOptions(problem);
-      this.optionsNeedRecreate = GetOptionsNeedRecreate(problem);
       this.InitProblem();
     },
 
@@ -168,7 +169,7 @@ export default {
     },
   },
   created: function () {
-    this.ChangeProblem(this.problem);
+    this.ChangeProblem(defaultValues.problem);
   },
 };
 </script>

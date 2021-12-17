@@ -1,7 +1,7 @@
 import { mainConfig, visualConfig, nQueenConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
-var { cellStatesEnum } = nQueenConfig;
+var { cellStatesEnum, optionsEnum } = nQueenConfig;
 var steps = [];
 
 var InitQueens = function (options) {
@@ -15,6 +15,11 @@ var InitQueens = function (options) {
       state: cellStatesEnum.empty,
     });
   return queens;
+};
+
+var UpdateQueens = function (options, changedOption, cells) {
+  if (changedOption == optionsEnum.gridSize) return InitQueens(options);
+  return cells;
 };
 
 var InitGrid = function (options) {
@@ -133,4 +138,4 @@ var AddStep = function (queens, after, options) {
   steps.push({ actions, description });
 };
 
-export { InitQueens, InitGrid, Solve, ApplyForwardAction, ApplyBackAction };
+export { InitQueens, UpdateQueens, InitGrid, Solve, ApplyForwardAction, ApplyBackAction };

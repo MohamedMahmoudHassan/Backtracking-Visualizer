@@ -80,7 +80,7 @@ var visualConfig = {
     { id: 2, label: "Slow", value: 2, interval: 1000 },
     { id: 3, label: "Normal", value: 3, interval: 500 },
     { id: 4, label: "Fast", value: 4, interval: 100 },
-    { id: 5, label: "Faster", value: 5, interval: 1 },
+    { id: 5, label: "Faster", value: 5, interval: 0 },
   ],
   defaultValues: {
     mode: "disabled",
@@ -88,17 +88,16 @@ var visualConfig = {
     currentStepId: 0,
     steps: [],
     descriptionList: [],
-    stepsNoLimit: 10000,
+    stepsNoLimit: 30000,
     descriptionNoLimit: 7,
   },
 };
 
 var sudokuConfig = {
   gridSizesList: [
-    // { id: 1, label: "1 x 1", value: 1 },
-    { id: 2, label: "4 x 4", value: 2 },
-    { id: 3, label: "9 x 9", value: 3 },
-    { id: 4, label: "16 x 16", value: 4 },
+    { id: 1, label: "4 x 4", value: 2 },
+    { id: 2, label: "9 x 9", value: 3 },
+    { id: 3, label: "16 x 16", value: 4 },
   ],
 };
 
@@ -106,24 +105,26 @@ var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
     diagonalsFirst: "diagonalsFirst",
   },
-  stepsNoLimit: 30000,
   defaultValues: {
     gridSize: 3,
     gridEmptiness: 50,
     diagonalsFirst: false,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -132,13 +133,15 @@ var sudokuSolConfig = {
     gridSize: 3,
     gridEmptiness: 50,
   },
-  optionsNeedRecreate: ["gridSize", "gridEmptiness"],
+  optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: ["gridEmptiness"],
 };
 
 var nQueenConfig = {
   gridSizeLimits: { min: 4, max: 16, forceRowByRow: 10 },
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     rowByRow: "rowByRow",
@@ -148,10 +151,14 @@ var nQueenConfig = {
     rowByRow: true,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 var knightTourConfig = {
-  gridSizeLimits: { min: 5, max: 7 },
+  gridSizesList: [
+    { id: 1, label: "5 x 5", value: 5 },
+    { id: 2, label: "6 x 6", value: 6 },
+  ],
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
   stepsNoLimit: 1000,
@@ -162,6 +169,7 @@ var knightTourConfig = {
     gridSize: 5,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 export {

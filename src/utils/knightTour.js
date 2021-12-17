@@ -1,15 +1,14 @@
 import { mainConfig, knightTourConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
-var { cellStatesEnum } = knightTourConfig;
+var { cellStatesEnum, optionsEnum } = knightTourConfig;
 
 var InitCells = function (options) {
   var cells = [];
-  var id = 0;
   for (var rowId = 1; rowId <= options.gridSize; rowId++)
     for (var colId = 1; colId <= options.gridSize; colId++)
       cells.push({
-        id: id++,
+        id: (rowId - 1) * options.gridSize + colId - 1,
         row: rowId,
         col: colId,
         value: -1,
@@ -19,14 +18,19 @@ var InitCells = function (options) {
   return cells;
 };
 
+var UpdateCells = function (options, changedOption, cells) {
+  if (changedOption == optionsEnum.gridSize) return InitCells(options);
+  return cells;
+};
+
 var InitGrid = function (cells, options) {
   var grid = [];
   var size = options.gridSize;
-  var id = 0;
   for (var rowId = 1; rowId <= size; rowId++) {
     var row = { id: rowId, value: [] };
     grid.push(row);
-    for (var colId = 1; colId <= size; colId++) row.value.push(cells[id++]);
+    for (var colId = 1; colId <= size; colId++)
+      row.value.push(cells[(rowId - 1) * size + colId - 1]);
   }
   return grid;
 };
@@ -67,9 +71,9 @@ var GetValidValues = function (knightCell, cells) {
   );
 };
 
-var GetKnightCell = function(cells, id){
+var GetKnightCell = function (cells, id) {
   return cells.find((c) => c.value == id);
-}
+};
 
 var SolveWithBacktracking = function (id, cells, options, steps) {
   if (id == cells.length) return true;
@@ -122,4 +126,4 @@ var AddStep = function (steps, cells, state, newCell) {
   steps.push({ actions, description });
 };
 
-export { InitCells, InitGrid, Solve, ApplyForwardAction, ApplyBackAction };
+export { InitCells, UpdateCells, InitGrid, Solve, ApplyForwardAction, ApplyBackAction };

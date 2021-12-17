@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app :color="colors.base" dark>
     <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
-    <v-sheet class="mx-auto" max-width="650" :color="colors.base" dark>
+    <v-sheet class="mx-auto" max-width="800" :color="colors.base" dark>
       <v-slide-group show-arrows mandatory>
         <v-slide-item v-for="p in problemsList" :key="p.id">
           <v-btn

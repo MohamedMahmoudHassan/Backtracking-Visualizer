@@ -1,22 +1,21 @@
-import {  sudokuGenConfig } from "../config";
+import { sudokuSolConfig } from "../config";
 import { GetRandFromList } from "./helpers";
+import { AddStep, GetValidValues, InitEmptyCells, SolveWithBacktracking } from "./sudoku";
+import { GetGridFromBucket } from "./sudokuGridsBucket";
 
-var { cellStatesEnum } = sudokuGenConfig;
+var { cellStatesEnum, optionsEnum } = sudokuSolConfig;
 
 var InitCells = function (options) {
-  var cells = [];
-  var size = options.gridSize * options.gridSize;
-  for (var rowId = 1; rowId <= size; rowId++)
-    for (var colId = 1; colId <= size; colId++)
-      cells.push({
-        id: (rowId - 1) * size + colId - 1,
-        row: rowId,
-        col: colId,
-        subGridRow: Math.ceil(rowId / options.gridSize),
-        subGridCol: Math.ceil(colId / options.gridSize),
-        state: cellStatesEnum.empty,
-        value: 0,
-      });
+  var cells = InitEmptyCells(options);
+  var startTime = Date.now();
+  if (!FillWithBacktracking(0, cells, options, startTime))
+    cells = InitCellsFromBucket(options, cells);
+  return RemoveRandCells(cells, options);
+};
+
+var UpdateCells = function (options, changedOption, cells) {
+  if (changedOption == optionsEnum.gridSize) return InitCells(options);
+  if (changedOption == optionsEnum.gridEmptiness) return RemoveRandCells(cells, options);
   return cells;
 };
 
@@ -32,21 +31,50 @@ var InitGrid = function (cells, options) {
   return grid;
 };
 
-var Solve = function (options) {
-  var cells = InitCells(options);
-  if (!SolveWithBacktracking(0, cells, cells, options)) return -1;
+var Solve = function (options, grid) {
+  var steps = [];
+  var gridCells = grid.map((cell) => {
+    return { ...cell };
+  });
+  var cells = gridCells.filter((cell) => cell.state == cellStatesEnum.empty);
+  for (var cell of cells) cell.value = 0;
+  console.log(cells)
+  if (!SolveWithBacktracking(steps, 0, cells, gridCells, options)) return -1;
+  AddStep(steps, cells, { state: cellStatesEnum.succeed });
+  AddStep(steps, cells, { state: cellStatesEnum.normal });
+  return steps;
+};
+
+// var SolveGrid = function (options, grid) {
+//   steps = [];
+//   var gridCells = grid.map((cell) => {
+//     return { ...cell };
+//   });
+//   var cells = gridCells.filter((cell) => cell.state == cellStatesEnum.empty);
+//   SolveWithBacktracking(cells, gridCells, 0, options);
+//   UpdateCells(cells, { state: cellStatesEnum.succeed }, options);
+//   UpdateCells(cells, { state: cellStatesEnum.const }, options);
+//   return steps;
+// };
+var InitCellsFromBucket = function (options, cells) {
+  var values = GetGridFromBucket(options);
+  for (var id = 0; id < values.length; id++) {
+    cells[id].value = values[id];
+    cells[id].state = cellStatesEnum.const;
+  }
   return cells;
 };
 
-var SolveWithBacktracking = function (id, cells, gridCells, options) {
+var FillWithBacktracking = function (id, cells, options, startTime) {
   if (id == cells.length) return true;
   var cell = cells[id];
-  var validValues = GetValidValues(gridCells, cell, options);
+  var validValues = GetValidValues(cells, cell, options);
   while (validValues.length) {
     cell.value = GetRandFromList(validValues);
     cell.state = cellStatesEnum.const;
 
-    if (SolveWithBacktracking(id + 1, cells, gridCells, options)) return true;
+    if (FillWithBacktracking(id + 1, cells, options, startTime)) return true;
+    if (Date.now() - startTime > 300) return false;
     validValues = validValues.filter((val) => val != cell.value);
 
     cell.value = 0;
@@ -55,19 +83,17 @@ var SolveWithBacktracking = function (id, cells, gridCells, options) {
   return false;
 };
 
-var CellsConflict = function (cell1, cell2) {
-  return (
-    cell1.row == cell2.row ||
-    cell1.col == cell2.col ||
-    (cell1.subGridRow == cell2.subGridRow && cell1.subGridCol == cell2.subGridCol)
-  );
+var RemoveRandCells = function (cells, options) {
+  for (var cell of cells) cell.state = cellStatesEnum.const;
+  var needToRemove = Math.round((options.gridEmptiness * cells.length) / 100);
+  while (needToRemove) {
+    var remCell = GetRandFromList(cells);
+    if (remCell.state != cellStatesEnum.empty) {
+      remCell.state = cellStatesEnum.empty;
+      needToRemove--;
+    }
+  }
+  return cells;
 };
 
-var GetValidValues = function (cells, cell, options) {
-  var maxValue = options.gridSize * options.gridSize;
-  var allValues = Array.from({ length: maxValue }, (_, i) => i + 1);
-  var invalidValues = cells.filter((c) => CellsConflict(c, cell)).map((c) => c.value);
-  return allValues.filter((value) => !invalidValues.includes(value));
-};
-
-export { InitCells, InitGrid, Solve };
+export { InitCells, UpdateCells, InitGrid, Solve };
