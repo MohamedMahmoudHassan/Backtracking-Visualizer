@@ -2,9 +2,15 @@
   <v-container>
     <v-row no-gutters v-for="row in chessGrid" :key="row.id">
       <v-col v-for="cell in row.value" :key="cell.Id">
-        <div :style="getCellStyle()" :class="getCellClass(cell)">
+        <div
+          :style="{
+            height: cellLengthBase / options.gridSize + 'px',
+            fontSize: fontSizeBase / options.gridSize + 'px',
+          }"
+          :class="getCellClass(cell)"
+        >
           <img
-            v-if="grid.filter((q) => q.row == cell.row && q.col == cell.col).length"
+            v-if="grid.find((q) => q.value.row == cell.row && q.value.col == cell.col)"
             src="../../assets/images/queen_chess.svg"
             class="chess-image"
           />
@@ -25,31 +31,25 @@ export default {
     return {
       chessGrid: [],
       cellStatesEnum: mainConfig.cellStatesEnum,
+      cellLengthBase: 36 * 15,
+      fontSizeBase: 36 * 6,
     };
   },
   methods: {
-    getCellLength: function () {
-      return (36 * 15) / this.options.gridSize;
-    },
-    getFontSize: function () {
-      return (36 * 6) / this.options.gridSize;
-    },
     getCellClass: function (cell) {
-      var queen = this.grid.filter((q) => q.row == cell.row && q.col == cell.col);
+      var queen = this.grid.find((q) => q.value.row == cell.row && q.value.col == cell.col);
       return [
         "grid-cell pa-24",
-        queen.length && queen[0].state != this.cellStatesEnum.const
-          ? queen[0].state
+        queen &&
+        (queen.state != this.cellStatesEnum.const && queen.state != this.cellStatesEnum.normal)
+          ? queen.state
           : (cell.row + cell.col) % 2
           ? "black-cell"
           : "white-cell",
       ];
     },
     getCellStyle: function () {
-      return {
-        height: this.getCellLength() + "px",
-        fontSize: this.getFontSize() + "px",
-      };
+      return {};
     },
   },
   created: function () {
