@@ -38,27 +38,25 @@ var InitGrid = function (cells, options) {
 var Solve = function (options) {
   var steps = [];
   var cells = InitCells(options);
-  if (!SolveWithBacktracking(1, cells, options, steps)) return -1;
-  AddStep(steps, cells, cellStatesEnum.succeed);
-  AddStep(steps, cells, cellStatesEnum.normal);
+  if (!SolveWithBacktracking(steps, 1, cells, options)) return -1;
+  AddStep(steps, cells, { state: cellStatesEnum.succeed });
+  AddStep(steps, cells, { state: cellStatesEnum.normal });
   return steps;
 };
 
 var ApplyForwardAction = function (actions, cells) {
   for (const action of actions) {
-    const { cell, after } = action;
-    var gridCell = cells.find((c) => c.id == cell.id);
-    gridCell.value = after.value;
-    gridCell.state = after.state;
+    var gridCell = cells[action.cellId];
+    gridCell.value = action.newValue;
+    gridCell.state = action.newState;
   }
 };
 
 var ApplyBackAction = function (actions, cells) {
   for (const action of actions) {
-    const { cell, before } = action;
-    var gridCell = cells.find((c) => c.id == cell.id);
-    gridCell.value = before.value;
-    gridCell.state = before.state;
+    var gridCell = cells[action.cellId];
+    gridCell.value = action.oldValue;
+    gridCell.state = action.oldState;
   }
 };
 
@@ -75,21 +73,25 @@ var GetKnightCell = function (cells, id) {
   return cells.find((c) => c.value == id);
 };
 
-var SolveWithBacktracking = function (id, cells, options, steps) {
+var SolveWithBacktracking = function (steps, id, cells, options) {
   if (id == cells.length) return true;
   var knightCell = GetKnightCell(cells, id);
   var validValues = GetValidValues(knightCell, cells, options);
   while (validValues.length) {
     var cell = GetRandFromList(validValues);
-    AddStep(steps, [cell], cellStatesEnum.try, {
-      validValuesNo: validValues.length,
-      value: id + 1,
-    });
-    if (SolveWithBacktracking(id + 1, cells, options, steps)) return true;
+    var change = {
+      state: cellStatesEnum.try,
+      newValue: id + 1,
+      validValuesCount: validValues.length,
+    };
+
+    AddStep(steps, [cell], change);
+    if (SolveWithBacktracking(steps, id + 1, cells, options)) return true;
     if (steps.length > knightTourConfig.stepsNoLimit) return false;
+
     validValues = validValues.filter((val) => val.id != cell.id);
-    AddStep(steps, [cell], cellStatesEnum.failed);
-    AddStep(steps, [cell], cellStatesEnum.empty);
+    AddStep(steps, [cell], { state: cellStatesEnum.failed });
+    AddStep(steps, [cell], { state: cellStatesEnum.empty });
   }
   return false;
 };
@@ -98,29 +100,52 @@ var getCellPair = function (cell) {
   return "(" + cell.row + ", " + cell.col + ")";
 };
 
-var DescribeStep = function (state, oldCell, newCell) {
+var DescribeStep = function (change, cell) {
   var text = "";
-  if (state == cellStatesEnum.succeed) text = "Success!";
-  if (state == cellStatesEnum.normal) text = "Knight visited all cells!";
-  if (state == cellStatesEnum.failed) text = "Can't continue with: " + getCellPair(oldCell);
-  if (state == cellStatesEnum.empty) text = "Retreating from: " + getCellPair(oldCell);
-  if (state == cellStatesEnum.try)
-    text = newCell.validValuesNo
-      ? newCell.validValuesNo + " valid cells, Trying: " + getCellPair(oldCell)
-      : "No valid cells";
-  var color = mainConfig.cellStatesList.find((s) => s.value == state).color;
+  switch (change.state) {
+    case cellStatesEnum.normal:
+      text = "Knight visited all cells!";
+      break;
+    case cellStatesEnum.succeed:
+      text = "Success!";
+      break;
+    case cellStatesEnum.failed:
+      text = text = "Can't continue with: " + getCellPair(cell);
+      break;
+    case cellStatesEnum.empty:
+      text = text = "Retreating from: " + getCellPair(cell);
+      break;
+    case cellStatesEnum.const:
+      text = text =
+        change.validValuesCount +
+        " valid cells, Putting knight in: " +
+        getCellPair(change.newValue);
+      break;
+    case cellStatesEnum.try:
+      text = change.validValuesCount
+        ? change.validValuesCount + " valid cells, Trying: " + getCellPair(cell)
+        : "No valid cells";
+  }
+  var color = mainConfig.cellStatesList.find((state) => state.value == change.state).color;
   return { text, color };
 };
 
-var AddStep = function (steps, cells, state, newCell) {
+var AddStep = function (steps, cells, change) {
   var actions = [];
-  var description = DescribeStep(state, cells[0], newCell);
+  change.oldValue = cells[0].value;
+  var description = DescribeStep(change, { row: cells[0].row, col: cells[0].col });
+  var { state, newValue, validValuesCount } = change;
   for (const cell of cells) {
-    var action = { cell, before: { ...cell }, after: {} };
-    cell.state = state;
-    if (state == cellStatesEnum.try || state == cellStatesEnum.const) cell.value = newCell.value;
-    if (state == cellStatesEnum.empty) cell.value = -1;
-    action.after = { ...cell };
+    var action = {
+      cellId: cell.id,
+      oldState: cell.state,
+      newState: change.state,
+      oldValue: cell.value,
+      newValue: state == cellStatesEnum.empty ? -1 : newValue || cell.value,
+      validValuesCount,
+    };
+    cell.state = action.newState;
+    cell.value = action.newValue;
     actions.push(action);
   }
   steps.push({ actions, description });

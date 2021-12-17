@@ -111,7 +111,7 @@ var DescribeStep = function (change) {
   var text = "";
   switch (change.state) {
     case cellStatesEnum.normal:
-      text = "Grid is complete!";
+      text = "All queens was placed!";
       break;
     case cellStatesEnum.succeed:
       text = "Success!";
