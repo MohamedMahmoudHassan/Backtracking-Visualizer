@@ -36,18 +36,17 @@
       </v-slide-group>
     </v-sheet>
 
-    <v-btn class="ma-2" @click="ChangeColor()" fab small>
+    <v-btn class="ma-2" @click="ChangeColor()" fab small  title="Change color">
       <v-icon> mdi-palette </v-icon>
     </v-btn>
-    <v-btn class="ma-2" fab small>
-      <v-icon> mdi-help </v-icon>
-    </v-btn>
+    <help-dialog :colors="colors"></help-dialog>
     <v-btn
       class="ma-2"
       fab
       small
       href="https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer"
       target="_blank"
+      title="Visit repository"
     >
       <v-icon> mdi-github </v-icon>
     </v-btn>
@@ -55,12 +54,15 @@
 </template>
 
 <script>
+import helpDialog from "./help-dialog";
+
 import { mainConfig } from "../config";
 import { GetRandFromList } from "../utils/helpers";
 var { colorsList, problemsList, problemsEnum } = mainConfig;
 
 export default {
   name: "app-header",
+  components: { helpDialog },
   props: ["colors", "ChooseColor", "problem", "ChooseProblem"],
   data: function () {
     return {
