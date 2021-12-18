@@ -36,7 +36,7 @@
       tile
       :disabled="isDisabled"
       :color="colors.primary"
-      @click="StartVisualization"
+      @click="StartVisualization()"
     >
       Start Visualization
     </v-btn>

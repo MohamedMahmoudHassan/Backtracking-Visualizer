@@ -1,8 +1,23 @@
 <template>
   <v-container>
     <v-row no-gutters v-for="row in sudokuGrid" :key="row.id">
-      <v-col v-for="cell in row.value" :key="cell.row + '-' + cell.col">
-        <div :style="getCellStyle()" :class="getCellClass(cell)">
+      <v-col v-for="cell in row.value" :key="cell.id">
+        <div
+          :style="{
+            height: cellLengthBase / (options.gridSize * options.gridSize) + 'px',
+            fontSize: fontSizeBase / (options.gridSize * options.gridSize) + 'px',
+          }"
+          :class="[
+            'grid-cell pa-24',
+            cell.state,
+            {
+              'first-row': cell.row == 1,
+              'first-col': cell.col == 1,
+              'last-group-row': cell.row % options.gridSize == 0,
+              'last-group-column': cell.col % options.gridSize == 0,
+            },
+          ]"
+        >
           {{ cell.state == cellStatesEnum.empty ? "" : cell.value }}
         </div>
       </v-col>
@@ -21,32 +36,9 @@ export default {
     return {
       sudokuGrid: [],
       cellStatesEnum: mainConfig.cellStatesEnum,
+      cellLengthBase: 36 * 15,
+      fontSizeBase: 36 * 6,
     };
-  },
-  methods: {
-    getCellLength: function () {
-      return (36 * 15) / (this.options.gridSize * this.options.gridSize);
-    },
-    getFontSize: function () {
-      return (36 * 6) / (this.options.gridSize * this.options.gridSize);
-    },
-    getCellClass: function (cell) {
-      return [
-        "grid-cell pa-24",
-        cell.state,
-        { "first-row": cell.row == 1 },
-        { "first-col": cell.col == 1 },
-        { "last-group-row": cell.row % this.options.gridSize == 0 },
-        { "last-group-column": cell.col % this.options.gridSize == 0 },
-      ];
-    },
-
-    getCellStyle: function () {
-      return {
-        height: this.getCellLength() + "px",
-        fontSize: this.getFontSize() + "px",
-      };
-    },
   },
   created: function () {
     this.sudokuGrid = InitGrid(this.grid, this.options);

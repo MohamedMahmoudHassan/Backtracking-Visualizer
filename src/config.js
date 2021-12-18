@@ -22,9 +22,9 @@ var mainConfig = {
   ],
   problemsList: [
     { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
-    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "indigo" },
-    { id: 3, label: "N-Queen", value: "NQueens", color: "red" },
-    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "green" },
+    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo" },
+    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
@@ -53,7 +53,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "KnightTour",
+    problem: "SudokuGenerator",
     colors: {
       primary: "purple",
       base: "secondary",
@@ -74,13 +74,14 @@ var visualConfig = {
     active: "active",
     paused: "paused",
     disabled: "disabled",
+    searching: "searching",
   },
   speedsList: [
     { id: 1, label: "Slower", value: 1, interval: 5000 },
     { id: 2, label: "Slow", value: 2, interval: 1000 },
     { id: 3, label: "Normal", value: 3, interval: 500 },
     { id: 4, label: "Fast", value: 4, interval: 100 },
-    { id: 5, label: "Faster", value: 5, interval: 1 },
+    { id: 5, label: "Faster", value: 5, interval: 0 },
   ],
   defaultValues: {
     mode: "disabled",
@@ -88,17 +89,16 @@ var visualConfig = {
     currentStepId: 0,
     steps: [],
     descriptionList: [],
-    stepsNoLimit: 10000,
+    stepsNoLimit: 100000,
     descriptionNoLimit: 7,
   },
 };
 
 var sudokuConfig = {
   gridSizesList: [
-    // { id: 1, label: "1 x 1", value: 1 },
-    { id: 2, label: "4 x 4", value: 2 },
-    { id: 3, label: "9 x 9", value: 3 },
-    { id: 4, label: "16 x 16", value: 4 },
+    { id: 1, label: "4 x 4", value: 2 },
+    { id: 2, label: "9 x 9", value: 3 },
+    { id: 3, label: "16 x 16", value: 4 },
   ],
 };
 
@@ -106,6 +106,7 @@ var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  gridEmptinessLimits: { min: 30, max: 70 },
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -117,21 +118,26 @@ var sudokuGenConfig = {
     diagonalsFirst: false,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  gridEmptinessLimits: { min: 30, max: 70, max16: 50 },
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
+    bestFirst: "bestFirst",
   },
   defaultValues: {
     gridSize: 3,
     gridEmptiness: 50,
+    bestFirst: true,
   },
-  optionsNeedRecreate: ["gridSize", "gridEmptiness"],
+  optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: ["gridEmptiness"],
 };
 
 var nQueenConfig = {
@@ -147,10 +153,14 @@ var nQueenConfig = {
     rowByRow: true,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 var knightTourConfig = {
-  gridSizeLimits: { min: 5, max: 7 },
+  gridSizesList: [
+    { id: 1, label: "5 x 5", value: 5 },
+    { id: 2, label: "6 x 6", value: 6 },
+  ],
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
   optionsEnum: {
@@ -160,6 +170,7 @@ var knightTourConfig = {
     gridSize: 5,
   },
   optionsNeedRecreate: ["gridSize"],
+  optionsNeedUpdate: [],
 };
 
 export {

@@ -18,7 +18,7 @@
         </v-slide-x-transition>
       </v-timeline>
       <v-card v-else-if="!isDisabled" outlined class="unavailable-description" tile disabled>
-        Steps description is not available in fast mode, the animation looks bad :(
+        Steps description is not available in fast mode. Animation looks bad :(
       </v-card>
     </v-card>
     <v-btn
@@ -28,8 +28,9 @@
       :dark="!isDisabled"
       tile
       :color="colors.primary"
-      >{{ visualization.currentStepId }} of {{ visualization.steps.length }} steps</v-btn
     >
+      {{ visualization.currentStepId }} of {{ visualization.steps.length }} steps
+    </v-btn>
     <v-card tile outlined>
       <v-slider
         class="speed-slider"
@@ -45,13 +46,21 @@
       >
       </v-slider>
       <v-card tile style="text-align: center">
-        <v-btn tile width="116" :color="colors.base" :disabled="isDisabled" @click="StepBack()">
+        <v-btn
+          tile
+          width="116"
+          depressed
+          :color="colors.base"
+          :disabled="isDisabled"
+          @click="StepBack()"
+        >
           <span class="hidden-sm-and-down">Back</span>
-          <v-icon dark> mdi-skip-previous </v-icon>
+          <v-icon> mdi-skip-previous </v-icon>
         </v-btn>
         <v-btn
           v-if="visualization.mode != visualizationModes.active"
           tile
+          depressed
           width="115"
           :color="colors.primary"
           :disabled="isDisabled"
@@ -64,6 +73,7 @@
         <v-btn
           v-else
           tile
+          depressed
           width="115"
           :color="colors.primary"
           :disabled="isDisabled"
@@ -71,30 +81,34 @@
           @click="Pause()"
         >
           <span class="hidden-sm-and-down">Pause</span>
-          <v-icon dark> mdi-pause </v-icon>
+          <v-icon> mdi-pause </v-icon>
         </v-btn>
-        <v-btn tile width="116" :color="colors.base" :disabled="isDisabled" @click="StepForward()">
+        <v-btn
+          tile
+          depressed
+          width="116"
+          :color="colors.base"
+          :disabled="isDisabled"
+          @click="StepForward()"
+        >
           <span class="hidden-sm-and-down">Forward</span>
-          <v-icon dark> mdi-skip-next </v-icon>
+          <v-icon> mdi-skip-next </v-icon>
         </v-btn>
         <v-btn
           block
           tile
+          depressed
           :color="colors.base"
           :disabled="isDisabled"
           :dark="!isDisabled"
           style="margin-top: 3px"
           @click="StopVisualization()"
         >
-          <v-icon dark> mdi-stop </v-icon>
+          <v-icon> mdi-stop </v-icon>
           <span class="hidden-sm-and-down">Stop Visualization</span>
         </v-btn>
       </v-card>
     </v-card>
-    <v-snackbar v-model="showCompleteSnackbar">
-      Visualization steps are completed
-      <v-btn :color="colors.primary" text small @click="Stop"> Stop Visualization </v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -110,7 +124,6 @@ export default {
     "Pause",
     "StepForward",
     "StepBack",
-    "showCompleteSnackbar",
     "StopVisualization",
   ],
   data: function () {
@@ -120,11 +133,6 @@ export default {
     };
   },
   methods: {
-    Stop: function () {
-      this.showCompleteSnackbar = false;
-      this.StopVisualization();
-    },
-
     ShowDescription: function () {
       return (
         !this.isDisabled &&

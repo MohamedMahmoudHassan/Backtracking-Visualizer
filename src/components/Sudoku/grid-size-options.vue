@@ -27,5 +27,10 @@ export default {
       gridSizesList: sudokuGenConfig.gridSizesList,
     };
   },
+  watch: {
+    gridSize: function () {
+      this.size = this.gridSize;
+    },
+  },
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
   <v-card :color="colors.base" tile outlined class="options-container">
     <grid-size-options
-      :gridSize="gridSize"
+      :gridSize="options.gridSize"
       :isDisabled="isDisabled"
       :colors="colors"
       :ChooseGridSize="(size) => ChooseOption(size, 'gridSize')"
     ></grid-size-options>
     <grid-emptiness-options
-      :gridEmptiness="gridEmptiness"
+      :gridEmptiness="options.gridEmptiness"
       :isDisabled="isDisabled"
       :colors="colors"
       :ChooseGridEmptiness="(emptiness) => ChooseOption(emptiness, 'gridEmptiness')"
@@ -33,10 +33,17 @@ export default {
   props: ["options", "isDisabled", "colors", "ChooseOption"],
   data: function () {
     return {
-      gridSize: this.options.gridSize,
-      gridEmptiness: this.options.gridEmptiness,
       diagonalsFirst: this.options.diagonalsFirst,
     };
+  },
+  watch: {
+    options: {
+      handler: function (val, oldVal) {
+        if (val.diagonalsFirst != oldVal.diagonalsFirst)
+          this.diagonalsFirst = this.options.diagonalsFirst;
+      },
+      deep: true,
+    },
   },
 };
 </script>

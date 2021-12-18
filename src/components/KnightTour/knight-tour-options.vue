@@ -2,17 +2,22 @@
   <v-card :color="colors.base" tile outlined class="options-container">
     <v-card :color="colors.base" tile outlined class="option-item">
       <v-subheader class="pl-0">Grid Size</v-subheader>
-      <v-slider
-        v-model="gridSize"
-        :min="gridSizeLimits.min"
-        :max="gridSizeLimits.max"
-        :step="1"
-        thumb-label
-        :disabled="isDisabled"
-        :color="colors.primary"
-        @change="ChooseOption(gridSize, 'gridSize')"
-      >
-      </v-slider>
+      <v-row justify="space-around">
+        <v-radio-group
+          row
+          v-model="gridSize"
+          @change="ChooseOption(gridSize, 'gridSize')"
+          :disabled="isDisabled"
+        >
+          <v-radio
+            v-for="size in gridSizesList"
+            :key="size.id"
+            :label="size.label"
+            :value="size.value"
+            :color="colors.primary"
+          ></v-radio>
+        </v-radio-group>
+      </v-row>
     </v-card>
   </v-card>
 </template>
@@ -25,8 +30,16 @@ export default {
   data: function () {
     return {
       gridSize: this.options.gridSize,
-      gridSizeLimits: knightTourConfig.gridSizeLimits,
+      gridSizesList: knightTourConfig.gridSizesList,
     };
+  },
+  watch: {
+    options: {
+      handler: function (val, oldVal) {
+        if (val.gridSize != oldVal.gridSize) this.gridSize = this.options.gridSize;
+      },
+      deep: true,
+    },
   },
 };
 </script>

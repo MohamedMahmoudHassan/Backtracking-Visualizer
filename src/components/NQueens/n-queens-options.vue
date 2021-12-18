@@ -56,5 +56,14 @@ export default {
       this.ChooseOption(this.rowByRow, "rowByRow");
     },
   },
+  watch: {
+    options: {
+      handler: function (val, oldVal) {
+        if (val.gridSize != oldVal.gridSize) this.gridSize = this.options.gridSize;
+        if (val.rowByRow != oldVal.rowByRow) this.rowByRow = this.options.rowByRow;
+      },
+      deep: true,
+    },
+  },
 };
 </script>
