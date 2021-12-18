@@ -158,8 +158,14 @@ export default {
   props: ["colors"],
   data: function () {
     return {
-      dialog: true,
+      dialog: false,
     };
+  },
+  created: function () {
+    if (!localStorage.getItem("backtrackingVisualizerVisit")) {
+      this.dialog = true;
+      localStorage.setItem("backtrackingVisualizerVisit", true);
+    }
   },
 };
 </script>
