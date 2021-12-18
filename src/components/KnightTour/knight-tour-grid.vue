@@ -5,7 +5,7 @@
         <div :style="getCellStyle()" :class="getCellClass(cell)">
           <img
             v-if="cell.value == Math.max(...grid.map((c) => c.value))"
-            src="../../assets/knight_chess.svg"
+            src="../../assets/images/knight_chess.svg"
             class="chess-image"
           />
           <div v-else-if="cell.value != -1">{{ cell.value }}</div>
