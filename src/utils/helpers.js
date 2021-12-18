@@ -46,10 +46,10 @@ var GetRandFromList = function (items) {
 };
 
 var GetDefaultOptions = function (problem) {
-  if (problem == problemsEnum.sudokuGenerator) return sudokuGenConfig.defaultValues;
-  if (problem == problemsEnum.sudokuSolver) return sudokuSolConfig.defaultValues;
-  if (problem == problemsEnum.nQueens) return nQueenConfig.defaultValues;
-  if (problem == problemsEnum.knightTour) return knightTourConfig.defaultValues;
+  if (problem == problemsEnum.sudokuGenerator) return { ...sudokuGenConfig.defaultValues };
+  if (problem == problemsEnum.sudokuSolver) return { ...sudokuSolConfig.defaultValues };
+  if (problem == problemsEnum.nQueens) return { ...nQueenConfig.defaultValues };
+  if (problem == problemsEnum.knightTour) return { ...knightTourConfig.defaultValues };
 };
 
 var InitGrid = function (problem, options) {

@@ -1,4 +1,4 @@
-import { mainConfig, knightTourConfig } from "../config";
+import { mainConfig, visualConfig, knightTourConfig } from "../config";
 import { GetRandFromList } from "./helpers";
 
 var { cellStatesEnum, optionsEnum } = knightTourConfig;
@@ -87,7 +87,7 @@ var SolveWithBacktracking = function (steps, id, cells, options) {
 
     AddStep(steps, [cell], change);
     if (SolveWithBacktracking(steps, id + 1, cells, options)) return true;
-    if (steps.length > knightTourConfig.stepsNoLimit) return false;
+    if (steps.length > visualConfig.defaultValues.stepsNoLimit) return false;
 
     validValues = validValues.filter((val) => val.id != cell.id);
     AddStep(steps, [cell], { state: cellStatesEnum.failed });

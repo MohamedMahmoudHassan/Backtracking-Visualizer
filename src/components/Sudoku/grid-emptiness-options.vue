@@ -27,5 +27,10 @@ export default {
       emptiness: this.gridEmptiness,
     };
   },
+  watch: {
+    gridEmptiness: function () {
+      this.emptiness = this.gridEmptiness;
+    },
+  },
 };
 </script>

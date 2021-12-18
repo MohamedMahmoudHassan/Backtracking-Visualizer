@@ -22,9 +22,9 @@ var mainConfig = {
   ],
   problemsList: [
     { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
-    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "indigo" },
-    { id: 3, label: "N-Queen", value: "NQueens", color: "red" },
-    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "green" },
+    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo" },
+    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
@@ -74,6 +74,7 @@ var visualConfig = {
     active: "active",
     paused: "paused",
     disabled: "disabled",
+    searching: "searching"
   },
   speedsList: [
     { id: 1, label: "Slower", value: 1, interval: 5000 },
@@ -88,7 +89,7 @@ var visualConfig = {
     currentStepId: 0,
     steps: [],
     descriptionList: [],
-    stepsNoLimit: 30000,
+    stepsNoLimit: 100000,
     descriptionNoLimit: 7,
   },
 };
@@ -105,7 +106,6 @@ var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
-  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -124,7 +124,6 @@ var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
-  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -141,7 +140,6 @@ var nQueenConfig = {
   gridSizeLimits: { min: 4, max: 16, forceRowByRow: 10 },
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
-  stepsNoLimit: 30000,
   optionsEnum: {
     gridSize: "gridSize",
     rowByRow: "rowByRow",
@@ -161,7 +159,6 @@ var knightTourConfig = {
   ],
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
-  stepsNoLimit: 1000,
   optionsEnum: {
     gridSize: "gridSize",
   },

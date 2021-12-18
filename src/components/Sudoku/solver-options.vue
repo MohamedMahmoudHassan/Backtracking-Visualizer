@@ -1,13 +1,13 @@
 <template>
   <v-card :color="colors.base" tile outlined class="options-container">
     <grid-size-options
-      :gridSize="gridSize"
+      :gridSize="options.gridSize"
       :isDisabled="isDisabled"
       :colors="colors"
       :ChooseGridSize="(size) => ChooseOption(size, 'gridSize')"
     ></grid-size-options>
     <grid-emptiness-options
-      :gridEmptiness="gridEmptiness"
+      :gridEmptiness="options.gridEmptiness"
       :isDisabled="isDisabled"
       :colors="colors"
       :ChooseGridEmptiness="(emptiness) => ChooseOption(emptiness, 'gridEmptiness')"

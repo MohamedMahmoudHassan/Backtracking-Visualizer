@@ -1,12 +1,18 @@
 <template>
   <v-app>
+    <many-steps-snackbar
+      :view="viewManyStepsSnackbar"
+      :colors="colors"
+      :TryAgain="StartVisualization"
+      :ChooseDefaultOptions="ChooseDefaultOptions"
+    ></many-steps-snackbar>
     <options-controller
       :isDisabled="visualization.mode != modesEnum.disabled"
       :problem="problem"
       :colors="colors"
       :options="options"
       :ChooseOption="(opt, prop) => ChangeOption(opt, prop)"
-      :StartVisualization="(steps) => StartVisualization(steps)"
+      :StartVisualization="StartVisualization"
     ></options-controller>
     <app-header
       :problem="problem"
@@ -20,13 +26,16 @@
           <problem-grid
             :grid="grid"
             :problem="problem"
+            :isSearching="visualization.mode == modesEnum.searching"
             :options="options"
             :colors="colors"
           ></problem-grid>
         </v-col>
         <v-col>
           <visualization-controller
-            :isDisabled="visualization.mode == modesEnum.disabled"
+            :isDisabled="
+              visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
+            "
             :colors="colors"
             :visualization="visualization"
             :AutoPlay="StartAutoPlay"
@@ -46,6 +55,7 @@ import appHeader from "./components/app-header.vue";
 import optionsController from "./components/options-controller.vue";
 import problemGrid from "./components/problem-grid.vue";
 import visualizationController from "./components/visualization-controller.vue";
+import manyStepsSnackbar from "./components/many-steps-snackbar.vue";
 
 import {
   InitGrid,
@@ -65,9 +75,11 @@ export default {
     optionsController,
     problemGrid,
     visualizationController,
+    manyStepsSnackbar,
   },
   data: function () {
     return {
+      viewManyStepsSnackbar: false,
       problem: "",
       colors: defaultValues.colors,
       grid: {},
@@ -79,11 +91,18 @@ export default {
   },
   methods: {
     InitProblem: function () {
+      this.viewManyStepsSnackbar = false;
       this.visualization = { ...visualConfig.defaultValues };
       this.grid = InitGrid(this.problem, this.options);
     },
 
+    ChooseDefaultOptions: function () {
+      this.options = GetDefaultOptions(this.problem);
+      this.InitProblem();
+    },
+
     ChangeOption: function (opt, prop) {
+      this.viewManyStepsSnackbar = false;
       if (this.options[prop] == opt) return;
       this.options[prop] = opt;
       this.grid = UpdateGrid(this.problem, this.options, prop, this.grid);
@@ -101,14 +120,25 @@ export default {
       this.InitProblem();
     },
 
-    StartVisualization: function () {
-      var solution = Solve(this.problem, this.options, this.grid);
-      if (solution == -1) {
-        console.log("Too many steps");
-        return;
+    StartVisualization: function (triesCounter = 0) {
+      if (!triesCounter) {
+        this.visualization.mode = visualConfig.modesEnum.searching;
+        this.viewManyStepsSnackbar = false;
       }
-      this.visualization.steps = solution;
-      this.StartAutoPlay();
+      setTimeout(() => {
+        if (this.visualization.mode == visualConfig.modesEnum.searching) {
+          var solution = (solution = Solve(this.problem, this.options, this.grid));
+          if (solution == -1) {
+            if (triesCounter == 5) {
+              this.visualization.mode = visualConfig.modesEnum.disabled;
+              this.viewManyStepsSnackbar = true;
+            } else this.StartVisualization(triesCounter + 1);
+          } else {
+            this.visualization.steps = solution;
+            this.StartAutoPlay();
+          }
+        }
+      }, 900);
     },
 
     StepForward: function () {

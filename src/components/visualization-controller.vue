@@ -109,10 +109,6 @@
         </v-btn>
       </v-card>
     </v-card>
-    <v-snackbar v-model="showCompleteSnackbar">
-      Visualization steps are completed
-      <v-btn :color="colors.primary" text small @click="Stop"> Stop Visualization </v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -128,7 +124,6 @@ export default {
     "Pause",
     "StepForward",
     "StepBack",
-    "showCompleteSnackbar",
     "StopVisualization",
   ],
   data: function () {
@@ -138,11 +133,6 @@ export default {
     };
   },
   methods: {
-    Stop: function () {
-      this.showCompleteSnackbar = false;
-      this.StopVisualization();
-    },
-
     ShowDescription: function () {
       return (
         !this.isDisabled &&

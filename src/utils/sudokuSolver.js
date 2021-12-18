@@ -38,7 +38,6 @@ var Solve = function (options, grid) {
   });
   var cells = gridCells.filter((cell) => cell.state == cellStatesEnum.empty);
   for (var cell of cells) cell.value = 0;
-  console.log(cells)
   if (!SolveWithBacktracking(steps, 0, cells, gridCells, options)) return -1;
   AddStep(steps, cells, { state: cellStatesEnum.succeed });
   AddStep(steps, cells, { state: cellStatesEnum.normal });
