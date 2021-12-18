@@ -7,9 +7,9 @@
     </template>
     <v-card>
       <v-toolbar flat :color="colors.base" dark>
-        <v-toolbar-title>Help</v-toolbar-title>
+        <v-toolbar-title>Welcome to Backtracking Visualizer</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn @click="dialog = false" right>Close</v-btn>
+        <v-btn @click="dialog = false" right>Got it!</v-btn>
       </v-toolbar>
       <v-tabs vertical :color="colors.primary">
         <v-tab>
@@ -102,6 +102,10 @@
                 <li>
                   <strong>Grid Emptiness Level:</strong> Controls the percentage of the empty cells
                   of the grid (30% : 70%).
+                </li>
+                <li>
+                  <strong>Best Cell First:</strong> Controls if we try to fill the cell with least
+                  number of possible values first or to fill them row by row.
                 </li>
               </ul>
             </v-card-text>

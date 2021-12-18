@@ -9,9 +9,19 @@
     <grid-emptiness-options
       :gridEmptiness="options.gridEmptiness"
       :isDisabled="isDisabled"
+      :gridSize="options.gridSize"
       :colors="colors"
       :ChooseGridEmptiness="(emptiness) => ChooseOption(emptiness, 'gridEmptiness')"
     ></grid-emptiness-options>
+    <v-card :color="colors.base" tile outlined>
+      <v-switch
+        label="Best Cell First"
+        v-model="bestFirst"
+        :disabled="isDisabled"
+        :color="colors.primary"
+        @change="ChooseOption(bestFirst, 'bestFirst')"
+      ></v-switch>
+    </v-card>
   </v-card>
 </template>
 
@@ -24,9 +34,16 @@ export default {
   props: ["options", "isDisabled", "colors", "ChooseOption"],
   data: function () {
     return {
-      gridSize: this.options.gridSize,
-      gridEmptiness: this.options.gridEmptiness,
+      bestFirst: this.options.bestFirst,
     };
+  },
+  watch: {
+    options: {
+      handler: function (val, oldVal) {
+        if (val.bestFirst != oldVal.bestFirst) this.bestFirst = this.options.bestFirst;
+      },
+      deep: true,
+    },
   },
 };
 </script>

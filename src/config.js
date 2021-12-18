@@ -74,7 +74,7 @@ var visualConfig = {
     active: "active",
     paused: "paused",
     disabled: "disabled",
-    searching: "searching"
+    searching: "searching",
   },
   speedsList: [
     { id: 1, label: "Slower", value: 1, interval: 5000 },
@@ -106,6 +106,7 @@ var sudokuGenConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  gridEmptinessLimits: { min: 30, max: 70 },
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
@@ -124,13 +125,16 @@ var sudokuSolConfig = {
   gridSizesList: sudokuConfig.gridSizesList,
   cellStatesList: mainConfig.cellStatesList,
   cellStatesEnum: mainConfig.cellStatesEnum,
+  gridEmptinessLimits: { min: 30, max: 70, max16: 50 },
   optionsEnum: {
     gridSize: "gridSize",
     gridEmptiness: "gridEmptiness",
+    bestFirst: "bestFirst",
   },
   defaultValues: {
     gridSize: 3,
     gridEmptiness: 50,
+    bestFirst: true,
   },
   optionsNeedRecreate: ["gridSize"],
   optionsNeedUpdate: ["gridEmptiness"],

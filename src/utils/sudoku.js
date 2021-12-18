@@ -50,7 +50,7 @@ var ApplyBackAction = function (actions, cells) {
 
 var SolveWithBacktracking = function (steps, id, cells, gridCells, options) {
   if (id == cells.length) return true;
-  var cell = cells[id];
+  var cell = options.bestFirst ? GetBestCell(cells, gridCells, options) : cells[id];
   var validValues = GetValidValues(gridCells, cell, options);
   while (validValues.length) {
     var change = {
@@ -68,6 +68,18 @@ var SolveWithBacktracking = function (steps, id, cells, gridCells, options) {
     AddStep(steps, [cell], { state: cellStatesEnum.empty });
   }
   return false;
+};
+
+var GetBestCell = function (cells, gridCells, options) {
+  var bestCell = { id: -1, validValuesCount: options.gridSize * options.gridSize + 1 };
+  for (var cell of cells) {
+    if (cell.state == cellStatesEnum.empty) {
+      var validValuesCount = GetValidValues(gridCells, cell, options).length;
+      if (validValuesCount < bestCell.validValuesCount)
+        bestCell = { id: cell.id, validValuesCount };
+    }
+  }
+  return gridCells[bestCell.id];
 };
 
 var CellsConflict = function (cell1, cell2) {
