@@ -1,5 +1,33 @@
 <template>
   <v-app>
+    <v-main class="purple lighten-4">
+      <v-row no-gutters style="height: 7%; background-color: lime; width: 100%"> </v-row>
+      <v-row no-gutters style="width: 100%; height: 93%; background-color: yellow">
+        <v-col
+          xl="3"
+          lg="3"
+          md="12"
+          sm="12"
+          cols="12"
+          order-xl="0"
+          order-lg="0"
+          order-md="3"
+          order-sm="3"
+          order="3"
+        >
+          <div style="width: 100%; height: 100%; background-color: red"></div>
+        </v-col>
+        <v-col xl="5" lg="5" md="7" sm="7" cols="12">
+          <div class="pa-2" style="width: 100%; height: 100%; background-color: blue">
+            <v-card class="ma-auto problem-grid" color="red"> </v-card>
+          </div>
+        </v-col>
+        <v-col xl="4" lg="4" md="5" sm="5" cols="12">
+          <div style="width: 100%; height: 100%; background-color: green"></div>
+        </v-col>
+      </v-row>
+    </v-main>
+
     <many-steps-snackbar
       :view="viewManyStepsSnackbar"
       :colors="colors"
@@ -7,6 +35,7 @@
       :ChooseDefaultOptions="ChooseDefaultOptions"
     ></many-steps-snackbar>
     <options-controller
+      v-if="false"
       :isDisabled="visualization.mode != modesEnum.disabled"
       :problem="problem"
       :colors="colors"
@@ -15,37 +44,40 @@
       :StartVisualization="StartVisualization"
     ></options-controller>
     <app-header
+      v-if="false"
       :problem="problem"
       :colors="colors"
       :ChooseColor="(c, prop) => ChangeColor(c, prop)"
       :ChooseProblem="(p) => ChangeProblem(p)"
     ></app-header>
-    <v-main class="grey lighten-4">
-      <v-row no-gutters>
-        <v-col>
-          <problem-grid
-            :grid="grid"
-            :problem="problem"
-            :isSearching="visualization.mode == modesEnum.searching"
-            :options="options"
-            :colors="colors"
-          ></problem-grid>
-        </v-col>
-        <v-col>
-          <visualization-controller
-            :isDisabled="
-              visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
-            "
-            :colors="colors"
-            :visualization="visualization"
-            :AutoPlay="StartAutoPlay"
-            :Pause="Pause"
-            :StepForward="StepForward"
-            :StepBack="StepBack"
-            :StopVisualization="InitProblem"
-          ></visualization-controller>
-        </v-col>
-      </v-row>
+    <v-main class="grey lighten-4" v-if="false">
+      <v-container>
+        <v-row>
+          <v-col xl="5" lg="7">
+            <problem-grid
+              :grid="grid"
+              :problem="problem"
+              :isSearching="visualization.mode == modesEnum.searching"
+              :options="options"
+              :colors="colors"
+            ></problem-grid>
+          </v-col>
+          <v-col v-if="false" lg="4" class="pd-2" co>
+            <visualization-controller
+              :isDisabled="
+                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
+              "
+              :colors="colors"
+              :visualization="visualization"
+              :AutoPlay="StartAutoPlay"
+              :Pause="Pause"
+              :StepForward="StepForward"
+              :StepBack="StepBack"
+              :StopVisualization="InitProblem"
+            ></visualization-controller>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -205,6 +237,40 @@ export default {
 </script>
 
 <style>
+@media only screen and (max-width: 600px) {
+  .problem-grid {
+    height: 280px;
+    width: 280px;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .problem-grid {
+    height: 320px;
+    width: 320px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .problem-grid {
+    height: 450px;
+    width: 450px;
+  }
+}
+
+@media only screen and (min-width: 1264px) {
+  .problem-grid {
+    height: 500px;
+    width: 500px;
+  }
+}
+
+@media only screen and (min-width: 1904px) {
+  .problem-grid {
+    height: 750px;
+    width: 750px;
+  }
+}
+
 .grid-cell {
   border-width: 1px;
   border-style: solid;
@@ -213,6 +279,8 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: "center";
+  /* height: unset !important;
+  padding-top: 100%; */
 }
 
 .const-cell {

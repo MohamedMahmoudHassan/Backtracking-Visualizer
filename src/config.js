@@ -53,7 +53,8 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "SudokuGenerator",
+    // problem: "SudokuGenerator",
+    problem: "test",
     colors: {
       primary: "purple",
       base: "secondary",

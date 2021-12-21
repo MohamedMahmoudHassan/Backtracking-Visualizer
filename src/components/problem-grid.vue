@@ -1,5 +1,9 @@
 <template>
-  <v-card elevation="3" width="600" class="main-grid" :loading="isSearching ? colors.primary : false">
+  <v-card
+    elevation="3"
+    color="blue"
+    :loading="isSearching ? colors.primary : false"
+  >
     <sudoku-grid
       v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
       :grid="grid"
@@ -42,7 +46,19 @@ export default {
 </script>
 
 <style>
+/* @media only screen and (max-width: 4000) {
 .main-grid {
-  margin: 20px 0px 0px 350px;
+  margin-left: 50%;
 }
+}
+@media only screen and (max-width: 1350) {
+  .main-grid {
+    margin-left: 5%;
+  }
+}
+@media only screen and (max-width: 1020) {
+  .main-grid {
+    margin-left: 30%;
+  }
+} */
 </style>

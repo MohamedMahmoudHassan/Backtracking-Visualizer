@@ -153,7 +153,8 @@ export default {
   padding: 10px;
 }
 .visualization-controller {
-  margin: 30px 20px 0px 0px;
-  float: right;
+  /* margin-top: 20%; */
+  /* margin-right: 5%; */
+  /* float: right; */
 }
 </style>
