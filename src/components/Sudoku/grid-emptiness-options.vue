@@ -1,5 +1,5 @@
 <template>
-  <v-card :color="colors.base" tile outlined class="option-item">
+  <div>
     <v-subheader class="pl-0">Grid Emptiness Level</v-subheader>
     <v-slider
       v-model="emptiness"
@@ -15,7 +15,7 @@
         {{ value + "%" }}
       </template>
     </v-slider>
-  </v-card>
+  </div>
 </template>
 
 <script>

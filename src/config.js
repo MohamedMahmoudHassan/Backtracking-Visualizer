@@ -53,8 +53,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    // problem: "SudokuGenerator",
-    problem: "test",
+    problem: "NQueens",
     colors: {
       primary: "purple",
       base: "secondary",
@@ -97,9 +96,10 @@ var visualConfig = {
 
 var sudokuConfig = {
   gridSizesList: [
-    { id: 1, label: "4 x 4", value: 2 },
-    { id: 2, label: "9 x 9", value: 3 },
-    { id: 3, label: "16 x 16", value: 4 },
+    // { id: 1, label: "1 x 1", value: 1 },
+    { id: 2, label: "4 x 4", value: 2, isBig: false },
+    { id: 3, label: "9 x 9", value: 3, isBig: false },
+    { id: 4, label: "16 x 16", value: 4, isBig: true },
   ],
 };
 

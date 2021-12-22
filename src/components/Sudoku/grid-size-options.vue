@@ -1,18 +1,17 @@
 <template>
-  <v-card :color="colors.base" tile outlined>
-    <v-subheader class="pl-0">Grid Size</v-subheader>
-    <v-row justify="space-around">
-      <v-radio-group row v-model="size" @change="ChooseGridSize(size)" :disabled="isDisabled">
-        <v-radio
-          v-for="size in gridSizesList"
-          :key="size.id"
-          :label="size.label"
-          :value="size.value"
-          :color="colors.primary"
-        ></v-radio>
-      </v-radio-group>
-    </v-row>
-  </v-card>
+  <div>
+    <v-radio-group v-model="size" @change="ChooseGridSize(size)" :disabled="isDisabled">
+      <v-row>
+        <v-col xl="4" lg="4" md="6" cols="4" v-for="size in gridSizesList" :key="size.id">
+          <v-radio :label="size.label" :value="size.value" :color="colors.primary">
+            <template v-slot:label>
+              <div style="font-size: .9rem">{{size.label}}</div>
+            </template>
+          </v-radio>
+        </v-col>
+      </v-row>
+    </v-radio-group>
+  </div>
 </template>
 
 <script>

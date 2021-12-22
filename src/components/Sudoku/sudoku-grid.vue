@@ -1,14 +1,16 @@
 <template>
-  <v-container>
-    <v-row no-gutters v-for="row in sudokuGrid" :key="row.id">
+  <v-container class="pa-3 fill-height">
+    <v-row
+      no-gutters
+      v-for="row in sudokuGrid"
+      :key="row.id"
+      :style="{ height: 100 / sudokuGrid.length + '%' }"
+    >
       <v-col v-for="cell in row.value" :key="cell.id">
         <div
-          :style="{
-            height: cellLengthBase / (options.gridSize * options.gridSize) + 'px',
-            fontSize: fontSizeBase / (options.gridSize * options.gridSize) + 'px',
-          }"
+          :style="{ fontSize: 1 / sudokuGrid.length + 'em' }"
           :class="[
-            'grid-cell pa-24',
+            'grid-cell',
             cell.state,
             {
               'first-row': cell.row == 1,

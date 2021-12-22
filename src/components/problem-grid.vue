@@ -1,28 +1,30 @@
 <template>
-  <v-card
-    elevation="3"
-    color="blue"
-    :loading="isSearching ? colors.primary : false"
-  >
-    <sudoku-grid
-      v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
-      :grid="grid"
-      :options="options"
-      :colors="colors"
-    ></sudoku-grid>
-    <n-queens-grid
-      v-else-if="problem == problemsEnum.nQueens"
-      :grid="grid"
-      :options="options"
-      :colors="colors"
-    ></n-queens-grid>
-    <knight-tour-grid
-      v-else-if="problem == problemsEnum.knightTour"
-      :grid="grid"
-      :options="options"
-      :colors="colors"
-    ></knight-tour-grid>
-  </v-card>
+  <div class="pa-2 fill-height">
+    <v-card
+      elevation="3"
+      class="ma-auto problem-grid"
+      :loading="isSearching ? colors.primary : false"
+    >
+      <sudoku-grid
+        v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
+        :grid="grid"
+        :options="options"
+        :colors="colors"
+      ></sudoku-grid>
+      <n-queens-grid
+        v-else-if="problem == problemsEnum.nQueens"
+        :grid="grid"
+        :options="options"
+        :colors="colors"
+      ></n-queens-grid>
+      <knight-tour-grid
+        v-else-if="problem == problemsEnum.knightTour"
+        :grid="grid"
+        :options="options"
+        :colors="colors"
+      ></knight-tour-grid>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -46,6 +48,44 @@ export default {
 </script>
 
 <style>
+@media only screen and (max-width: 600px) {
+  .problem-grid {
+    height: 280px;
+    width: 280px;
+    font-size: 126px;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .problem-grid {
+    height: 320px;
+    width: 320px;
+    font-size: 144px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .problem-grid {
+    height: 450px;
+    width: 450px;
+    font-size: 162px;
+  }
+}
+
+@media only screen and (min-width: 1264px) {
+  .problem-grid {
+    height: 560px;
+    width: 560px;
+    font-size: 180px;
+  }
+}
+
+@media only screen and (min-width: 1904px) {
+  .problem-grid {
+    height: 750px;
+    width: 750px;
+    font-size: 234px;
+  }
+}
 /* @media only screen and (max-width: 4000) {
 .main-grid {
   margin-left: 50%;

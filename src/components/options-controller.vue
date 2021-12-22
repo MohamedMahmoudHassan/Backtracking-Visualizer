@@ -1,46 +1,50 @@
 <template>
-  <v-navigation-drawer :color="colors.base" dark width="300" permanent absolute>
-    <sudoku-generator-options
-      v-if="problem == problemsEnum.sudokuGenerator"
-      :isDisabled="isDisabled"
-      :colors="colors"
-      :options="options"
-      :ChooseOption="ChooseOption"
-    ></sudoku-generator-options>
-    <sudoku-solver-options
-      v-else-if="problem == problemsEnum.sudokuSolver"
-      :isDisabled="isDisabled"
-      :colors="colors"
-      :options="options"
-      :ChooseOption="ChooseOption"
-    >
-    </sudoku-solver-options>
-    <n-queens-options
-      v-else-if="problem == problemsEnum.nQueens"
-      :isDisabled="isDisabled"
-      :colors="colors"
-      :options="options"
-      :ChooseOption="ChooseOption"
-    ></n-queens-options>
-    <knight-tour-options
-      v-else-if="problem == problemsEnum.knightTour"
-      :isDisabled="isDisabled"
-      :colors="colors"
-      :options="options"
-      :ChooseOption="ChooseOption"
-    ></knight-tour-options>
-    <v-btn
-      class="option-item"
-      elevation="4"
-      block
-      tile
-      :disabled="isDisabled"
-      :color="colors.primary"
-      @click="StartVisualization()"
-    >
-      Start Visualization
-    </v-btn>
-  </v-navigation-drawer>
+  <div class="fill-height secondary">
+    <v-card class="pa-3 secondary" dark tile outlined>
+      <sudoku-generator-options
+        v-if="problem == problemsEnum.sudokuGenerator"
+        :isDisabled="isDisabled"
+        :colors="colors"
+        :options="options"
+        :ChooseOption="ChooseOption"
+      ></sudoku-generator-options>
+      <sudoku-solver-options
+        v-else-if="problem == problemsEnum.sudokuSolver"
+        :isDisabled="isDisabled"
+        :colors="colors"
+        :options="options"
+        :ChooseOption="ChooseOption"
+      >
+      </sudoku-solver-options>
+      <n-queens-options
+        v-else-if="problem == problemsEnum.nQueens"
+        :isDisabled="isDisabled"
+        :colors="colors"
+        :options="options"
+        :ChooseOption="ChooseOption"
+      ></n-queens-options>
+      <knight-tour-options
+        v-else-if="problem == problemsEnum.knightTour"
+        :isDisabled="isDisabled"
+        :colors="colors"
+        :options="options"
+        :ChooseOption="ChooseOption"
+      ></knight-tour-options>
+    </v-card>
+      <v-btn
+        max-width="200"
+        class="option-item"
+        elevation="4"
+        tile
+        block
+        dark
+        :disabled="isDisabled"
+        :color="colors.primary"
+        @click="StartVisualization()"
+      >
+        Start Visualization
+      </v-btn>
+  </div>
 </template>
 
 <script>
@@ -63,12 +67,3 @@ export default {
   },
 };
 </script>
-<style>
-.options-container {
-  margin: 80px 10px 0px 10px;
-}
-
-.option-item {
-  margin-top: 20px;
-}
-</style>

@@ -1,29 +1,34 @@
 <template>
   <v-app>
-    <v-main class="purple lighten-4">
-      <v-row no-gutters style="height: 7%; background-color: lime; width: 100%"> </v-row>
-      <v-row no-gutters style="width: 100%; height: 93%; background-color: yellow">
-        <v-col
-          xl="3"
-          lg="3"
-          md="12"
-          sm="12"
-          cols="12"
-          order-xl="0"
-          order-lg="0"
-          order-md="3"
-          order-sm="3"
-          order="3"
-        >
-          <div style="width: 100%; height: 100%; background-color: red"></div>
+    <v-main class="red lighten-4">
+      <app-header
+        :problem="problem"
+        :colors="colors"
+        :ChooseColor="(c, prop) => ChangeColor(c, prop)"
+        :ChooseProblem="(p) => ChangeProblem(p)"
+      ></app-header>
+      <v-row no-gutters style="height: 100%" class="grey lighten-4">
+        <v-col lg="3" md="3" sm="12" cols="12" order-md="0" order-sm="3" order="3">
+          <options-controller
+            :isDisabled="visualization.mode != modesEnum.disabled"
+            :problem="problem"
+            :colors="colors"
+            :options="options"
+            :ChooseOption="(opt, prop) => ChangeOption(opt, prop)"
+            :StartVisualization="StartVisualization"
+          ></options-controller>
         </v-col>
-        <v-col xl="5" lg="5" md="7" sm="7" cols="12">
-          <div class="pa-2" style="width: 100%; height: 100%; background-color: blue">
-            <v-card class="ma-auto problem-grid" color="red"> </v-card>
-          </div>
+        <v-col lg="6" md="6" sm="7" cols="12">
+          <problem-grid
+            :grid="grid"
+            :problem="problem"
+            :isSearching="visualization.mode == modesEnum.searching"
+            :options="options"
+            :colors="colors"
+          ></problem-grid>
         </v-col>
-        <v-col xl="4" lg="4" md="5" sm="5" cols="12">
-          <div style="width: 100%; height: 100%; background-color: green"></div>
+        <v-col lg="4" md="3" sm="5" cols="12">
+          <div style="width: 100%; height: 100%"></div>
         </v-col>
       </v-row>
     </v-main>
@@ -34,15 +39,6 @@
       :TryAgain="StartVisualization"
       :ChooseDefaultOptions="ChooseDefaultOptions"
     ></many-steps-snackbar>
-    <options-controller
-      v-if="false"
-      :isDisabled="visualization.mode != modesEnum.disabled"
-      :problem="problem"
-      :colors="colors"
-      :options="options"
-      :ChooseOption="(opt, prop) => ChangeOption(opt, prop)"
-      :StartVisualization="StartVisualization"
-    ></options-controller>
     <app-header
       v-if="false"
       :problem="problem"
@@ -237,40 +233,6 @@ export default {
 </script>
 
 <style>
-@media only screen and (max-width: 600px) {
-  .problem-grid {
-    height: 280px;
-    width: 280px;
-  }
-}
-@media only screen and (min-width: 600px) {
-  .problem-grid {
-    height: 320px;
-    width: 320px;
-  }
-}
-
-@media only screen and (min-width: 960px) {
-  .problem-grid {
-    height: 450px;
-    width: 450px;
-  }
-}
-
-@media only screen and (min-width: 1264px) {
-  .problem-grid {
-    height: 500px;
-    width: 500px;
-  }
-}
-
-@media only screen and (min-width: 1904px) {
-  .problem-grid {
-    height: 750px;
-    width: 750px;
-  }
-}
-
 .grid-cell {
   border-width: 1px;
   border-style: solid;
@@ -279,6 +241,7 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: "center";
+  height: 100%;
   /* height: unset !important;
   padding-top: 100%; */
 }

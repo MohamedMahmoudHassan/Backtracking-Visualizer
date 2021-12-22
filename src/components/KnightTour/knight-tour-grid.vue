@@ -1,8 +1,13 @@
 <template>
-  <v-container>
-    <v-row no-gutters v-for="row in chessGrid" :key="row.id">
+  <v-container class="pa-3 fill-height">
+    <v-row
+      no-gutters
+      v-for="row in chessGrid"
+      :key="row.id"
+      :style="{ height: 100 / chessGrid.length + '%' }"
+    >
       <v-col v-for="cell in row.value" :key="cell.id">
-        <div :style="getCellStyle()" :class="getCellClass(cell)">
+        <div :style="{ fontSize: 1 / chessGrid.length + 'em' }" :class="getCellClass(cell)">
           <img
             v-if="cell.value == Math.max(...grid.map((c) => c.value))"
             src="../../assets/images/knight_chess.svg"

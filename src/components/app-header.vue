@@ -1,8 +1,9 @@
 <template>
   <v-app-bar app :color="colors.base" dark>
+    <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
     <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
-    <v-sheet class="mx-auto" max-width="800" :color="colors.base" dark>
-      <v-slide-group show-arrows mandatory>
+    <v-sheet class="mx-auto" :color="colors.base" dark v-if="false">
+      <v-slide-group class="problems-slider" show-arrows mandatory>
         <v-slide-item v-for="p in problemsList" :key="p.id">
           <v-btn
             class="mx-2"
@@ -36,11 +37,12 @@
       </v-slide-group>
     </v-sheet>
 
-    <v-btn class="ma-2" @click="ChangeColor()" fab small  title="Change color">
+    <v-btn v-if="false" class="ma-2" @click="ChangeColor()" fab small title="Change color">
       <v-icon> mdi-palette </v-icon>
     </v-btn>
-    <help-dialog :colors="colors"></help-dialog>
+    <help-dialog v-if="false" :colors="colors"></help-dialog>
     <v-btn
+      v-if="false"
       class="ma-2"
       fab
       small
@@ -68,6 +70,7 @@ export default {
     return {
       problemsList: problemsList,
       problemsEnum: problemsEnum,
+      drawer: false,
     };
   },
   methods: {
@@ -83,5 +86,34 @@ export default {
 .problem-icon {
   height: 25px;
   margin-right: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+  .problems-slider {
+    max-width: 6px;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .problems-slider {
+    max-width: 600px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .problems-slider {
+    max-width: 600px;
+  }
+}
+
+@media only screen and (min-width: 1264px) {
+  .problems-slider {
+    max-width: 600px;
+  }
+}
+
+@media only screen and (min-width: 1904px) {
+  .problems-slider {
+    max-width: 600px;
+  }
 }
 </style>

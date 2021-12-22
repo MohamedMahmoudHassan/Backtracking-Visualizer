@@ -1,5 +1,5 @@
 <template>
-  <v-card :color="colors.base" tile outlined class="options-container">
+  <div>
     <grid-size-options
       :gridSize="options.gridSize"
       :isDisabled="isDisabled"
@@ -12,7 +12,7 @@
       :colors="colors"
       :ChooseGridEmptiness="(emptiness) => ChooseOption(emptiness, 'gridEmptiness')"
     ></grid-emptiness-options>
-    <v-card :color="colors.base" tile outlined>
+    <div>
       <v-switch
         label="Generate Diagonals First"
         v-model="diagonalsFirst"
@@ -20,8 +20,8 @@
         :color="colors.primary"
         @change="ChooseOption(diagonalsFirst, 'diagonalsFirst')"
       ></v-switch>
-    </v-card>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script>
