@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app :color="colors.base" dark>
-    <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon></v-app-bar-nav-icon>
     <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
     <v-sheet class="mx-auto" :color="colors.base" dark v-if="false">
       <v-slide-group class="problems-slider" show-arrows mandatory>
@@ -36,7 +36,6 @@
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
-
     <v-btn v-if="false" class="ma-2" @click="ChangeColor()" fab small title="Change color">
       <v-icon> mdi-palette </v-icon>
     </v-btn>
@@ -65,7 +64,7 @@ var { colorsList, problemsList, problemsEnum } = mainConfig;
 export default {
   name: "app-header",
   components: { helpDialog },
-  props: ["colors", "ChooseColor", "problem", "ChooseProblem"],
+  props: ["colors", "problem", "ChooseProblem", "ChooseColor"],
   data: function () {
     return {
       problemsList: problemsList,

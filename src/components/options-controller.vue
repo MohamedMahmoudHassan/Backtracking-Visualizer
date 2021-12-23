@@ -31,19 +31,17 @@
         :ChooseOption="ChooseOption"
       ></knight-tour-options>
     </v-card>
-      <v-btn
-        max-width="200"
-        class="option-item"
-        elevation="4"
-        tile
-        block
-        dark
-        :disabled="isDisabled"
-        :color="colors.primary"
-        @click="StartVisualization()"
-      >
-        Start Visualization
-      </v-btn>
+    <v-btn
+      elevation="4"
+      tile
+      block
+      dark
+      :disabled="isDisabled"
+      :color="colors.primary"
+      @click="StartVisualization()"
+    >
+      Start Visualization
+    </v-btn>
   </div>
 </template>
 

@@ -12,10 +12,10 @@ var mainConfig = {
     { id: 10, label: "Green", value: "green" },
     { id: 11, label: "Light Green", value: "light-green" },
     { id: 12, label: "Lime", value: "lime" },
-    // { id: 13, label: "Yellow", value: "yellow" },
+    { id: 13, label: "Deep Orange", value: "deep-orange" },
     { id: 14, label: "Amber", value: "amber" },
     { id: 15, label: "Orange", value: "orange" },
-    { id: 16, label: "Deep Orange", value: "deep-orange" },
+    // { id: 16, label: "Yellow", value: "yellow" },
     // { id: 17, label: "Brown", value: "brown" },
     // { id: 18, label: "Blue Grey", value: "blue-grey" },
     // { id: 19, label: "Grey", value: "grey" },
@@ -53,7 +53,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "NQueens",
+    problem: "SudokuSolver",
     colors: {
       primary: "purple",
       base: "secondary",

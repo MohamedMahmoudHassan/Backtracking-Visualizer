@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="view" vertical width="600">
+  <v-snackbar v-model="show" vertical width="600">
     Solution found has too many steps (more than 100,000 steps)
     <template v-slot:action="{ attrs }">
       <v-btn :color="colors.primary" text v-bind="attrs" @click="TryAgain()"> Try again </v-btn>
@@ -13,6 +13,6 @@
 <script>
 export default {
   name: "many-steps-snackbar",
-  props: ["view", "colors", "TryAgain", "ChooseDefaultOptions"],
+  props: ["show", "colors", "TryAgain", "ChooseDefaultOptions"],
 };
 </script>

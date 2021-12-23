@@ -46,9 +46,6 @@ export default {
           : "white-cell",
       ];
     },
-    getCellStyle: function () {
-      return {};
-    },
   },
   created: function () {
     this.chessGrid = InitGrid(this.options);

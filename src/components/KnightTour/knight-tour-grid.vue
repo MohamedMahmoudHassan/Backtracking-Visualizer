@@ -50,12 +50,6 @@ export default {
           : "white-cell",
       ];
     },
-    getCellStyle: function () {
-      return {
-        height: this.getCellLength() + "px",
-        fontSize: this.getFontSize() + "px",
-      };
-    },
   },
   created: function () {
     this.chessGrid = InitGrid(this.grid, this.options);

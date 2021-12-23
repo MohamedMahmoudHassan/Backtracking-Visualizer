@@ -1,11 +1,12 @@
 <template>
   <div>
+    <v-subheader class="pl-0 sub-header-2">Grid Size</v-subheader>
     <v-radio-group v-model="size" @change="ChooseGridSize(size)" :disabled="isDisabled">
       <v-row>
-        <v-col xl="4" lg="4" md="6" cols="4" v-for="size in gridSizesList" :key="size.id">
-          <v-radio :label="size.label" :value="size.value" :color="colors.primary">
+        <v-col xl="4" lg="4" md="6" :cols="4" v-for="size in gridSizesList" :key="size.id">
+          <v-radio :value="size.value" :color="colors.primary">
             <template v-slot:label>
-              <div style="font-size: .9rem">{{size.label}}</div>
+              <div style="font-size: 0.9rem">{{ size.label }}</div>
             </template>
           </v-radio>
         </v-col>

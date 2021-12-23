@@ -38,8 +38,6 @@ export default {
     return {
       sudokuGrid: [],
       cellStatesEnum: mainConfig.cellStatesEnum,
-      cellLengthBase: 36 * 15,
-      fontSizeBase: 36 * 6,
     };
   },
   created: function () {

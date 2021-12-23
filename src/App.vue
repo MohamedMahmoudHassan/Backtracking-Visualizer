@@ -28,13 +28,26 @@
           ></problem-grid>
         </v-col>
         <v-col lg="4" md="3" sm="5" cols="12">
-          <div style="width: 100%; height: 100%"></div>
+          <div>
+            <visualization-controller
+              :isDisabled="
+                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
+              "
+              :colors="colors"
+              :visualization="visualization"
+              :AutoPlay="StartAutoPlay"
+              :Pause="Pause"
+              :StepForward="StepForward"
+              :StepBack="StepBack"
+              :StopVisualization="InitProblem"
+            ></visualization-controller>
+          </div>
         </v-col>
       </v-row>
     </v-main>
 
     <many-steps-snackbar
-      :view="viewManyStepsSnackbar"
+      :show="showManyStepsSnackbar"
       :colors="colors"
       :TryAgain="StartVisualization"
       :ChooseDefaultOptions="ChooseDefaultOptions"
@@ -58,7 +71,7 @@
               :colors="colors"
             ></problem-grid>
           </v-col>
-          <v-col v-if="false" lg="4" class="pd-2" co>
+          <v-col lg="4" class="pd-2">
             <visualization-controller
               :isDisabled="
                 visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
@@ -107,7 +120,7 @@ export default {
   },
   data: function () {
     return {
-      viewManyStepsSnackbar: false,
+      showManyStepsSnackbar: false,
       problem: "",
       colors: defaultValues.colors,
       grid: {},
@@ -119,7 +132,7 @@ export default {
   },
   methods: {
     InitProblem: function () {
-      this.viewManyStepsSnackbar = false;
+      this.showManyStepsSnackbar = false;
       this.visualization = { ...visualConfig.defaultValues };
       this.grid = InitGrid(this.problem, this.options);
     },
@@ -130,7 +143,7 @@ export default {
     },
 
     ChangeOption: function (opt, prop) {
-      this.viewManyStepsSnackbar = false;
+      this.showManyStepsSnackbar = false;
       if (this.options[prop] == opt) return;
       this.options[prop] = opt;
       this.grid = UpdateGrid(this.problem, this.options, prop, this.grid);
@@ -151,7 +164,7 @@ export default {
     StartVisualization: function (triesCounter = 0) {
       if (!triesCounter) {
         this.visualization.mode = visualConfig.modesEnum.searching;
-        this.viewManyStepsSnackbar = false;
+        this.showManyStepsSnackbar = false;
       }
       setTimeout(() => {
         if (this.visualization.mode == visualConfig.modesEnum.searching) {
@@ -159,7 +172,7 @@ export default {
           if (solution == -1) {
             if (triesCounter == 5) {
               this.visualization.mode = visualConfig.modesEnum.disabled;
-              this.viewManyStepsSnackbar = true;
+              this.showManyStepsSnackbar = true;
             } else this.StartVisualization(triesCounter + 1);
           } else {
             this.visualization.steps = solution;
