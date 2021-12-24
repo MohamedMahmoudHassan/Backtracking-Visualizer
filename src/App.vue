@@ -1,14 +1,14 @@
 <template>
   <v-app>
-    <v-main class="red lighten-4">
+    <v-main>
       <app-header
         :problem="problem"
         :colors="colors"
         :ChooseColor="(c, prop) => ChangeColor(c, prop)"
         :ChooseProblem="(p) => ChangeProblem(p)"
       ></app-header>
-      <v-row no-gutters style="height: 100%" class="grey lighten-4">
-        <v-col lg="3" md="3" sm="12" cols="12" order-md="0" order-sm="3" order="3">
+      <v-row no-gutters class="fill-height grey lighten-4">
+        <v-col lg="3" md="3" cols="12" order-md="0" order="3">
           <options-controller
             :isDisabled="visualization.mode != modesEnum.disabled"
             :problem="problem"
@@ -27,67 +27,29 @@
             :colors="colors"
           ></problem-grid>
         </v-col>
-        <v-col lg="4" md="3" sm="5" cols="12">
-          <div>
-            <visualization-controller
-              :isDisabled="
-                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
-              "
-              :colors="colors"
-              :visualization="visualization"
-              :AutoPlay="StartAutoPlay"
-              :Pause="Pause"
-              :StepForward="StepForward"
-              :StepBack="StepBack"
-              :StopVisualization="InitProblem"
-            ></visualization-controller>
-          </div>
+        <v-col lg="3" md="3" sm="5" cols="12">
+          <visualization-controller
+          v-if="false"
+            :isDisabled="
+              visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
+            "
+            :colors="colors"
+            :visualization="visualization"
+            :AutoPlay="StartAutoPlay"
+            :Pause="Pause"
+            :StepForward="StepForward"
+            :StepBack="StepBack"
+            :StopVisualization="InitProblem"
+          ></visualization-controller>
         </v-col>
       </v-row>
     </v-main>
-
     <many-steps-snackbar
       :show="showManyStepsSnackbar"
       :colors="colors"
       :TryAgain="StartVisualization"
       :ChooseDefaultOptions="ChooseDefaultOptions"
     ></many-steps-snackbar>
-    <app-header
-      v-if="false"
-      :problem="problem"
-      :colors="colors"
-      :ChooseColor="(c, prop) => ChangeColor(c, prop)"
-      :ChooseProblem="(p) => ChangeProblem(p)"
-    ></app-header>
-    <v-main class="grey lighten-4" v-if="false">
-      <v-container>
-        <v-row>
-          <v-col xl="5" lg="7">
-            <problem-grid
-              :grid="grid"
-              :problem="problem"
-              :isSearching="visualization.mode == modesEnum.searching"
-              :options="options"
-              :colors="colors"
-            ></problem-grid>
-          </v-col>
-          <v-col lg="4" class="pd-2">
-            <visualization-controller
-              :isDisabled="
-                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
-              "
-              :colors="colors"
-              :visualization="visualization"
-              :AutoPlay="StartAutoPlay"
-              :Pause="Pause"
-              :StepForward="StepForward"
-              :StepBack="StepBack"
-              :StopVisualization="InitProblem"
-            ></visualization-controller>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
   </v-app>
 </template>
 
@@ -255,8 +217,6 @@ export default {
   align-items: center;
   text-align: "center";
   height: 100%;
-  /* height: unset !important;
-  padding-top: 100%; */
 }
 
 .const-cell {

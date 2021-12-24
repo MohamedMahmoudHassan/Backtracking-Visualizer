@@ -2,6 +2,7 @@
   <div>
     <v-subheader class="pl-0">Grid Emptiness Level</v-subheader>
     <v-slider
+      :class="$vuetify.breakpoint.sm ? 'mt-4' : ''"
       v-model="emptiness"
       :min="gridEmptinessLimits.min"
       :max="gridSize == 4 ? gridEmptinessLimits.max16 : gridEmptinessLimits.max"

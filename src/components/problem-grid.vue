@@ -1,30 +1,34 @@
 <template>
-  <div class="pa-2 fill-height">
-    <v-card
-      elevation="3"
-      class="ma-auto problem-grid"
-      :loading="isSearching ? colors.primary : false"
-    >
-      <sudoku-grid
-        v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
-        :grid="grid"
-        :options="options"
-        :colors="colors"
-      ></sudoku-grid>
-      <n-queens-grid
-        v-else-if="problem == problemsEnum.nQueens"
-        :grid="grid"
-        :options="options"
-        :colors="colors"
-      ></n-queens-grid>
-      <knight-tour-grid
-        v-else-if="problem == problemsEnum.knightTour"
-        :grid="grid"
-        :options="options"
-        :colors="colors"
-      ></knight-tour-grid>
-    </v-card>
-  </div>
+  <v-container class="fill-height" fluid>
+    <v-row align="center" justify="center">
+      <v-col>
+        <v-card
+          elevation="3"
+          class="ma-auto problem-grid"
+          :loading="isSearching ? colors.primary : false"
+        >
+          <sudoku-grid
+            v-if="problem == problemsEnum.sudokuGenerator || problem == problemsEnum.sudokuSolver"
+            :grid="grid"
+            :options="options"
+            :colors="colors"
+          ></sudoku-grid>
+          <n-queens-grid
+            v-else-if="problem == problemsEnum.nQueens"
+            :grid="grid"
+            :options="options"
+            :colors="colors"
+          ></n-queens-grid>
+          <knight-tour-grid
+            v-else-if="problem == problemsEnum.knightTour"
+            :grid="grid"
+            :options="options"
+            :colors="colors"
+          ></knight-tour-grid>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -86,19 +90,4 @@ export default {
     font-size: 234px;
   }
 }
-/* @media only screen and (max-width: 4000) {
-.main-grid {
-  margin-left: 50%;
-}
-}
-@media only screen and (max-width: 1350) {
-  .main-grid {
-    margin-left: 5%;
-  }
-}
-@media only screen and (max-width: 1020) {
-  .main-grid {
-    margin-left: 30%;
-  }
-} */
 </style>
