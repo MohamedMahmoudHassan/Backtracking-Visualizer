@@ -12,19 +12,25 @@ var mainConfig = {
     { id: 10, label: "Green", value: "green" },
     { id: 11, label: "Light Green", value: "light-green" },
     { id: 12, label: "Lime", value: "lime" },
-    // { id: 13, label: "Yellow", value: "yellow" },
+    { id: 13, label: "Deep Orange", value: "deep-orange" },
     { id: 14, label: "Amber", value: "amber" },
     { id: 15, label: "Orange", value: "orange" },
-    { id: 16, label: "Deep Orange", value: "deep-orange" },
+    // { id: 16, label: "Yellow", value: "yellow" },
     // { id: 17, label: "Brown", value: "brown" },
     // { id: 18, label: "Blue Grey", value: "blue-grey" },
     // { id: 19, label: "Grey", value: "grey" },
   ],
   problemsList: [
-    { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
-    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green" },
-    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo" },
-    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red" },
+    {
+      id: 1,
+      label: "Sudoku Generator",
+      value: "SudokuGenerator",
+      color: "orange",
+      icon: "mdi-grid",
+    },
+    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green", icon: "mdi-grid" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo", icon: "mdi-chess-queen" },
+    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red", icon: "mdi-chess-knight" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
@@ -96,9 +102,10 @@ var visualConfig = {
 
 var sudokuConfig = {
   gridSizesList: [
-    { id: 1, label: "4 x 4", value: 2 },
-    { id: 2, label: "9 x 9", value: 3 },
-    { id: 3, label: "16 x 16", value: 4 },
+    // { id: 1, label: "1 x 1", value: 1 },
+    { id: 2, label: "4 x 4", value: 2, isBig: false },
+    { id: 3, label: "9 x 9", value: 3, isBig: false },
+    { id: 4, label: "16 x 16", value: 4, isBig: true },
   ],
 };
 
