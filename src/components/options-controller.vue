@@ -7,6 +7,7 @@
         :colors="colors"
         :options="options"
         :ChooseOption="ChooseOption"
+        :StartVisualization="StartVisualization"
       ></sudoku-generator-options>
       <sudoku-solver-options
         v-else-if="problem == problemsEnum.sudokuSolver"
@@ -14,6 +15,7 @@
         :colors="colors"
         :options="options"
         :ChooseOption="ChooseOption"
+        :StartVisualization="StartVisualization"
       >
       </sudoku-solver-options>
       <n-queens-options
@@ -22,6 +24,7 @@
         :colors="colors"
         :options="options"
         :ChooseOption="ChooseOption"
+        :StartVisualization="StartVisualization"
       ></n-queens-options>
       <knight-tour-options
         v-else-if="problem == problemsEnum.knightTour"
@@ -29,12 +32,14 @@
         :colors="colors"
         :options="options"
         :ChooseOption="ChooseOption"
+        :StartVisualization="StartVisualization"
       ></knight-tour-options>
     </v-card>
     <v-btn
       elevation="4"
       tile
       block
+      v-if="!$vuetify.breakpoint.sm"
       dark
       :disabled="isDisabled"
       :color="colors.primary"

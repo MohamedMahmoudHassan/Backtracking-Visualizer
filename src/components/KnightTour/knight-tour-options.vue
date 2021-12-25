@@ -1,6 +1,7 @@
 <template>
-  <v-card :color="colors.base" tile outlined class="options-container">
-    <v-card :color="colors.base" tile outlined class="option-item">
+  <v-row no-gutters>
+    <v-col md="12" sm="6" cols="12">
+      <div>
       <v-subheader class="pl-0">Grid Size</v-subheader>
       <v-row justify="space-around">
         <v-radio-group
@@ -18,15 +19,30 @@
           ></v-radio>
         </v-radio-group>
       </v-row>
-    </v-card>
-  </v-card>
+      </div>
+    </v-col>
+    <v-col sm="6" v-if="$vuetify.breakpoint.sm" class="mt-10">
+      <div class="text-center">
+        <v-btn
+          elevation="4"
+          tile
+          dark
+          :disabled="isDisabled"
+          :color="colors.primary"
+          @click="StartVisualization()"
+        >
+          Start Visualization
+        </v-btn>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import { knightTourConfig } from "../../config";
 
 export default {
   name: "knight-tour-options",
-  props: ["options", "isDisabled", "colors", "ChooseOption"],
+  props: ["options", "isDisabled", "colors", "ChooseOption", "StartVisualization"],
   data: function () {
     return {
       gridSize: this.options.gridSize,

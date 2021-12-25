@@ -1,14 +1,14 @@
 <template>
   <v-app>
-    <v-main class="red lighten-4">
+    <v-main>
       <app-header
         :problem="problem"
         :colors="colors"
         :ChooseColor="(c, prop) => ChangeColor(c, prop)"
         :ChooseProblem="(p) => ChangeProblem(p)"
       ></app-header>
-      <v-row no-gutters style="height: 100%" class="grey lighten-4">
-        <v-col lg="3" md="3" sm="12" cols="12" order-md="0" order-sm="3" order="3">
+      <v-row no-gutters class="fill-height grey lighten-4">
+        <v-col md="3" cols="12" order-md="0" order="3">
           <options-controller
             :isDisabled="visualization.mode != modesEnum.disabled"
             :problem="problem"
@@ -18,7 +18,7 @@
             :StartVisualization="StartVisualization"
           ></options-controller>
         </v-col>
-        <v-col lg="6" md="6" sm="7" cols="12">
+        <v-col md="6" sm="7" cols="12">
           <problem-grid
             :grid="grid"
             :problem="problem"
@@ -27,66 +27,26 @@
             :colors="colors"
           ></problem-grid>
         </v-col>
-        <v-col lg="4" md="3" sm="5" cols="12">
-          <div>
-            <visualization-controller
-              :isDisabled="
-                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
-              "
-              :colors="colors"
-              :visualization="visualization"
-              :AutoPlay="StartAutoPlay"
-              :Pause="Pause"
-              :StepForward="StepForward"
-              :StepBack="StepBack"
-              :StopVisualization="InitProblem"
-            ></visualization-controller>
-          </div>
+        <v-col md="3" sm="5" cols="12">
+          <visualization-grid
+            :isDisabled="![modesEnum.paused, modesEnum.active].includes(visualization.mode)"
+            :colors="colors"
+            :visualization="visualization"
+            :AutoPlay="StartAutoPlay"
+            :Pause="Pause"
+            :StepForward="StepForward"
+            :StepBack="StepBack"
+            :StopVisualization="InitProblem"
+          ></visualization-grid>
         </v-col>
       </v-row>
-    </v-main>
-
-    <many-steps-snackbar
-      :show="showManyStepsSnackbar"
-      :colors="colors"
-      :TryAgain="StartVisualization"
-      :ChooseDefaultOptions="ChooseDefaultOptions"
-    ></many-steps-snackbar>
-    <app-header
-      v-if="false"
-      :problem="problem"
-      :colors="colors"
-      :ChooseColor="(c, prop) => ChangeColor(c, prop)"
-      :ChooseProblem="(p) => ChangeProblem(p)"
-    ></app-header>
-    <v-main class="grey lighten-4" v-if="false">
-      <v-container>
-        <v-row>
-          <v-col xl="5" lg="7">
-            <problem-grid
-              :grid="grid"
-              :problem="problem"
-              :isSearching="visualization.mode == modesEnum.searching"
-              :options="options"
-              :colors="colors"
-            ></problem-grid>
-          </v-col>
-          <v-col lg="4" class="pd-2">
-            <visualization-controller
-              :isDisabled="
-                visualization.mode != modesEnum.paused && visualization.mode != modesEnum.active
-              "
-              :colors="colors"
-              :visualization="visualization"
-              :AutoPlay="StartAutoPlay"
-              :Pause="Pause"
-              :StepForward="StepForward"
-              :StepBack="StepBack"
-              :StopVisualization="InitProblem"
-            ></visualization-controller>
-          </v-col>
-        </v-row>
-      </v-container>
+      <many-steps-snackbar
+        :showManyStepsSnackbar="showManyStepsSnackbar"
+        :colors="colors"
+        :TryAgain="StartVisualization"
+        :ChooseDefaultOptions="ChooseDefaultOptions"
+        :Hide="() => (showManyStepsSnackbar = false)"
+      ></many-steps-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -95,7 +55,7 @@
 import appHeader from "./components/app-header.vue";
 import optionsController from "./components/options-controller.vue";
 import problemGrid from "./components/problem-grid.vue";
-import visualizationController from "./components/visualization-controller.vue";
+import visualizationGrid from "./components/visualization-grid.vue";
 import manyStepsSnackbar from "./components/many-steps-snackbar.vue";
 
 import {
@@ -115,7 +75,7 @@ export default {
     appHeader,
     optionsController,
     problemGrid,
-    visualizationController,
+    visualizationGrid,
     manyStepsSnackbar,
   },
   data: function () {
@@ -161,6 +121,10 @@ export default {
       this.InitProblem();
     },
 
+    ScrollTop: function () {
+      this.$vuetify.goTo(0, { duration: 500 });
+    },
+
     StartVisualization: function (triesCounter = 0) {
       if (!triesCounter) {
         this.visualization.mode = visualConfig.modesEnum.searching;
@@ -176,6 +140,7 @@ export default {
             } else this.StartVisualization(triesCounter + 1);
           } else {
             this.visualization.steps = solution;
+            this.ScrollTop();
             this.StartAutoPlay();
           }
         }
@@ -195,8 +160,6 @@ export default {
         { text, color, id: this.visualization.currentStepId },
         ...this.visualization.descriptionList,
       ];
-      if (this.visualization.descriptionList.length > visualConfig.defaultValues.descriptionNoLimit)
-        this.visualization.descriptionList.pop();
       return true;
     },
 
@@ -208,17 +171,6 @@ export default {
       const { actions } = this.visualization.steps[--this.visualization.currentStepId];
       ApplyBackAction(this.problem, actions, this.grid);
       this.visualization.descriptionList.splice(0, 1);
-
-      var { descriptionNoLimit } = visualConfig.defaultValues;
-      if (currentStepId > descriptionNoLimit - 1) {
-        var { text, color } =
-          this.visualization.steps[currentStepId - descriptionNoLimit].description;
-        this.visualization.descriptionList.push({
-          text,
-          color,
-          id: currentStepId - descriptionNoLimit,
-        });
-      }
       return true;
     },
 
@@ -246,19 +198,6 @@ export default {
 </script>
 
 <style>
-.grid-cell {
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: "center";
-  height: 100%;
-  /* height: unset !important;
-  padding-top: 100%; */
-}
-
 .const-cell {
   background-color: #eeeeee;
 }

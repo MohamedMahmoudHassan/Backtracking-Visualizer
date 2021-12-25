@@ -21,10 +21,16 @@ var mainConfig = {
     // { id: 19, label: "Grey", value: "grey" },
   ],
   problemsList: [
-    { id: 1, label: "Sudoku Generator", value: "SudokuGenerator", color: "orange" },
-    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green" },
-    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo" },
-    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red" },
+    {
+      id: 1,
+      label: "Sudoku Generator",
+      value: "SudokuGenerator",
+      color: "orange",
+      icon: "mdi-grid",
+    },
+    { id: 2, label: "Sudoku Solver", value: "SudokuSolver", color: "green", icon: "mdi-grid" },
+    { id: 3, label: "N-Queen", value: "NQueens", color: "indigo", icon: "mdi-chess-queen" },
+    { id: 4, label: "Knight's Tour", value: "KnightTour", color: "red", icon: "mdi-chess-knight" },
   ],
   problemsEnum: {
     sudokuGenerator: "SudokuGenerator",
@@ -53,7 +59,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "SudokuSolver",
+    problem: "SudokuGenerator",
     colors: {
       primary: "purple",
       base: "secondary",
