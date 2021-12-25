@@ -41,10 +41,11 @@
         </v-col>
       </v-row>
       <many-steps-snackbar
-        :show="showManyStepsSnackbar"
+        :showManyStepsSnackbar="showManyStepsSnackbar"
         :colors="colors"
         :TryAgain="StartVisualization"
         :ChooseDefaultOptions="ChooseDefaultOptions"
+        :Hide="() => (showManyStepsSnackbar = false)"
       ></many-steps-snackbar>
     </v-main>
   </v-app>

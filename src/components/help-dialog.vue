@@ -56,19 +56,32 @@
 
         <v-tab-item>
           <v-card flat class="fill-height">
-            <v-stepper vertical flat non-linear>
+            <v-stepper value="1" vertical flat non-linear>
               <v-stepper-step
                 :color="colors.primary"
                 complete
                 complete-icon="mdi-chess-knight"
                 class="p-0"
+                step="2"
               >
                 <strong>Choose the problem.</strong>
               </v-stepper-step>
-              <v-stepper-step :color="colors.primary" complete complete-icon="mdi-cog" class="p-0">
+              <v-stepper-step
+                :color="colors.primary"
+                complete
+                complete-icon="mdi-cog"
+                class="p-0"
+                step="3"
+              >
                 <strong> Choose problem's parameters.</strong>
               </v-stepper-step>
-              <v-stepper-step :color="colors.primary" complete complete-icon="mdi-play" class="p-0">
+              <v-stepper-step
+                :color="colors.primary"
+                complete
+                complete-icon="mdi-play"
+                class="p-0"
+                step="4"
+              >
                 <strong>Start visualization.</strong>
               </v-stepper-step>
             </v-stepper>

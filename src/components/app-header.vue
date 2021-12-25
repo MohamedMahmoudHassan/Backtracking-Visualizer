@@ -2,7 +2,7 @@
   <div>
     <v-app-bar app :color="colors.base" dark>
       <v-app-bar-nav-icon
-        @click="drawer = true"
+        @click="OpenDrawer()"
         v-if="$vuetify.breakpoint.smAndDown"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
@@ -86,6 +86,11 @@ export default {
     ChangeColor: function () {
       var color = GetRandFromList(colorsList);
       this.ChooseColor(color.value, "primary");
+    },
+
+    OpenDrawer: function () {
+      this.$vuetify.goTo(0, { duration: 100 });
+      this.drawer = true;
     },
   },
 };
