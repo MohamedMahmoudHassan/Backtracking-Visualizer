@@ -1,10 +1,13 @@
 <template>
   <div>
     <v-app-bar app :color="colors.base" dark>
-      <v-app-bar-nav-icon @click="drawer = true" v-if="$vuetify.breakpoint.xs"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click="drawer = true"
+        v-if="$vuetify.breakpoint.smAndDown"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title>Backtracking Visualizer</v-toolbar-title>
-      <v-sheet class="mx-auto secondary" dark v-if="$vuetify.breakpoint.smAndUp">
-        <v-slide-group class="problems-slider" show-arrows mandatory>
+      <v-sheet class="mx-auto secondary" dark v-if="$vuetify.breakpoint.mdAndUp">
+        <v-slide-group class="problems-slider" :show-arrows="$vuetify.breakpoint.md" mandatory>
           <v-slide-item v-for="p in problemsList" :key="p.id">
             <v-btn
               class="mx-2"
@@ -37,23 +40,18 @@
           </v-slide-item>
         </v-slide-group>
       </v-sheet>
-      <v-btn v-if="false" class="ma-2" @click="ChangeColor()" fab small title="Change Color">
-        <v-icon> mdi-palette </v-icon>
-      </v-btn>
-      <help-dialog v-if="false" :colors="colors"></help-dialog>
-      <v-btn
-        v-if="false"
-        class="ma-2"
-        fab
-        small
-        href="https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer"
-        target="_blank"
-        title="Visit Repository"
-      >
-        <v-icon> mdi-github </v-icon>
-      </v-btn>
+      <div v-if="$vuetify.breakpoint.mdAndUp">
+        <v-btn class="ma-2" @click="ChangeColor()" fab small title="Change Color">
+          <v-icon> mdi-palette </v-icon>
+        </v-btn>
+        <help-dialog :colors="colors"></help-dialog>
+        <v-btn class="ma-2" fab small :href="gitLink" target="_blank" title="Visit Repository">
+          <v-icon> mdi-github </v-icon>
+        </v-btn>
+      </div>
     </v-app-bar>
     <side-drawer
+      v-if="$vuetify.breakpoint.smAndDown"
       :drawer="drawer"
       :problem="problem"
       :colors="colors"
@@ -81,18 +79,13 @@ export default {
       problemsList: problemsList,
       problemsEnum: problemsEnum,
       drawer: false,
-      group: null,
+      gitLink: "https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer",
     };
   },
   methods: {
     ChangeColor: function () {
       var color = GetRandFromList(colorsList);
       this.ChooseColor(color.value, "primary");
-    },
-  },
-  watch: {
-    group() {
-      this.drawer = false;
     },
   },
 };
@@ -103,27 +96,22 @@ export default {
   height: 25px;
   margin-right: 5px;
 }
-@media only screen and (min-width: 600px) {
+
+@media only screen and (min-width: 960px) {
   .problems-slider {
-    max-width: 360px;
+    max-width: 520px;
   }
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 1050px) {
   .problems-slider {
-    max-width: 560px;
+    max-width: 600px;
   }
 }
 
 @media only screen and (min-width: 1264px) {
   .problems-slider {
-    max-width: 600px;
-  }
-}
-
-@media only screen and (min-width: 1904px) {
-  .problems-slider {
-    max-width: 600px;
+    max-width: 900px;
   }
 }
 </style>

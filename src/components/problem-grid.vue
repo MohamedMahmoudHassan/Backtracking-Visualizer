@@ -52,6 +52,17 @@ export default {
 </script>
 
 <style>
+.grid-cell {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: "center";
+  height: 100%;
+}
+
 @media only screen and (max-width: 600px) {
   .problem-grid {
     height: 280px;

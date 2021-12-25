@@ -1,8 +1,9 @@
 <template>
-  <v-navigation-drawer v-model="drawerValue" absolute bottom temporary>
+  <v-navigation-drawer v-model="drawerValue" absolute temporary style="z-index: 500">
     <v-list>
-      <v-list-group :value="true" prepend-icon="mdi-puzzle" :color="colors.primary" no-action>
+      <v-list-group :value="true" :color="colors.primary" no-action>
         <template v-slot:activator>
+          <v-icon class="pr-4">mdi-puzzle</v-icon>
           <v-list-item-title>Choose Problem</v-list-item-title>
         </template>
         <v-list-item
@@ -21,17 +22,14 @@
     </v-list>
 
     <v-list dense>
+      <help-dialog :colors="colors"></help-dialog>
       <v-list-item link @click="ChangeColor()" :color="colors.primary">
         <v-list-item-icon>
           <v-icon>mdi-palette</v-icon>
         </v-list-item-icon>
         <v-list-item-title>Change Color</v-list-item-title>
       </v-list-item>
-      <v-list-item
-        link
-        href="https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer"
-        target="_blank"
-      >
+      <v-list-item link :href="gitLink" target="_blank">
         <v-list-item-icon>
           <v-icon>mdi-github</v-icon>
         </v-list-item-icon>
@@ -42,11 +40,14 @@
 </template>
 
 <script>
+import helpDialog from "./help-dialog.vue";
 import { mainConfig } from "../config";
 export default {
   props: ["drawer", "problem", "colors", "CloseDrawer", "ChooseProblem", "ChangeColor"],
+  components: { helpDialog },
   data: function () {
     return {
+      gitLink: "https://github.com/MohamedMahmoudHassan/Sudoku-Solver-Visualizer",
       drawerValue: this.drawer,
       problemsList: mainConfig.problemsList,
     };

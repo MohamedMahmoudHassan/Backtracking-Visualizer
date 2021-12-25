@@ -59,7 +59,7 @@ var mainConfig = {
     invalid: "invalid-cell",
   },
   defaultValues: {
-    problem: "SudokuSolver",
+    problem: "SudokuGenerator",
     colors: {
       primary: "purple",
       base: "secondary",
