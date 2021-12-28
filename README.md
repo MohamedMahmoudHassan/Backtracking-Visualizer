@@ -11,7 +11,11 @@ Backtracking visualizer is a visualization tool for some backtracking standard p
   - Control visualization speed.
   - Manually change between steps.
   - Describe each step in the solution.
- 
+
+### Live version: https://backtracking-visualizer.herokuapp.com/
+
+---
+
 ## Project setup
 ```
 npm install
