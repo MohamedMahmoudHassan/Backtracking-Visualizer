@@ -7,6 +7,11 @@ Backtracking visualizer is a visualization tool for some backtracking standard p
   - N Queens.
   - Knight's Tour.
 
+### The visualizer has some options such as:
+  - Control visualization speed.
+  - Manually change between steps.
+  - Describe each step in the solution.
+ 
 ## Project setup
 ```
 npm install
