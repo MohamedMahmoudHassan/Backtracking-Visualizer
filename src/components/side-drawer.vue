@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer v-model="drawerValue" absolute temporary style="z-index: 500">
     <v-list>
-      <v-list-group :value="true" :color="colors.primary" no-action>
+      <v-list-group :value="true" :color="colors.primary">
         <template v-slot:activator>
           <v-icon class="pr-4">mdi-puzzle</v-icon>
           <v-list-item-title>Choose Problem</v-list-item-title>
@@ -12,11 +12,12 @@
           link
           :input-value="p.value == problem"
           @click="ChooseProblemFromMenu(p.value)"
+          class="pl-8"
         >
-          <v-list-item-title v-text="p.label"></v-list-item-title>
           <v-list-item-icon>
             <v-icon v-text="p.icon"></v-icon>
           </v-list-item-icon>
+          <v-list-item-title v-text="p.label"></v-list-item-title>
         </v-list-item>
       </v-list-group>
     </v-list>
