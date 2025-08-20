@@ -6,27 +6,28 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "npx browserslist@latest --update-db"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "express": "^4.17.1",
-    "serve-static": "^1.14.1",
-    "vue": "^2.6.11",
-    "vuetify": "^2.4.0"
+    "core-js": "^3.37.0",
+    "express": "^4.21.1",
+    "serve-static": "^1.16.2",
+    "vue": "^2.7.16",
+    "vuetify": "^2.7.3"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "sass": "~1.32.0",
-    "sass-loader": "^10.0.0",
-    "vue-cli-plugin-vuetify": "~2.4.3",
-    "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.7.0"
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^7.20.0",
+    "sass": "^1.77.8",
+    "sass-loader": "^12.6.0",
+    "vue-cli-plugin-vuetify": "^2.5.8",
+    "vue-template-compiler": "^2.7.16",
+    "vuetify-loader": "^1.9.2"
   },
   "eslintConfig": {
     "root": true,
@@ -46,5 +47,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  }
 }
